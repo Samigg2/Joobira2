@@ -105,6 +105,11 @@ function toggleLanguage() {
     }
 }
 
+function toggleMenu() {
+    const nav = document.querySelector('.main-nav');
+    nav.classList.toggle('active');
+}
+
 function updateTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');

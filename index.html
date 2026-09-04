@@ -15,7 +15,7 @@
 </head>
 <body>
     <!-- Background Curve -->
-    <div class="hero-bg"></div>
+    <div class="hero-bg index-hero"></div>
 
     <!-- Header -->
     <header>
@@ -26,6 +26,9 @@
             <div class="top-actions">
                 <button id="langToggle" class="lang-switch" onclick="toggleLanguage()">
                     <i class="fa-solid fa-globe"></i> አማ
+                </button>
+                <button class="hamburger" onclick="toggleMenu()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; margin-left: 10px;">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
@@ -43,7 +46,42 @@
 
     <!-- Main Content -->
     <main>
-        <h1 class="page-title" data-i18n="title_auctions">የቀረቡ ጨረታዎች</h1>
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title" data-am="በአነስተኛ ዋጋ አሸንፉ" data-en="Bid Low. Win Big." data-om="Gatii Xiqqaan Mo'adhaa">በአነስተኛ ዋጋ አሸንፉ</h1>
+                <p class="hero-desc" data-am="ለየት ያለውን አነስተኛ ዋጋ በመምረጥ የፈለጉትን እቃ የራስዎ ያድርጉ።" data-en="Pick the lowest unique bid and take home amazing items." data-om="Gatii xiqqaa adda ta'e filachuun meeshaalee gaggaarii fudhadhaa.">ለየት ያለውን አነስተኛ ዋጋ በመምረጥ የፈለጉትን እቃ የራስዎ ያድርጉ።</p>
+                <div class="hero-buttons">
+                    <a href="#auctions" class="btn-primary" style="display: inline-block; width: auto; padding: 15px 30px; text-decoration: none;" data-am="ጨረታዎችን ይመልከቱ" data-en="Browse Auctions" data-om="Caalbaasiiwwan Ilaalaa">ጨረታዎችን ይመልከቱ</a>
+                    <a href="faq.html" class="btn-outline-light" style="display: inline-block; width: auto; padding: 15px 30px; text-decoration: none; color: white; border-color: white;" data-am="እንዴት እንደሚሰራ" data-en="How it works" data-om="Akkamitti akka hojjatu">እንዴት እንደሚሰራ</a>
+                </div>
+                
+                <div class="hero-stats-row">
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">65+</div>
+                        <div class="hero-stat-lbl" data-am="አሸናፊዎች" data-en="Winners" data-om="Mo'attoota">አሸናፊዎች</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">1 <span class="currency-lbl">ብር</span></div>
+                        <div class="hero-stat-lbl" data-am="መነሻ ዋጋ" data-en="Min Bid" data-om="Gatii Ka'umsaa">መነሻ ዋጋ</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="hero-ticket">
+                    <div class="ticket-badge" data-am="● ቀጥታ" data-en="● Live Now" data-om="● Amma">● ቀጥታ</div>
+                    <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&q=80&w=400" alt="Laptop">
+                    <h3 data-am="ዴል ላፕቶፕ ኮር i7" data-en="Dell Laptop Core i7" data-om="Dell Laptop Core i7">ዴል ላፕቶፕ ኮር i7</h3>
+                    <div class="ticket-row">
+                        <span data-i18n="lbl_bids">የጨረታ ብዛት</span>
+                        <strong>142</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <h1 class="page-title" data-i18n="title_auctions" style="margin-top: 40px;">የቀረቡ ጨረታዎች</h1>
         <p class="page-subtitle" data-am="ዝቅተኛውን ዋጋ በማቅረብ ያሸንፉ!" data-en="Bid lowest, be unique, and win!" data-om="Gatii xiqqaa dhiheessuun mo'adhaa!">ዝቅተኛውን ዋጋ በማቅረብ ያሸንፉ!</p>
         
         <!-- LIVE AUCTIONS -->
