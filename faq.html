@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joobiraa - FAQ</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background Curve -->
+    <div class="hero-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+            </div>
+            <div class="top-actions">
+                <button id="langToggle" class="lang-switch" onclick="toggleLanguage()">
+                    <i class="fa-solid fa-globe"></i> አማ
+                </button>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav_home">መነሻ</a></li>
+                <li><a href="index.html#auctions" data-i18n="nav_auctions">ጨረታዎች</a></li>
+                <li><a href="faq.html" data-i18n="nav_faq" style="color: var(--primary-gold);">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
+                <li><a href="login.html" data-i18n="nav_login">ግባ / ተመዝገብ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1 class="page-title" data-i18n="title_faq">ተደጋግመው የሚጠየቁ ጥያቄዎች</h1>
+        <p class="page-subtitle" data-i18n="subtitle_faq">ስለ Joobira ጨረታ እና ክፍያ መረጃዎችን እዚህ ያገኛሉ</p>
+        
+        <section class="faq-container">
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <span data-am="JOOBIRA ምንድን ነው እና እንዴት ጨረታዎችን ማቅረብ እችላለሁ?" data-en="What is JOOBIRA and how can I place bids?" data-om="JOOBIRAA maaliifi akkamitti caalbaasii dhiheessuu danda'a?">JOOBIRA ምንድን ነው እና እንዴት ጨረታዎችን ማቅረብ እችላለሁ?</span>
+                    </div>
+                    <div class="faq-toggle"><i class="fa-solid fa-plus"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <p data-am="JOOBIRA የጨረታ መተግበሪያ ሲሆን የተለያዩ እቃዎችን በርካሽ ዋጋ የሚገዙበት ስርዓት ነው።" data-en="JOOBIRA is an auction application where you can buy various items at low prices." data-om="JOOBIRAA application caalbaasii yoo ta'u meeshaalee adda addaa gatii rakashaan itti bitattaniidha.">JOOBIRA የጨረታ መተግበሪያ ሲሆን የተለያዩ እቃዎችን በርካሽ ዋጋ የሚገዙበት ስርዓት ነው።</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <span data-am="JOOBIRA እንዴት ይሰራል እና ጨረታው ካሸነፍኩ በኋላ እንዴት እከፍላለሁ?" data-en="How does JOOBIRA work and how do I pay if I win?" data-om="JOOBIRAA akkamitti hojjata erga mo'adhee booda akkamittin kaffala?">JOOBIRA እንዴት ይሰራል እና ጨረታው ካሸነፍኩ በኋላ እንዴት እከፍላለሁ?</span>
+                    </div>
+                    <div class="faq-toggle"><i class="fa-solid fa-plus"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <p data-am="ካሸነፉ በኋላ በሲስተሙ አማካኝነት ክፍያዎን በቀላሉ ማጠናቀቅ ይችላሉ።" data-en="After winning, you can easily complete your payment through the system." data-om="Erga mo'attanii booda sirnichaan kaffaltii keessan xumuruu dandeessu.">ካሸነፉ በኋላ በሲስተሙ አማካኝነት ክፍያዎን በቀላሉ ማጠናቀቅ ይችላሉ።</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <span data-am="አንድ ለጨረታ የቀረበ እቃ ላይ ከአንድ ጊዜ በላይ መጫረት እችላለሁ?" data-en="Can I bid more than once on an item placed for auction?" data-om="Meeshaa caalbaasiif dhiyaate tokko irratti yeroo tokkoo ol caalbaasii dhiheessuu danda'aa?">አንድ ለጨረታ የቀረበ እቃ ላይ ከአንድ ጊዜ በላይ መጫረት እችላለሁ?</span>
+                    </div>
+                    <div class="faq-toggle"><i class="fa-solid fa-plus"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <p data-am="አዎ፣ ከአንድ ጊዜ በላይ መጫረት ይችላሉ።" data-en="Yes, you can bid more than once." data-om="Eeyyee, yeroo tokkoo ol caalbaasii dhiheessuu ni dandeessu.">አዎ፣ ከአንድ ጊዜ በላይ መጫረት ይችላሉ።</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <div class="faq-question-text">
+                        <i class="fa-solid fa-comment-dots"></i>
+                        <span data-am="ክፍያን ካልጨረስኩ ምን ይሆናል?" data-en="What happens if I don't complete the payment?" data-om="Kaffaltii yoon hin xumurin maal ta'a?">ክፍያን ካልጨረስኩ ምን ይሆናል?</span>
+                    </div>
+                    <div class="faq-toggle"><i class="fa-solid fa-plus"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <p data-am="በተሰጠው የጊዜ ገደብ ውስጥ ክፍያ ካልፈፀሙ እቃው ለቀጣዩ አሸናፊ ይሰጣል።" data-en="If you don't pay within the given time frame, the item goes to the next winner." data-om="Yeroo kenname keessatti kaffaltii yoo hin raawwatin meeshichi mo'ataa itti aanuuf kennama.">በተሰጠው የጊዜ ገደብ ውስጥ ክፍያ ካልፈፀሙ እቃው ለቀጣዩ አሸናፊ ይሰጣል።</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <p data-i18n="footer_desc">Joobiraa (ጁቢራ) አዳዲስ እቃዎችን በርካሽ ዋጋ የሚያገኙበት ትልቁ የጨረታ መድረክ።</p>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="nav_contact">ያግኙን</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-phone"></i> 994 / 0911000000</a></li>
+                    <li><a href="#"><i class="fa-solid fa-envelope"></i> support@joobira.et</a></li>
+                    <li><a href="#"><i class="fa-solid fa-location-dot"></i> አዲስ አበባ, ኢትዮጵያ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="footer_about">ስለ እኛ</h4>
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_auctions">ጨረታዎች</a></li>
+                    <li><a href="faq.html" data-i18n="nav_faq">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
+                    <li><a href="#" data-i18n="footer_terms">ደንብና ግዴታዎች</a></li>
+                    <li><a href="#" data-i18n="footer_privacy">የግላዊነት ፖሊሲ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Joobiraa. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

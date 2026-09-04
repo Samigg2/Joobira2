@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joobiraa - Login</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background Curve -->
+    <div class="hero-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+            </div>
+            <div class="top-actions">
+                <button id="langToggle" class="lang-switch" onclick="toggleLanguage()">
+                    <i class="fa-solid fa-globe"></i> አማ
+                </button>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav_home">መነሻ</a></li>
+                <li><a href="index.html#auctions" data-i18n="nav_auctions">ጨረታዎች</a></li>
+                <li><a href="faq.html" data-i18n="nav_faq">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
+                <li><a href="login.html" data-i18n="nav_login" style="color: var(--primary-gold);">ግባ / ተመዝገብ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="login-container">
+            <div class="login-left">
+                <h1 class="login-title" data-am="ሰላም," data-en="HI, THERE" data-om="AKKAM,">ሰላም,</h1>
+                <p class="login-subtitle" data-am="ወደ መለያዎ ይግቡና መጫረት ይጀምሩ" data-en="Log in to your account here to begin bidding." data-om="Gara herrega keessanitti seenaa caalbaasii jalqabaa">ወደ መለያዎ ይግቡና መጫረት ይጀምሩ</p>
+                
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label data-am="ስልክ ቁጥር" data-en="Phone Number" data-om="Lakkoofsa Bilbilaa">ስልክ ቁጥር</label>
+                        <input type="text" placeholder="09..." required>
+                    </div>
+                    <div class="form-group">
+                        <label data-am="የይለፍ ቃል" data-en="Password" data-om="Iggitaa">የይለፍ ቃል</label>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+                    <a href="#" class="forgot-pwd" data-am="የይለፍ ቃል ረሱ?" data-en="Forgot password?" data-om="Iggitaa irraanfattanii?">የይለፍ ቃል ረሱ?</a>
+                    
+                    <button type="submit" class="btn-outline btn-block" data-am="በመለያ ይግቡ (Login)" data-en="Login with Password" data-om="Seenaa (Login)">በመለያ ይግቡ (Login)</button>
+                </form>
+
+                <div class="divider">
+                    <span data-am="ወይም" data-en="OR" data-om="YKN">ወይም</span>
+                </div>
+                
+                <button class="btn-outline btn-block" data-am="በአጭር መልዕክት ይግቡ (Login with OTP)" data-en="Login with OTP" data-om="Ergaa Gabaabaan Seenaa (OTP)">በአጭር መልዕክት ይግቡ (Login with OTP)</button>
+            </div>
+            <div class="login-right">
+                <i class="fa-solid fa-user-plus" style="font-size: 3rem; color: var(--primary-gold); margin-bottom: 20px;"></i>
+                <h3 style="font-size: 1.5rem; color: white; margin-bottom: 10px;" data-am="አዲስ ነዎት?" data-en="NEW HERE?" data-om="HAARAA DHA?">አዲስ ነዎት?</h3>
+                <p style="color: #C7D0E0; margin-bottom: 30px;" data-am="አዲስ መለያ ይፍጠሩ እና ጨረታውን ይቀላቀሉ" data-en="Sign up and create your Account" data-om="Herrega haaraa banaa caalbaasii itti dabalaa">አዲስ መለያ ይፍጠሩ እና ጨረታውን ይቀላቀሉ</p>
+                <button class="btn-outline-light" data-am="ተመዝገብ (Sign Up)" data-en="Sign Up" data-om="Galmaa'aa (Sign Up)">ተመዝገብ (Sign Up)</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <p data-i18n="footer_desc">Joobiraa (ጁቢራ) አዳዲስ እቃዎችን በርካሽ ዋጋ የሚያገኙበት ትልቁ የጨረታ መድረክ።</p>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="nav_contact">ያግኙን</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-phone"></i> 994 / 0911000000</a></li>
+                    <li><a href="#"><i class="fa-solid fa-envelope"></i> support@joobira.et</a></li>
+                    <li><a href="#"><i class="fa-solid fa-location-dot"></i> አዲስ አበባ, ኢትዮጵያ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="footer_about">ስለ እኛ</h4>
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_auctions">ጨረታዎች</a></li>
+                    <li><a href="faq.html" data-i18n="nav_faq">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
+                    <li><a href="#" data-i18n="footer_terms">ደንብና ግዴታዎች</a></li>
+                    <li><a href="#" data-i18n="footer_privacy">የግላዊነት ፖሊሲ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Joobiraa. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

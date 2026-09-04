@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joobiraa - Auctions</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background Curve -->
+    <div class="hero-bg"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="top-bar">
+            <div class="logo">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+            </div>
+            <div class="top-actions">
+                <button id="langToggle" class="lang-switch" onclick="toggleLanguage()">
+                    <i class="fa-solid fa-globe"></i> አማ
+                </button>
+            </div>
+        </div>
+        
+        <nav class="main-nav">
+            <ul class="nav-links">
+                <li><a href="index.html" data-i18n="nav_home">መነሻ</a></li>
+                <li><a href="#auctions" data-i18n="nav_auctions" style="color: var(--primary-gold);">ጨረታዎች</a></li>
+                <li><a href="#winners" data-i18n="title_winners">አሸናፊዎች</a></li>
+                <li><a href="faq.html" data-i18n="nav_faq">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
+                <li><a href="login.html" data-i18n="nav_login">ግባ / ተመዝገብ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h1 class="page-title" data-i18n="title_auctions">የቀረቡ ጨረታዎች</h1>
+        <p class="page-subtitle" data-am="ዝቅተኛውን ዋጋ በማቅረብ ያሸንፉ!" data-en="Bid lowest, be unique, and win!" data-om="Gatii xiqqaa dhiheessuun mo'adhaa!">ዝቅተኛውን ዋጋ በማቅረብ ያሸንፉ!</p>
+        
+        <!-- LIVE AUCTIONS -->
+        <section id="auctions" class="auctions-grid">
+            <div class="auction-card">
+                <div class="card-badges">
+                    <div class="badge-live"><i class="fa-solid fa-gavel"></i> 5.2K</div>
+                    <div class="badge-views"><i class="fa-regular fa-eye"></i> 9.2K</div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=500" alt="Samsung Galaxy" class="card-img">
+                
+                <h3 class="card-title" data-am="ሳምሰንግ ጋላክሲ S26 አልትራ" data-en="Samsung Galaxy S26 Ultra" data-om="Samsung Galaxy S26 Ultra">ሳምሰንግ ጋላክሲ S26 አልትራ</h3>
+                
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <span class="stat-label" data-i18n="lbl_current_bid">የአሁኑ ዋጋ</span>
+                        <span class="stat-value price">
+                            <i class="fa-solid fa-gavel"></i> 75.00 <span class="currency-lbl">ብር</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label" data-i18n="lbl_bids">የጨረታ ብዛት</span>
+                        <span class="stat-value" style="color: var(--primary-orange);">
+                            <i class="fa-solid fa-tag"></i> 223
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="timer-section">15ቀን : 13ሰ : 04ደ : 14ሴ</div>
+                
+                <div class="bid-controls">
+                    <button class="bid-btn-icon bid-minus"><i class="fa-solid fa-minus"></i></button>
+                    <input type="text" value="1" class="bid-input" readonly>
+                    <button class="bid-btn-icon bid-plus"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                
+                <button class="btn-primary" data-i18n="btn_bid">የጨረታ ዋጋ ያቅርቡ</button>
+            </div>
+
+            <div class="auction-card">
+                <div class="card-badges">
+                    <div class="badge-live"><i class="fa-solid fa-gavel"></i> 3.1K</div>
+                    <div class="badge-views"><i class="fa-regular fa-eye"></i> 8.5K</div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&q=80&w=500" alt="Electric Bike" class="card-img">
+                
+                <h3 class="card-title" data-am="B26 ኤሌክትሪክ ብስክሌት" data-en="B26 Electric Fat-Tire Bike" data-om="B26 Biskiliitii Elektirikii">B26 ኤሌክትሪክ ብስክሌት</h3>
+                
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <span class="stat-label" data-i18n="lbl_current_bid">የአሁኑ ዋጋ</span>
+                        <span class="stat-value price">
+                            <i class="fa-solid fa-gavel"></i> 75.00 <span class="currency-lbl">ብር</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label" data-i18n="lbl_bids">የጨረታ ብዛት</span>
+                        <span class="stat-value" style="color: var(--primary-orange);">
+                            <i class="fa-solid fa-tag"></i> 221
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="timer-section">14ቀን : 13ሰ : 04ደ : 14ሴ</div>
+                
+                <div class="bid-controls">
+                    <button class="bid-btn-icon bid-minus"><i class="fa-solid fa-minus"></i></button>
+                    <input type="text" value="1" class="bid-input" readonly>
+                    <button class="bid-btn-icon bid-plus"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                
+                <button class="btn-primary" data-i18n="btn_bid">የጨረታ ዋጋ ያቅርቡ</button>
+            </div>
+
+            <div class="auction-card">
+                <div class="card-badges">
+                    <div class="badge-live"><i class="fa-solid fa-gavel"></i> 4.5K</div>
+                    <div class="badge-views"><i class="fa-regular fa-eye"></i> 7.5K</div>
+                </div>
+                <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&q=80&w=500" alt="Washing Machine" class="card-img">
+                
+                <h3 class="card-title" data-am="አልጂ የልብስ ማጠቢያ ማሽን 18 ኪ.ግ" data-en="LG TwinTub Washing Machine 18kg" data-om="LG Maashinii Uffata Miiccuu 18kg">አልጂ የልብስ ማጠቢያ ማሽን 18 ኪ.ግ</h3>
+                
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <span class="stat-label" data-i18n="lbl_current_bid">የአሁኑ ዋጋ</span>
+                        <span class="stat-value price">
+                            <i class="fa-solid fa-gavel"></i> 75.00 <span class="currency-lbl">ብር</span>
+                        </span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label" data-i18n="lbl_bids">የጨረታ ብዛት</span>
+                        <span class="stat-value" style="color: var(--primary-orange);">
+                            <i class="fa-solid fa-tag"></i> 222
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="timer-section">13ቀን : 13ሰ : 04ደ : 14ሴ</div>
+                
+                <div class="bid-controls">
+                    <button class="bid-btn-icon bid-minus"><i class="fa-solid fa-minus"></i></button>
+                    <input type="text" value="1" class="bid-input" readonly>
+                    <button class="bid-btn-icon bid-plus"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                
+                <button class="btn-primary" data-i18n="btn_bid">የጨረታ ዋጋ ያቅርቡ</button>
+            </div>
+        </section>
+
+        <!-- WINNERS GALLERY -->
+        <section id="winners" class="content-section">
+            <h2 class="section-title" data-i18n="title_winners">የአሸናፊዎች ማዕከለ-ስዕላት (Winners Gallery)</h2>
+            <p class="section-desc" data-i18n="desc_winners">እውነተኛ አሸናፊዎች እና የጨረታ ውጤቶች</p>
+
+            <div class="winners-grid">
+                <div class="winner-card">
+                    <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
+                    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=300" alt="Samsung Galaxy">
+                    <p style="color: var(--text-light); font-size: 0.9rem;" data-am="ሳምሰንግ ጋላክሲ S26" data-en="Samsung Galaxy S26" data-om="Samsung Galaxy S26">ሳምሰንግ ጋላክሲ S26</p>
+                    <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Fikru</div>
+                    <div class="winner-bid">7.38 <span class="currency-lbl">ብር</span></div>
+                </div>
+                <div class="winner-card">
+                    <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
+                    <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&q=80&w=300" alt="E-bike">
+                    <p style="color: var(--text-light); font-size: 0.9rem;" data-am="ኤሌክትሪክ ብስክሌት" data-en="Electric Bike" data-om="Biskiliitii Elektirikii">ኤሌክትሪክ ብስክሌት</p>
+                    <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Tsega</div>
+                    <div class="winner-bid">4.17 <span class="currency-lbl">ብር</span></div>
+                </div>
+                <div class="winner-card">
+                    <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
+                    <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&q=80&w=300" alt="Washer">
+                    <p style="color: var(--text-light); font-size: 0.9rem;" data-am="አልጂ ማጠቢያ ማሽን" data-en="LG Washer" data-om="LG Maashinii Uffata Miiccuu">አልጂ ማጠቢያ ማሽን</p>
+                    <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Yadeta</div>
+                    <div class="winner-bid">9.16 <span class="currency-lbl">ብር</span></div>
+                </div>
+                <div class="winner-card">
+                    <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
+                    <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=300" alt="iPhone">
+                    <p style="color: var(--text-light); font-size: 0.9rem;" data-am="አይፎን 17" data-en="iPhone 17 Pro Max" data-om="iPhone 17">አይፎን 17</p>
+                    <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Dawit</div>
+                    <div class="winner-bid">4.84 <span class="currency-lbl">ብር</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMMUNITY IMPACT -->
+        <section id="impact" class="content-section">
+            <div class="impact-container">
+                <div class="impact-text">
+                    <h2 data-i18n="title_impact">የማህበረሰብ ተፅእኖ (Community Impact)</h2>
+                    <p style="font-size: 1.1rem; line-height: 1.8;" data-i18n="desc_impact">ከእያንዳንዱ ጨረታ 20% ለማህበረሰቡ ድጋፍ ይውላል</p>
+                </div>
+                <div class="impact-stats">
+                    <div class="impact-number">128,460</div>
+                    <p data-i18n="lbl_donated">እስከ አሁን የተለገሰው (ETB)</p>
+                    <div class="impact-progress">
+                        <div class="impact-bar"></div>
+                    </div>
+                    <p style="text-align: right; font-size: 0.8rem; margin-top: 10px; color: var(--text-light);" data-i18n="lbl_target">የሩብ ዓመቱ ግብ (Target): 640,000 ETB</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <p data-i18n="footer_desc">Joobiraa (ጁቢራ) አዳዲስ እቃዎችን በርካሽ ዋጋ የሚያገኙበት ትልቁ የጨረታ መድረክ።</p>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="nav_contact">ያግኙን</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-phone"></i> 994 / 0911000000</a></li>
+                    <li><a href="#"><i class="fa-solid fa-envelope"></i> support@joobira.et</a></li>
+                    <li><a href="#"><i class="fa-solid fa-location-dot"></i> አዲስ አበባ, ኢትዮጵያ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="footer_about">ስለ እኛ</h4>
+                <ul>
+                    <li><a href="index.html" data-i18n="nav_auctions">ጨረታዎች</a></li>
+                    <li><a href="faq.html" data-i18n="nav_faq">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
+                    <li><a href="#" data-i18n="footer_terms">ደንብና ግዴታዎች</a></li>
+                    <li><a href="#" data-i18n="footer_privacy">የግላዊነት ፖሊሲ</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Joobiraa. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
