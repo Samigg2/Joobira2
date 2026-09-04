@@ -14,19 +14,17 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Background Curve -->
-    <div class="hero-bg"></div>
-
-    <!-- Header -->
-    <header>
+    <div class="hero-wrapper"><header>
         <div class="top-bar">
             <div class="logo">
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; letter-spacing: 2px; font-size: 1.8rem; text-transform: uppercase; color: white; margin: 0;">JOO<span style="color: var(--primary-gold);">BIRA</span></h2>
             </div>
             <div class="top-actions">
-                <button id="langToggle" class="lang-switch" onclick="toggleLanguage()">
-                    <i class="fa-solid fa-globe"></i> አማ
-                </button>
+                <select id="langDropdown" onchange="changeLanguage(this.value)" class="lang-dropdown">
+                    <option value="om">Afaan Oromoo</option>
+                    <option value="am">አማርኛ</option>
+                    <option value="en">English</option>
+                </select>
                 <button class="hamburger" onclick="toggleMenu()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; margin-left: 10px;">
                     <i class="fa-solid fa-bars"></i>
                 </button>
@@ -40,8 +38,7 @@
                 <li><a href="faq.html" data-i18n="nav_faq" style="color: var(--primary-gold);">ተደጋግመው የሚጠየቁ ጥያቄዎች</a></li>
                 <li><a href="login.html" data-i18n="nav_login">ግባ / ተመዝገብ</a></li>
             </ul>
-        </nav>
-    </header>
+        </nav></header></div>
 
     <!-- Main Content -->
     <main>
@@ -109,7 +106,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; letter-spacing: 2px; font-size: 1.8rem; text-transform: uppercase; color: white; margin: 0;">JOO<span style="color: var(--primary-gold);">BIRA</span></h2>
                 <p data-i18n="footer_desc">Joobiraa (ጁቢራ) አዳዲስ እቃዎችን በርካሽ ዋጋ የሚያገኙበት ትልቁ የጨረታ መድረክ።</p>
             </div>
             <div class="footer-links">
@@ -138,3 +135,5 @@
     <script src="js/script.js"></script>
 </body>
 </html>
+
+

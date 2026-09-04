@@ -14,19 +14,20 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Background Curve -->
-    <div class="hero-bg index-hero"></div>
+    <div class="hero-wrapper">
 
     <!-- Header -->
     <header>
         <div class="top-bar">
             <div class="logo">
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; letter-spacing: 2px; font-size: 1.8rem; text-transform: uppercase; color: white; margin: 0;">JOO<span style="color: var(--primary-gold);">BIRA</span></h2>
             </div>
             <div class="top-actions">
-                <button id="langToggle" class="lang-switch" onclick="toggleLanguage()">
-                    <i class="fa-solid fa-globe"></i> አማ
-                </button>
+                <select id="langDropdown" onchange="changeLanguage(this.value)" class="lang-dropdown">
+                    <option value="om">Afaan Oromoo</option>
+                    <option value="am">አማርኛ</option>
+                    <option value="en">English</option>
+                </select>
                 <button class="hamburger" onclick="toggleMenu()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; margin-left: 10px;">
                     <i class="fa-solid fa-bars"></i>
                 </button>
@@ -45,8 +46,7 @@
     </header>
 
     <!-- Main Content -->
-    <main>
-        <!-- HERO SECTION -->
+    <!-- HERO SECTION -->
         <section class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title" data-am="በአነስተኛ ዋጋ አሸንፉ" data-en="Bid Low. Win Big." data-om="Gatii Xiqqaan Mo'adhaa">በአነስተኛ ዋጋ አሸንፉ</h1>
@@ -71,7 +71,7 @@
             <div class="hero-visual">
                 <div class="hero-ticket">
                     <div class="ticket-badge" data-am="● ቀጥታ" data-en="● Live Now" data-om="● Amma">● ቀጥታ</div>
-                    <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&q=80&w=400" alt="Laptop">
+                    <img src="assets/images/images.jpeg" alt="Laptop">
                     <h3 data-am="ዴል ላፕቶፕ ኮር i7" data-en="Dell Laptop Core i7" data-om="Dell Laptop Core i7">ዴል ላፕቶፕ ኮር i7</h3>
                     <div class="ticket-row">
                         <span data-i18n="lbl_bids">የጨረታ ብዛት</span>
@@ -79,9 +79,7 @@
                     </div>
                 </div>
             </div>
-        </section>
-
-        <h1 class="page-title" data-i18n="title_auctions" style="margin-top: 40px;">የቀረቡ ጨረታዎች</h1>
+        </section></div><main><h1 class="page-title" data-i18n="title_auctions" style="margin-top: 40px;">የቀረቡ ጨረታዎች</h1>
         <p class="page-subtitle" data-am="ዝቅተኛውን ዋጋ በማቅረብ ያሸንፉ!" data-en="Bid lowest, be unique, and win!" data-om="Gatii xiqqaa dhiheessuun mo'adhaa!">ዝቅተኛውን ዋጋ በማቅረብ ያሸንፉ!</p>
         
         <!-- LIVE AUCTIONS -->
@@ -91,7 +89,7 @@
                     <div class="badge-live"><i class="fa-solid fa-gavel"></i> 5.2K</div>
                     <div class="badge-views"><i class="fa-regular fa-eye"></i> 9.2K</div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=500" alt="Samsung Galaxy" class="card-img">
+                <img src="assets/images/images (1).jpeg" alt="Samsung Galaxy" class="card-img">
                 
                 <h3 class="card-title" data-am="ሳምሰንግ ጋላክሲ S26 አልትራ" data-en="Samsung Galaxy S26 Ultra" data-om="Samsung Galaxy S26 Ultra">ሳምሰንግ ጋላክሲ S26 አልትራ</h3>
                 
@@ -126,7 +124,7 @@
                     <div class="badge-live"><i class="fa-solid fa-gavel"></i> 3.1K</div>
                     <div class="badge-views"><i class="fa-regular fa-eye"></i> 8.5K</div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&q=80&w=500" alt="Electric Bike" class="card-img">
+                <img src="assets/images/images (2).jpeg" alt="Electric Bike" class="card-img">
                 
                 <h3 class="card-title" data-am="B26 ኤሌክትሪክ ብስክሌት" data-en="B26 Electric Fat-Tire Bike" data-om="B26 Biskiliitii Elektirikii">B26 ኤሌክትሪክ ብስክሌት</h3>
                 
@@ -161,7 +159,7 @@
                     <div class="badge-live"><i class="fa-solid fa-gavel"></i> 4.5K</div>
                     <div class="badge-views"><i class="fa-regular fa-eye"></i> 7.5K</div>
                 </div>
-                <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&q=80&w=500" alt="Washing Machine" class="card-img">
+                <img src="assets/images/images (3).jpeg" alt="Washing Machine" class="card-img">
                 
                 <h3 class="card-title" data-am="አልጂ የልብስ ማጠቢያ ማሽን 18 ኪ.ግ" data-en="LG TwinTub Washing Machine 18kg" data-om="LG Maashinii Uffata Miiccuu 18kg">አልጂ የልብስ ማጠቢያ ማሽን 18 ኪ.ግ</h3>
                 
@@ -200,28 +198,28 @@
             <div class="winners-grid">
                 <div class="winner-card">
                     <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
-                    <img src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&q=80&w=300" alt="Samsung Galaxy">
+                    <img src="assets/images/images (1).jpeg" alt="Samsung Galaxy">
                     <p style="color: var(--text-light); font-size: 0.9rem;" data-am="ሳምሰንግ ጋላክሲ S26" data-en="Samsung Galaxy S26" data-om="Samsung Galaxy S26">ሳምሰንግ ጋላክሲ S26</p>
                     <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Fikru</div>
                     <div class="winner-bid">7.38 <span class="currency-lbl">ብር</span></div>
                 </div>
                 <div class="winner-card">
                     <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
-                    <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&q=80&w=300" alt="E-bike">
+                    <img src="assets/images/images (2).jpeg" alt="E-bike">
                     <p style="color: var(--text-light); font-size: 0.9rem;" data-am="ኤሌክትሪክ ብስክሌት" data-en="Electric Bike" data-om="Biskiliitii Elektirikii">ኤሌክትሪክ ብስክሌት</p>
                     <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Tsega</div>
                     <div class="winner-bid">4.17 <span class="currency-lbl">ብር</span></div>
                 </div>
                 <div class="winner-card">
                     <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
-                    <img src="https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&q=80&w=300" alt="Washer">
+                    <img src="assets/images/images (3).jpeg" alt="Washer">
                     <p style="color: var(--text-light); font-size: 0.9rem;" data-am="አልጂ ማጠቢያ ማሽን" data-en="LG Washer" data-om="LG Maashinii Uffata Miiccuu">አልጂ ማጠቢያ ማሽን</p>
                     <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Yadeta</div>
                     <div class="winner-bid">9.16 <span class="currency-lbl">ብር</span></div>
                 </div>
                 <div class="winner-card">
                     <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
-                    <img src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?auto=format&fit=crop&q=80&w=300" alt="iPhone">
+                    <img src="assets/images/images (4).jpeg" alt="iPhone">
                     <p style="color: var(--text-light); font-size: 0.9rem;" data-am="አይፎን 17" data-en="iPhone 17 Pro Max" data-om="iPhone 17">አይፎን 17</p>
                     <div class="winner-name"><span data-i18n="lbl_winner">አሸናፊ</span>: Dawit</div>
                     <div class="winner-bid">4.84 <span class="currency-lbl">ብር</span></div>
@@ -253,7 +251,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-brand">
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-style: italic; letter-spacing: 1.5px; font-size: 1.8rem; text-transform: lowercase;"><span style="color: var(--primary-gold); font-style: normal;">●</span> joobiraa</h2>
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; letter-spacing: 2px; font-size: 1.8rem; text-transform: uppercase; color: white; margin: 0;">JOO<span style="color: var(--primary-gold);">BIRA</span></h2>
                 <p data-i18n="footer_desc">Joobiraa (ጁቢራ) አዳዲስ እቃዎችን በርካሽ ዋጋ የሚያገኙበት ትልቁ የጨረታ መድረክ።</p>
             </div>
             <div class="footer-links">
@@ -282,3 +280,9 @@
     <script src="js/script.js"></script>
 </body>
 </html>
+
+
+
+
+
+

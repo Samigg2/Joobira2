@@ -91,17 +91,16 @@ const dict = {
 
 const langs = ['en', 'am', 'om'];
 const langLabels = {'en': 'EN', 'am': 'አማ', 'om': 'OR'};
-let currentLangIndex = 2; // starts at 'om'
-let currentLang = langs[currentLangIndex];
+let currentLang = localStorage.getItem("lang") || "om"; let currentLangIndex = langs.indexOf(currentLang);
 
-function toggleLanguage() {
-    currentLangIndex = (currentLangIndex + 1) % langs.length;
-    currentLang = langs[currentLangIndex];
+function changeLanguage(lang) {
+    currentLang = lang;
+    currentLangIndex = langs.indexOf(lang);
     updateTranslations();
-    document.documentElement.lang = currentLang;
-    const btn = document.getElementById('langToggle');
-    if(btn) {
-        btn.innerHTML = `<i class="fa-solid fa-globe"></i> ${langLabels[currentLang]}`;
+    document.documentElement.lang = currentLang; localStorage.setItem("lang", currentLang);
+    const dropdown = document.getElementById('langDropdown');
+    if(dropdown && dropdown.value !== lang) {
+        dropdown.value = lang;
     }
 }
 
@@ -146,9 +145,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTranslations();
     
     // Set initial label on load
-    const btn = document.getElementById('langToggle');
-    if(btn) {
-        btn.innerHTML = `<i class="fa-solid fa-globe"></i> ${langLabels[currentLang]}`;
+    const dropdown = document.getElementById('langDropdown');
+    if(dropdown) {
+        dropdown.value = currentLang;
     }
 
     const faqQuestions = document.querySelectorAll('.faq-question');
@@ -183,3 +182,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
