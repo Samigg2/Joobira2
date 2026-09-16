@@ -139,6 +139,21 @@ function updateTranslations() {
             el.textContent = omText || el.getAttribute('data-en'); // fallback to en if om missing
         }
     });
+
+    updateTimers();
+}
+
+function updateTimers() {
+    document.querySelectorAll('.timer-section').forEach(el => {
+        if(el.hasAttribute('data-d')) {
+            let d = el.getAttribute('data-d');
+            let h = el.getAttribute('data-h');
+            let m = el.getAttribute('data-m');
+            let s = el.getAttribute('data-s');
+            
+            el.textContent = dict[currentLang]['time_format'](d, h, m, s);
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -149,6 +164,32 @@ document.addEventListener('DOMContentLoaded', () => {
     if(dropdown) {
         dropdown.value = currentLang;
     }
+
+    // Countdown Timer Logic
+    setInterval(() => {
+        document.querySelectorAll('.timer-section').forEach(el => {
+            if(el.hasAttribute('data-d')) {
+                let d = parseInt(el.getAttribute('data-d')) || 0;
+                let h = parseInt(el.getAttribute('data-h')) || 0;
+                let m = parseInt(el.getAttribute('data-m')) || 0;
+                let s = parseInt(el.getAttribute('data-s')) || 0;
+                
+                s--;
+                if(s < 0) { s = 59; m--; }
+                if(m < 0) { m = 59; h--; }
+                if(h < 0) { h = 23; d--; }
+                if(d < 0) { d = 0; h = 0; m = 0; s = 0; } // Timer stopped
+                
+                let pad = (num) => num.toString().padStart(2, '0');
+                
+                el.setAttribute('data-d', d);
+                el.setAttribute('data-h', pad(h));
+                el.setAttribute('data-m', pad(m));
+                el.setAttribute('data-s', pad(s));
+            }
+        });
+        updateTimers();
+    }, 1000);
 
     const faqQuestions = document.querySelectorAll('.faq-question');
     faqQuestions.forEach(q => {
