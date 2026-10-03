@@ -5,7 +5,8 @@
 
 const dict = {
     om: {
-        time_format: (d, h, m, s) => `${d}g : ${h}s : ${m}d : ${s}s`, lbl_views: 'ilaalcha', lbl_bidders: 'dorgomtoota',
+        lbl_code: 'Lakk. caalbaasii', copied: 'garagalfameera',
+        time_format: (d, h, m, s) => `${d}g : ${h}s : ${m}d : ${s}s`,
         nav_home: 'Mana', nav_auctions: 'Caalbaasii', nav_winners: "Mo'attoota", nav_mybids: 'Caalbaasii Koo',
         nav_faq: 'Gaaffiilee', nav_account: 'Herrega', nav_signin: 'Seeni', nav_contact: 'Nu Qunnamaa',
         footer_about: "Waa'ee Keenya", footer_terms: 'Seerota fi Haalawwan', footer_privacy: 'Imaammata Iccitii',
@@ -15,7 +16,7 @@ const dict = {
         hero_title: "Gatii <em>Xiqqaan</em> Mo'adhaa", hero_desc: "Qarshii 1 irraa jalqabee meeshaalee haaraa mo'adhaa.",
         title_auctions: 'Caalbaasiiwwan Ammaa', subtitle_auctions: "Gatii xiqqaa fi adda ta'e dhiheessuun mo'adhaa!",
         title_faq: "Gaaffiilee Yeroo Baay'ee Gaafataman", subtitle_faq: "Odeeffannoo waa'ee Joobiraa fi kaffaltii asitti argattu",
-        btn_bid: 'Gatii Dhiheessi', lbl_current_bid: 'Gatii Ammaa', lbl_bids: "Baay'ina Caalbaasii", currency: 'ETB',
+        btn_bid: 'Gatii Dhiheessi', lbl_current_bid: 'Gatii Ammaa', lbl_bids: 'Dorgomtoota', stat_views: 'Ilaalcha', currency: 'ETB',
         live: 'Amma', ended: 'Xumurame',
         bids_count: n => `caalbaasii ${n}`, results: n => `Caalbaasii ${n}`,
         search_placeholder: 'Caalbaasii barbaadi...',
@@ -80,7 +81,8 @@ const dict = {
         theme_dark: 'Haala dukkanaa', theme_light: 'Haala ifaa'
     },
     am: {
-        time_format: (d, h, m, s) => `${d}ቀን : ${h}ሰ : ${m}ደ : ${s}ሴ`, lbl_views: 'ዕይታ', lbl_bidders: 'ተጫራቾች',
+        lbl_code: 'የጨረታ ቁጥር', copied: 'ተቀድቷል',
+        time_format: (d, h, m, s) => `${d}ቀን : ${h}ሰ : ${m}ደ : ${s}ሴ`,
         nav_home: 'መነሻ', nav_auctions: 'ጨረታዎች', nav_winners: 'አሸናፊዎች', nav_mybids: 'የኔ ጨረታዎች',
         nav_faq: 'ጥያቄዎች', nav_account: 'መለያ', nav_signin: 'ይግቡ', nav_contact: 'ያግኙን',
         footer_about: 'ስለ እኛ', footer_terms: 'ደንብና ግዴታዎች', footer_privacy: 'የግላዊነት ፖሊሲ',
@@ -90,7 +92,7 @@ const dict = {
         hero_title: 'በአነስተኛ ዋጋ <em>አሸንፉ</em>', hero_desc: 'ከ1 ብር ጀምሮ አዳዲስ እቃዎችን ያሸንፉ።',
         title_auctions: 'የቀረቡ ጨረታዎች', subtitle_auctions: 'ዝቅተኛ እና ልዩ ዋጋ በማቅረብ ያሸንፉ!',
         title_faq: 'ተደጋግመው የሚጠየቁ ጥያቄዎች', subtitle_faq: 'ስለ Joobiraa ጨረታ እና ክፍያ መረጃዎችን እዚህ ያገኛሉ',
-        btn_bid: 'የጨረታ ዋጋ ያቅርቡ', lbl_current_bid: 'የአሁኑ ዋጋ', lbl_bids: 'የጨረታ ብዛት', currency: 'ብር',
+        btn_bid: 'የጨረታ ዋጋ ያቅርቡ', lbl_current_bid: 'የአሁኑ ዋጋ', lbl_bids: 'ተጫራቾች', stat_views: 'ዕይታ', currency: 'ብር',
         live: 'ቀጥታ', ended: 'ተጠናቋል',
         bids_count: n => `${n} ጨረታዎች`, results: n => `${n} ጨረታዎች`,
         search_placeholder: 'ጨረታ ይፈልጉ...',
@@ -155,7 +157,8 @@ const dict = {
         theme_dark: 'ጨለማ ገጽታ', theme_light: 'ብሩህ ገጽታ'
     },
     en: {
-        time_format: (d, h, m, s) => `${d}d : ${h}h : ${m}m : ${s}s`, lbl_views: 'views', lbl_bidders: 'bidders',
+        lbl_code: 'Auction no.', copied: 'copied',
+        time_format: (d, h, m, s) => `${d}d : ${h}h : ${m}m : ${s}s`,
         nav_home: 'Home', nav_auctions: 'Auctions', nav_winners: 'Winners', nav_mybids: 'My Bids',
         nav_faq: 'FAQ', nav_account: 'Account', nav_signin: 'Sign in', nav_contact: 'Contact Us',
         footer_about: 'About Us', footer_terms: 'Terms & Conditions', footer_privacy: 'Privacy Policy',
@@ -165,7 +168,7 @@ const dict = {
         hero_title: 'Bid <em>Less</em>, Win <em>Big</em>', hero_desc: 'Win brand-new items starting from 1 ETB.',
         title_auctions: 'Live Auctions', subtitle_auctions: 'Bid lowest, be unique, and win!',
         title_faq: 'Frequently Asked Questions', subtitle_faq: 'Find information about Joobiraa auctions and payments here',
-        btn_bid: 'Place Bid', lbl_current_bid: 'Current Bid', lbl_bids: 'Total Bids', currency: 'ETB',
+        btn_bid: 'Place Bid', lbl_current_bid: 'Current Bid', lbl_bids: 'Bidders', stat_views: 'Views', currency: 'ETB',
         live: 'Live', ended: 'Ended',
         bids_count: n => `${n} bids`, results: n => `${n} auctions`,
         search_placeholder: 'Search auctions...',
@@ -496,7 +499,7 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
             <div class="field">
                 <label class="field-label">${t('lbl_bid_amount')}</label>
                 ${bidStepper(startAmount)}
-                <p class="field-hint">${t('bid_amount_hint')}</p>
+                <p class="field-hint"><i class="fa-solid fa-circle-info"></i> ${t('min_bid')}</p>
             </div>` : ''}
             <div class="field">
                 <span class="field-label">${t('pay_method')}</span>
@@ -594,7 +597,6 @@ function auctionCard(a) {
     <article class="auction-card" data-bid-scope>
         <div class="card-top">
             <span class="badge badge-live"><i class="fa-solid fa-gavel"></i> ${t('live')}</span>
-            <span class="badge-views"><i class="fa-regular fa-eye"></i> ${compact(a.views)}</span>
         </div>
         <div class="card-media">
             <a href="${href}"><img class="card-img" src="${a.images[0]}" alt="${L(a.name)}" loading="lazy"></a>
@@ -608,7 +610,11 @@ function auctionCard(a) {
             </div>
             <div class="stat-item">
                 <span class="stat-label">${t('lbl_bids')}</span>
-                <span class="stat-value count"><i class="fa-solid fa-tag"></i> ${a.bids}</span>
+                <span class="stat-value count"><i class="fa-solid fa-users"></i> ${compact(a.bids)}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">${t('stat_views')}</span>
+                <span class="stat-value views"><i class="fa-regular fa-eye"></i> ${compact(a.views)}</span>
             </div>
         </div>
         <div class="timer" data-ends="${a.endsAt}"></div>

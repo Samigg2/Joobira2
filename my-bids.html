@@ -79,6 +79,7 @@
                 <div>
                     <span class="status ${status[0]}">${t(status[1])}</span>
                     <h4><a href="${href}">${L(a.name)}</a></h4>
+                    <div class="meta">${t('lbl_code')}: ${a.code}</div>
                     <div class="meta">${meta}</div>
                     ${amounts ? `<div class="meta" style="margin-top:6px">${t('lbl_your_bids')} (${amounts.length})</div>${amountsHTML(amounts)}` : ''}
                 </div>

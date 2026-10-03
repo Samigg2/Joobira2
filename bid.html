@@ -34,15 +34,16 @@
             <div class="detail-gallery">
                 <div class="gallery-main">
                     <div class="gallery-track" id="galleryTrack">
-                        ${a.images.map((src, i) => `<img src="${src}" alt="${L(a.name)} — ${i + 1}">`).join('')}
+                        ${a.images.map((src, i) => `
+                        <div class="gallery-slide is-loading">
+                            <img src="${src}" alt="${L(a.name)} — ${i + 1}" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
+                        </div>`).join('')}
                     </div>
                     ${favButton(a.id)}
                     <span class="gallery-count" id="galleryCount">1 / ${a.images.length}</span>
                     <button type="button" class="gallery-nav prev" data-nav="-1" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
                     <button type="button" class="gallery-nav next" data-nav="1" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
-                <div class="gallery-thumbs" id="galleryThumbs">
-                    ${a.images.map((src, i) => `<button type="button" data-index="${i}" aria-label="Photo ${i + 1}"><img src="${src}" alt=""></button>`).join('')}
+                    <div class="gallery-dots" id="galleryDots">${a.images.map(() => '<span></span>').join('')}</div>
                 </div>
             </div>`;
         }
@@ -51,7 +52,8 @@
             return `
             <div class="card-stats" style="margin-bottom:0">
                 <div class="stat-item"><span class="stat-label">${label}</span><span class="stat-value price">${value} <small>${t('currency')}</small></span></div>
-                <div class="stat-item"><span class="stat-label">${t('lbl_bids')}</span><span class="stat-value count"><i class="fa-solid fa-tag"></i> ${auction.bids}</span></div>
+                <div class="stat-item"><span class="stat-label">${t('lbl_bids')}</span><span class="stat-value count"><i class="fa-solid fa-users"></i> ${compact(auction.bids)}</span></div>
+                <div class="stat-item"><span class="stat-label">${t('stat_views')}</span><span class="stat-value views"><i class="fa-regular fa-eye"></i> ${compact(auction.views)}</span></div>
             </div>`;
         }
 
@@ -102,14 +104,13 @@
             <div class="detail-grid">
                 ${galleryHTML(auction)}
                 <div>
-                    <span class="badge ${live ? 'badge-live' : 'badge-ended'}">
-                        <i class="fa-solid ${live ? 'fa-gavel' : 'fa-flag-checkered'}"></i> ${t(live ? 'live' : 'ended')}
-                    </span>
-                    <h1 class="detail-title">${L(auction.name)}</h1>
-                    <div class="detail-meta">
-                        <span><i class="fa-regular fa-eye"></i> ${compact(auction.views)} ${t('lbl_views')}</span>
-                        <span><i class="fa-solid fa-users"></i> ${compact(auction.bidders)} ${t('lbl_bidders')}</span>
+                    <div class="detail-status">
+                        <span class="badge ${live ? 'badge-live' : 'badge-ended'}">
+                            ${live ? '<span class="pulse-dot"></span>' : '<i class="fa-solid fa-flag-checkered"></i>'} ${t(live ? 'live' : 'ended')}
+                        </span>
+                        <span class="code-chip">${t('lbl_code')}: <strong>${auction.code}</strong></span>
                     </div>
+                    <h1 class="detail-title" style="margin-bottom:14px">${L(auction.name)}</h1>
                     ${bidPanelHTML(auction)}
                     <div class="panel accordion ${descOpen ? 'open' : ''}" id="descAccordion">
                         <button type="button" class="accordion-toggle" aria-expanded="${descOpen}">
@@ -135,7 +136,7 @@
                     kind: live ? 'bid' : 'win',
                     amount: startAmount,
                     // Refresh the bid count (live) or show "Paid" (win) after a short pause on the success screen
-                    onDone: () => { if (!live) setTimeout(render, 2500); else qs('.stat-value.count', qs('#pay')).innerHTML = `<i class="fa-solid fa-tag"></i> ${auction.bids}`; }
+                    onDone: () => { if (!live) setTimeout(render, 2500); else qs('.stat-value.count', qs('#pay')).innerHTML = `<i class="fa-solid fa-users"></i> ${compact(auction.bids)}`; }
                 });
             }
             wireGallery();
@@ -152,17 +153,22 @@
         function wireGallery() {
             const track = qs('#galleryTrack');
             const total = auction.images.length;
-            const thumbs = qsa('#galleryThumbs button');
+            const dots = qsa('#galleryDots span');
+            // Shimmer placeholder until each photo arrives, then fade it in
+            qsa('.gallery-slide img', track).forEach(img => {
+                const done = () => img.parentElement.classList.remove('is-loading');
+                if (img.complete && img.naturalWidth) done();
+                else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+            });
             const update = i => {
                 photoIndex = i;
                 qs('#galleryCount').textContent = `${i + 1} / ${total}`;
-                thumbs.forEach((b, j) => b.classList.toggle('active', i === j));
+                dots.forEach((d, j) => d.classList.toggle('active', i === j));
                 qs('.gallery-nav.prev').disabled = i === 0;
                 qs('.gallery-nav.next').disabled = i === total - 1;
             };
             const go = i => track.scrollTo({ left: i * track.clientWidth, behavior: 'smooth' });
             qsa('.gallery-nav').forEach(b => b.addEventListener('click', () => go(Math.min(total - 1, Math.max(0, photoIndex + +b.dataset.nav)))));
-            thumbs.forEach(b => b.addEventListener('click', () => go(+b.dataset.index)));
             track.addEventListener('scroll', () => update(Math.round(track.scrollLeft / track.clientWidth)), { passive: true });
             update(photoIndex);
             if (photoIndex) track.scrollLeft = photoIndex * track.clientWidth;

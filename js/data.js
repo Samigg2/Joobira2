@@ -17,7 +17,7 @@ const AUCTIONS = [
         id: 's26', cat: 'phones', status: 'live', endsIn: 15 * 86400 + 13 * 3600 + 4 * 60,
         name: { am: 'ሳምሰንግ ጋላክሲ S26 አልትራ', en: 'Samsung Galaxy S26 Ultra', om: 'Samsung Galaxy S26 Ultra' },
         images: [IMG + 'images (1).jpeg', IMG + 'images (1).jpeg', IMG + 'images (1).jpeg'],
-        price: 75, bids: 223, bidders: 5200, views: 9200, retail: 145000,
+        price: 75, bids: 223, views: 9200,
         desc: {
             am: 'አዲስ፣ ያልተከፈተ ሳምሰንግ ጋላክሲ S26 አልትራ ከS Pen ጋር። የ1 ዓመት ዋስትና ያለው።',
             en: 'Brand new, sealed Samsung Galaxy S26 Ultra with S Pen. Comes with a 1-year official warranty.',
@@ -33,7 +33,7 @@ const AUCTIONS = [
         id: 'ebike', cat: 'vehicles', status: 'live', endsIn: 14 * 86400 + 13 * 3600 + 4 * 60,
         name: { am: 'B26 ኤሌክትሪክ ብስክሌት', en: 'B26 Electric Fat-Tire Bike', om: 'B26 Biskiliitii Elektirikii' },
         images: [IMG + 'images (2).jpeg', IMG + 'images (2).jpeg', IMG + 'images (2).jpeg'],
-        price: 120, bids: 221, bidders: 3100, views: 8500, retail: 98000,
+        price: 120, bids: 221, views: 8500,
         desc: {
             am: 'በአንድ ቻርጅ እስከ 40 ኪ.ሜ የሚጓዝ ኤሌክትሪክ ብስክሌት። ለከተማ እና ለጠጠር መንገድ ተስማሚ።',
             en: 'Fat-tire electric bike with up to 40 km range per charge. Built for city streets and gravel roads.',
@@ -48,7 +48,7 @@ const AUCTIONS = [
         id: 'lgwasher', cat: 'home', status: 'live', endsIn: 13 * 86400 + 13 * 3600 + 4 * 60,
         name: { am: 'አልጂ የልብስ ማጠቢያ ማሽን 18 ኪ.ግ', en: 'LG TwinTub Washing Machine 18kg', om: 'LG Maashinii Uffata Miiccuu 18kg' },
         images: [IMG + 'images (3).jpeg', IMG + 'images (3).jpeg', IMG + 'images (3).jpeg'],
-        price: 45, bids: 222, bidders: 4500, views: 7500, retail: 62000,
+        price: 45, bids: 222, views: 7500,
         desc: {
             am: 'ባለ ሁለት ገንዳ ከፊል-አውቶማቲክ ማጠቢያ ማሽን። ማጠብ እና ማድረቅ በአንድ ጊዜ።',
             en: 'Semi-automatic twin-tub washer. Wash and spin-dry at the same time.',
@@ -63,7 +63,7 @@ const AUCTIONS = [
         id: 'dell', cat: 'computers', status: 'live', endsIn: 2 * 86400 + 5 * 3600 + 30 * 60,
         name: { am: 'ዴል ላፕቶፕ ኮር i7', en: 'Dell Laptop Core i7', om: 'Dell Laptop Core i7' },
         images: [IMG + 'images.jpeg', IMG + 'images.jpeg', IMG + 'images.jpeg'],
-        price: 60, bids: 142, bidders: 2400, views: 6100, retail: 88000,
+        price: 60, bids: 142, views: 6100,
         desc: {
             am: 'ለሥራ እና ለትምህርት የሚሆን ፈጣን ዴል ላፕቶፕ።',
             en: 'Fast Dell laptop for work and study.',
@@ -78,7 +78,7 @@ const AUCTIONS = [
         id: 'iphone17', cat: 'phones', status: 'live', endsIn: 6 * 3600 + 12 * 60,
         name: { am: 'አይፎን 17 ፕሮ ማክስ', en: 'iPhone 17 Pro Max', om: 'iPhone 17 Pro Max' },
         images: [IMG + 'images (4).jpeg', IMG + 'images (4).jpeg', IMG + 'images (4).jpeg'],
-        price: 90, bids: 310, bidders: 6800, views: 12400, retail: 190000,
+        price: 90, bids: 310, views: 12400,
         desc: {
             am: 'አዲስ አይፎን 17 ፕሮ ማክስ፣ 256GB።',
             en: 'Brand new iPhone 17 Pro Max, 256GB.',
@@ -95,7 +95,7 @@ const AUCTIONS = [
         id: 'w-s26', cat: 'phones', status: 'ended', winner: { name: 'Fikru', bid: 7.38 },
         name: { am: 'ሳምሰንግ ጋላክሲ S26', en: 'Samsung Galaxy S26', om: 'Samsung Galaxy S26' },
         images: [IMG + 'images (1).jpeg', IMG + 'images (1).jpeg', IMG + 'images (1).jpeg'],
-        price: 75, bids: 4980, bidders: 5100, views: 15000, retail: 120000,
+        price: 75, bids: 4980, views: 15000,
         desc: { am: 'የተጠናቀቀ ጨረታ።', en: 'Completed auction.', om: 'Caalbaasii xumurame.' },
         specs: [['spec_brand', 'Samsung'], ['spec_storage', '256 GB'], ['spec_condition', 'cond_new']]
     },
@@ -103,7 +103,7 @@ const AUCTIONS = [
         id: 'w-ebike', cat: 'vehicles', status: 'ended', winner: { name: 'Tsega', bid: 4.17 },
         name: { am: 'ኤሌክትሪክ ብስክሌት', en: 'Electric Bike', om: 'Biskiliitii Elektirikii' },
         images: [IMG + 'images (2).jpeg', IMG + 'images (2).jpeg', IMG + 'images (2).jpeg'],
-        price: 120, bids: 3020, bidders: 2900, views: 9800, retail: 98000,
+        price: 120, bids: 3020, views: 9800,
         desc: { am: 'የተጠናቀቀ ጨረታ።', en: 'Completed auction.', om: 'Caalbaasii xumurame.' },
         specs: [['spec_brand', 'B26'], ['spec_range', '40 km'], ['spec_condition', 'cond_new']]
     },
@@ -111,7 +111,7 @@ const AUCTIONS = [
         id: 'w-washer', cat: 'home', status: 'ended', winner: { name: 'Yadeta', bid: 9.16 },
         name: { am: 'አልጂ ማጠቢያ ማሽን', en: 'LG Washer', om: 'LG Maashinii Uffata Miiccuu' },
         images: [IMG + 'images (3).jpeg', IMG + 'images (3).jpeg', IMG + 'images (3).jpeg'],
-        price: 45, bids: 4410, bidders: 4300, views: 8800, retail: 62000,
+        price: 45, bids: 4410, views: 8800,
         desc: { am: 'የተጠናቀቀ ጨረታ።', en: 'Completed auction.', om: 'Caalbaasii xumurame.' },
         specs: [['spec_brand', 'LG'], ['spec_capacity', '18 kg'], ['spec_condition', 'cond_new']]
     },
@@ -119,7 +119,7 @@ const AUCTIONS = [
         id: 'w-iphone', cat: 'phones', status: 'ended', winner: { name: 'Dawit', bid: 4.84 },
         name: { am: 'አይፎን 17', en: 'iPhone 17 Pro Max', om: 'iPhone 17' },
         images: [IMG + 'images (4).jpeg', IMG + 'images (4).jpeg', IMG + 'images (4).jpeg'],
-        price: 90, bids: 6120, bidders: 6000, views: 17000, retail: 190000,
+        price: 90, bids: 6120, views: 17000,
         desc: { am: 'የተጠናቀቀ ጨረታ።', en: 'Completed auction.', om: 'Caalbaasii xumurame.' },
         specs: [['spec_brand', 'Apple'], ['spec_storage', '256 GB'], ['spec_condition', 'cond_new']]
     },
@@ -128,7 +128,7 @@ const AUCTIONS = [
         id: 'm-dell', cat: 'computers', status: 'ended', winner: { name: 'me', bid: 3.42 },
         name: { am: 'ዴል ላፕቶፕ ኮር i5', en: 'Dell Laptop Core i5', om: 'Dell Laptop Core i5' },
         images: [IMG + 'images.jpeg', IMG + 'images.jpeg', IMG + 'images.jpeg'],
-        price: 60, bids: 1880, bidders: 1700, views: 5200, retail: 65000, settleFee: 500,
+        price: 60, bids: 1880, views: 5200,
         desc: { am: 'የተጠናቀቀ ጨረታ።', en: 'Completed auction.', om: 'Caalbaasii xumurame.' },
         specs: [['spec_brand', 'Dell'], ['spec_cpu', 'Intel Core i5'], ['spec_condition', 'cond_new']]
     }
@@ -143,6 +143,9 @@ const DEMO_MY_BIDS = [
 ];
 
 const PAGE_LOADED_AT = Date.now();
-AUCTIONS.forEach(a => { if (a.status === 'live') a.endsAt = PAGE_LOADED_AT + a.endsIn * 1000; });
+AUCTIONS.forEach((a, i) => {
+    if (a.status === 'live') a.endsAt = PAGE_LOADED_AT + a.endsIn * 1000;
+    a.code = String(i + 1).padStart(2, '0'); // auction number — the API will supply this
+});
 
 function getAuction(id) { return AUCTIONS.find(a => a.id === id); }
