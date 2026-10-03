@@ -78,7 +78,15 @@ const dict = {
         empty_active: 'Caalbaasii ammaa hin qabdu', empty_won: "Ammaaf hin mo'anne", empty_lost: 'Caalbaasii darbe hin jiru',
         empty_favs: 'Jaallatamaan hin jiru — ❤ tuqi', signin_needed: 'Caalbaasii kee ilaaluuf seeni',
         signin_needed_d: 'Lakkoofsa bilbilaatiin sekondii muraasatti seeni.', account_phone: 'Lakkoofsa bilbilaa',
-        theme_dark: 'Haala dukkanaa', theme_light: 'Haala ifaa'
+        theme_dark: 'Haala dukkanaa', theme_light: 'Haala ifaa',
+        upcoming: 'Dhufaa jiru', starts_in: 'Kan jalqabu', opens_soon: 'Dhiyootti banama', btn_results: "Bu'aa ilaali",
+        upcoming_note: 'Caalbaasiin yeroon kun yommuu dhumu banama.', you: 'Ati',
+        title_all_auctions: 'Caalbaasiiwwan Hunda', desc_all_auctions: "Kan amma jiru, kan dhufu fi kan xumurame",
+        bid_history: 'Seenaa caalbaasii', h_total: 'Caalbaasii waliigalaa', h_repeated: "Kan irra deebi'ame", h_unique: "Kan adda ta'e",
+        h_amount: 'Hanga', unique_yes: 'Adda', unique_no: 'Adda miti', show_less: 'Xiqqeessi',
+        show_more: n => `Dabalata agarsiisi (${n} hafe)`, back: 'Duubatti', nav_menu: 'Baafata',
+        install_title: 'Appii Joobiraa buufadhu', install_sub: 'Saffisaan banama, intarneetii laafaa irrattis ni hojjata',
+        install_btn: 'Buufadhu', install_ios: 'Share <i class="fa-solid fa-arrow-up-from-bracket"></i> tuqiitii "Add to Home Screen" filadhu', install_menu: 'Appii buufadhu'
     },
     am: {
         lbl_code: 'የጨረታ ቁጥር', copied: 'ተቀድቷል',
@@ -154,7 +162,15 @@ const dict = {
         empty_active: 'ቀጥታ ጨረታ የለዎትም', empty_won: 'እስካሁን ያሸነፉት የለም', empty_lost: 'ያለፈ ጨረታ የለም',
         empty_favs: 'ተወዳጅ ያልመረጡት የለም — ❤ን ይጫኑ', signin_needed: 'ጨረታዎችዎን ለማየት ይግቡ',
         signin_needed_d: 'በስልክ ቁጥርዎ በሰከንዶች ውስጥ ይግቡ።', account_phone: 'ስልክ ቁጥር',
-        theme_dark: 'ጨለማ ገጽታ', theme_light: 'ብሩህ ገጽታ'
+        theme_dark: 'ጨለማ ገጽታ', theme_light: 'ብሩህ ገጽታ',
+        upcoming: 'የሚመጡ', starts_in: 'የሚጀምረው በ', opens_soon: 'በቅርቡ ይከፈታል', btn_results: 'ውጤቱን ይመልከቱ',
+        upcoming_note: 'ቆጠራው ሲያልቅ ጨረታው ይከፈታል።', you: 'እርስዎ',
+        title_all_auctions: 'ሁሉም ጨረታዎች', desc_all_auctions: 'ቀጥታ፣ የሚመጡ እና የተጠናቀቁ ጨረታዎች',
+        bid_history: 'የጨረታ ታሪክ', h_total: 'ጠቅላላ ጨረታዎች', h_repeated: 'ተደጋጋሚ ጨረታዎች', h_unique: 'ልዩ ጨረታዎች',
+        h_amount: 'መጠን', unique_yes: 'ልዩ', unique_no: 'ልዩ አይደለም', show_less: 'አሳንስ',
+        show_more: n => `ተጨማሪ አሳይ (${n} ቀሪ)`, back: 'ተመለስ', nav_menu: 'ምናሌ',
+        install_title: 'የJoobiraa መተግበሪያ ይጫኑ', install_sub: 'በፍጥነት ይከፈታል፣ በደካማ ኢንተርኔትም ይሰራል',
+        install_btn: 'ጫን', install_ios: 'Share <i class="fa-solid fa-arrow-up-from-bracket"></i> ተጭነው "Add to Home Screen" ይምረጡ', install_menu: 'መተግበሪያውን ይጫኑ'
     },
     en: {
         lbl_code: 'Auction no.', copied: 'copied',
@@ -230,7 +246,15 @@ const dict = {
         empty_active: 'You have no active bids', empty_won: 'No wins yet — keep bidding!', empty_lost: 'No past auctions',
         empty_favs: 'No favorites yet — tap the ❤ on any auction', signin_needed: 'Sign in to see your bids',
         signin_needed_d: 'It takes seconds with your phone number.', account_phone: 'Phone number',
-        theme_dark: 'Dark mode', theme_light: 'Light mode'
+        theme_dark: 'Dark mode', theme_light: 'Light mode',
+        upcoming: 'Upcoming', starts_in: 'Starts in', opens_soon: 'Opens soon', btn_results: 'View results',
+        upcoming_note: 'Bidding opens when the countdown ends.', you: 'You',
+        title_all_auctions: 'All Auctions', desc_all_auctions: 'Live, upcoming and closed auctions',
+        bid_history: 'Bid history', h_total: 'Total bids', h_repeated: 'Repeated bids', h_unique: 'Unique bids',
+        h_amount: 'Amount', unique_yes: 'Unique', unique_no: 'Not unique', show_less: 'Show less',
+        show_more: n => `Show more (${n} left)`, back: 'Back', nav_menu: 'Menu',
+        install_title: 'Install the Joobiraa app', install_sub: 'Opens faster and works on weak internet',
+        install_btn: 'Install', install_ios: 'Tap Share <i class="fa-solid fa-arrow-up-from-bracket"></i> then "Add to Home Screen"', install_menu: 'Install app'
     }
 };
 
@@ -250,6 +274,9 @@ function compact(n) { return n >= 1000 ? (n / 1000).toFixed(1).replace(/\.0$/, '
 function qs(sel, root = document) { return root.querySelector(sel); }
 function qsa(sel, root = document) { return [...root.querySelectorAll(sel)]; }
 function pad(n) { return String(n).padStart(2, '0'); }
+// Public views never show a full number: 09******75
+function maskPhone(p) { return `0${p.slice(0, 1)}******${p.slice(-2)}`; }
+function winnerName(a) { return a.winner.name === 'me' ? t('you') : a.winner.name; }
 function fmtPhone(p) { return `+251 ${p.slice(0, 2)} ${p.slice(2, 5)} ${p.slice(5)}`; }
 function fmtDate(ms) {
     const locale = LANGS.find(l => l.id === currentLang).locale;
@@ -330,6 +357,8 @@ function applyTranslations() {
 // ---------- shared chrome (header, bottom nav, footer) ----------
 function renderChrome() {
     const page = document.body.dataset.page;
+    const menuLink = (href, icon, key, id) =>
+        `<a href="${href}" class="${page === id ? 'active' : ''}"><i class="fa-solid ${icon}"></i><span data-i18n="${key}"></span></a>`;
     const navLink = (href, key, id) => `<li><a href="${href}" class="${page === id ? 'active' : ''}" data-i18n="${key}"></a></li>`;
     const header = qs('#site-header');
     if (header) header.outerHTML = `
@@ -338,12 +367,15 @@ function renderChrome() {
             <a href="index.html" class="brand" aria-label="Joobiraa home">JOO<span>BIRAA</span></a>
             <ul class="desktop-nav">
                 ${navLink('index.html', 'nav_home', 'home')}
-                ${navLink('index.html#auctions', 'nav_auctions', 'auctions')}
-                ${navLink('index.html#winners', 'nav_winners', 'winners')}
+                ${navLink('auctions.html', 'nav_auctions', 'auctions')}
+                ${navLink('winners.html', 'nav_winners', 'winners')}
                 ${navLink('my-bids.html', 'nav_mybids', 'mybids')}
                 ${navLink('faq.html', 'nav_faq', 'faq')}
             </ul>
             <div class="header-actions">
+                <button type="button" class="install-pill hidden" data-action="install">
+                    <img src="assets/icons/icon-192.png" alt="" width="18" height="18"><span data-i18n="install_btn"></span>
+                </button>
                 <div class="lang-menu">
                     <button class="lang-pill" type="button" aria-haspopup="listbox" aria-label="Language">
                         <i class="fa-solid fa-globe"></i><span class="code">OM</span><i class="fa-solid fa-chevron-down"></i>
@@ -355,24 +387,39 @@ function renderChrome() {
                 <button class="icon-btn" type="button" data-action="theme" aria-label="Toggle dark mode"><i data-theme-icon class="fa-solid fa-moon"></i></button>
                 <a href="login.html" class="btn-signin"><i class="fa-solid fa-mobile-screen"></i><span data-i18n="nav_signin"></span></a>
                 <a href="#" class="avatar" data-action="account" aria-label="Account"><i class="fa-solid fa-user"></i></a>
+                <button class="icon-btn menu-btn" type="button" data-action="menu" aria-expanded="false" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
+        <nav class="mobile-menu" aria-label="Menu">
+            ${menuLink('index.html', 'fa-house', 'nav_home', 'home')}
+            ${menuLink('auctions.html', 'fa-store', 'nav_auctions', 'auctions')}
+            ${menuLink('winners.html', 'fa-trophy', 'nav_winners', 'winners')}
+            ${menuLink('my-bids.html', 'fa-gavel', 'nav_mybids', 'mybids')}
+            ${menuLink('faq.html', 'fa-circle-question', 'nav_faq', 'faq')}
+            <a href="#" class="install-link hidden" data-action="install"><i class="fa-solid fa-download"></i><span data-i18n="install_menu"></span></a>
+        </nav>
     </header>`;
+
+    // Inner pages get a back link above the title
+    const head = qs('.page-head');
+    if (head && page !== 'home') head.insertAdjacentHTML('afterbegin',
+        `<a href="index.html" class="back-link" data-action="back"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back"></span></a>`);
 
     const tab = (href, icon, key, id, action) =>
         `<a href="${href}" class="${page === id ? 'active' : ''}" ${action ? `data-action="${action}"` : ''}><i class="fa-solid ${icon}"></i><span data-i18n="${key}"></span></a>`;
     document.body.insertAdjacentHTML('beforeend', `
     <nav class="bottom-nav" aria-label="Main">
         ${tab('index.html', 'fa-house', 'nav_home', 'home')}
+        ${tab('auctions.html', 'fa-store', 'nav_auctions', 'auctions')}
+        ${tab('winners.html', 'fa-trophy', 'nav_winners', 'winners')}
         ${tab('my-bids.html', 'fa-gavel', 'nav_mybids', 'mybids')}
-        ${tab('faq.html', 'fa-circle-question', 'nav_faq', 'faq')}
         ${session.user()
             ? tab('#', 'fa-user', 'nav_account', 'account', 'account')
             : tab('login.html', 'fa-right-to-bracket', 'nav_signin', 'login')}
     </nav>
     <div class="floating-buttons">
-        <a href="tel:0910443972" class="float-btn phone-float" aria-label="Call us"><i class="fa-solid fa-phone"></i></a>
-        <a href="https://t.me/+251910443972" class="float-btn telegram-float" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+        <a href="tel:0912120330" class="float-btn phone-float" aria-label="Call us"><i class="fa-solid fa-phone"></i></a>
+        <a href="https://t.me/+251912120330" class="float-btn telegram-float" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
     </div>
     <div class="toast" role="status" aria-live="polite"></div>`);
 
@@ -388,21 +435,22 @@ function renderChrome() {
                         <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                         <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
                         <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="https://t.me/+251910443972" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                        <a href="https://t.me/+251912120330" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
                     </div>
                 </div>
                 <div class="footer-links">
                     <h4 data-i18n="nav_contact"></h4>
                     <ul>
-                        <li><a href="tel:0910443972"><i class="fa-solid fa-phone"></i> 0910443972</a></li>
-                        <li><a href="mailto:support@joobiraa.et"><i class="fa-solid fa-envelope"></i> support@joobiraa.et</a></li>
+                        <li><a href="tel:0912120330"><i class="fa-solid fa-phone"></i> 0912120330</a></li>
+                        <li><a href="mailto:joobiraa219@gmail.com"><i class="fa-solid fa-envelope"></i> joobiraa219@gmail.com</a></li>
                         <li><a href="#"><i class="fa-solid fa-location-dot"></i> <span data-i18n="footer_location"></span></a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h4 data-i18n="footer_about"></h4>
                     <ul>
-                        <li><a href="index.html#auctions" data-i18n="nav_auctions"></a></li>
+                        <li><a href="auctions.html" data-i18n="nav_auctions"></a></li>
+                        <li><a href="winners.html" data-i18n="nav_winners"></a></li>
                         <li><a href="faq.html" data-i18n="nav_faq"></a></li>
                         <li><a href="#" data-i18n="footer_terms"></a></li>
                         <li><a href="#" data-i18n="footer_privacy"></a></li>
@@ -505,10 +553,10 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
                 <span class="field-label">${t('pay_method')}</span>
                 <div class="pay-methods">
                     <button type="button" class="pay-method telebirr" data-method="telebirr">
-                        <span class="logo">tele<br>birr</span><span>Telebirr<small>${t('pay_telebirr_sub')}</small></span>
+                        <span class="logo"><img src="assets/pay/telebirr.webp" alt="" width="48" height="27"></span><span>Telebirr<small>${t('pay_telebirr_sub')}</small></span>
                     </button>
                     <button type="button" class="pay-method cbe" data-method="cbe">
-                        <span class="logo">CBE</span><span>CBE Birr<small>${t('pay_cbe_sub')}</small></span>
+                        <span class="logo"><img src="assets/pay/cbe.webp" alt="" width="30" height="29"></span><span>CBE Birr<small>${t('pay_cbe_sub')}</small></span>
                     </button>
                 </div>
             </div>
@@ -583,21 +631,37 @@ function favButton(id) {
         <i class="fa-${on ? 'solid' : 'regular'} fa-heart"></i></button>`;
 }
 
+// The amount box is exactly as wide as the number, so "1.00 ETB" sits centred between − and +
+function bidWidth(v) { return `${Math.max(String(v).length, 1) + 0.3}ch`; }
+function fitBid(input) { input.style.width = bidWidth(input.value); }
 function bidStepper(value = '1.00') {
     return `<div class="bid-stepper">
-        <button type="button" data-step="-1" aria-label="-1"><i class="fa-solid fa-minus"></i></button>
-        <label class="bid-field"><input class="bid-input" type="text" inputmode="decimal" value="${value}" aria-label="${t('lbl_bid_amount')}"><span class="unit">${t('currency')}</span></label>
-        <button type="button" data-step="1" aria-label="+1"><i class="fa-solid fa-plus"></i></button>
+        <button type="button" data-step="-0.01" aria-label="-0.01"><i class="fa-solid fa-minus"></i></button>
+        <label class="bid-field"><input class="bid-input" type="text" inputmode="decimal" value="${value}" style="width:${bidWidth(value)}" aria-label="${t('lbl_bid_amount')}"><span class="unit">${t('currency')}</span></label>
+        <button type="button" data-step="0.01" aria-label="+0.01"><i class="fa-solid fa-plus"></i></button>
     </div>`;
 }
 
 function auctionCard(a) {
     const href = `bid.html?id=${a.id}`;
+    const ended = a.status === 'ended';
+    const badge = {
+        live: `<span class="badge badge-live"><i class="fa-solid fa-gavel"></i> ${t('live')}</span>`,
+        upcoming: `<span class="badge badge-upcoming"><i class="fa-regular fa-clock"></i> ${t('upcoming')}</span>`,
+        ended: `<span class="badge badge-ended"><i class="fa-solid fa-flag-checkered"></i> ${t('ended')}</span>`
+    }[a.status];
+    const bottom = {
+        live: () => `<div class="timer" data-ends="${a.endsAt}"></div>
+        ${bidStepper()}
+        <button type="button" class="btn btn-gold btn-block" data-bid="${a.id}">${t('btn_bid')}</button>`,
+        upcoming: () => `<div class="timer upcoming">${t('starts_in')} <span data-ends="${a.startsAt}"></span></div>
+        <a href="${href}" class="btn btn-outline btn-block"><i class="fa-regular fa-bell"></i> ${t('opens_soon')}</a>`,
+        ended: () => `<div class="winner-strip card-winner"><i class="fa-solid fa-trophy"></i> ${t('lbl_winner')}: <strong>${winnerName(a)}</strong> <span class="masked">${maskPhone(a.winner.phone)}</span></div>
+        <a href="${href}" class="btn btn-outline btn-block">${t('btn_results')}</a>`
+    }[a.status]();
     return `
     <article class="auction-card" data-bid-scope>
-        <div class="card-top">
-            <span class="badge badge-live"><i class="fa-solid fa-gavel"></i> ${t('live')}</span>
-        </div>
+        <div class="card-top">${badge}</div>
         <div class="card-media">
             <a href="${href}"><img class="card-img" src="${a.images[0]}" alt="${L(a.name)}" loading="lazy"></a>
             ${favButton(a.id)}
@@ -605,8 +669,8 @@ function auctionCard(a) {
         <a class="card-title" href="${href}">${L(a.name)}</a>
         <div class="card-stats">
             <div class="stat-item">
-                <span class="stat-label">${t('lbl_current_bid')}</span>
-                <span class="stat-value price">${fmtETB(a.price)} <small>${t('currency')}</small></span>
+                <span class="stat-label">${t(ended ? 'lbl_winning_bid' : 'lbl_current_bid')}</span>
+                <span class="stat-value price">${fmtETB(ended ? a.winner.bid : a.price)} <small>${t('currency')}</small></span>
             </div>
             <div class="stat-item">
                 <span class="stat-label">${t('lbl_bids')}</span>
@@ -617,10 +681,62 @@ function auctionCard(a) {
                 <span class="stat-value views"><i class="fa-regular fa-eye"></i> ${compact(a.views)}</span>
             </div>
         </div>
-        <div class="timer" data-ends="${a.endsAt}"></div>
-        ${bidStepper()}
-        <button type="button" class="btn btn-gold btn-block" data-bid="${a.id}">${t('btn_bid')}</button>
+        ${bottom}
     </article>`;
+}
+
+// Winners gallery card: the winner is shown by masked phone, never the full number
+function winnerCard(a) {
+    return `
+    <a class="winner-card" href="bid.html?id=${a.id}">
+        <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
+        <img src="${a.images[0]}" alt="${L(a.name)}" loading="lazy">
+        <p class="winner-item">${L(a.name)}</p>
+        <div class="winner-name">${winnerName(a)}</div>
+        <div class="winner-phone masked">${maskPhone(a.winner.phone)}</div>
+        <div class="winner-bid">${fmtETB(a.winner.bid)} ${t('currency')}</div>
+    </a>`;
+}
+
+// ---------- Bid history (ended auctions, inside a closed-by-default box) ----------
+const HISTORY_PAGE = 15;
+const CHIPS_SHOWN = 6;
+function historyHTML(a, shown = HISTORY_PAGE) {
+    const h = bidHistory(a);
+    const stat = (v, k, cls = '') => `<div class="h-stat"><strong class="${cls}">${v}</strong><span>${t(k)}</span></div>`;
+    const chip = p => `<span class="phone-chip">${maskPhone(p)}</span>`;
+    const rows = h.rows.slice(0, shown).map(r => {
+        const more = r.phones.length - CHIPS_SHOWN;
+        const icon = r.winner ? 'fa-crown' : r.n === 1 ? 'fa-circle-check' : 'fa-circle-xmark';
+        const label = r.winner ? t('lbl_winner') : t(r.n === 1 ? 'unique_yes' : 'unique_no');
+        return `
+        <li class="h-row ${r.winner ? 'is-winner' : ''}">
+            <div class="h-row-top">
+                <span class="h-amount">${fmtETB(r.amount)} <small>${t('currency')}</small></span>
+                <span class="h-count"><i class="fa-solid fa-users"></i> ${r.n}</span>
+                <span class="h-unique ${r.n === 1 ? 'yes' : 'no'}"><i class="fa-solid ${icon}"></i> ${label}</span>
+            </div>
+            <div class="h-phones">
+                ${r.phones.slice(0, CHIPS_SHOWN).map(chip).join('')}
+                ${more > 0 ? `<span class="h-phones-more hidden">${r.phones.slice(CHIPS_SHOWN).map(chip).join('')}</span><button type="button" class="phone-chip more" data-more-phones data-label="+${more}">+${more}</button>` : ''}
+            </div>
+        </li>`;
+    }).join('');
+    const left = h.rows.length - shown;
+    return `
+        <div class="h-stats">
+            ${stat(h.total.toLocaleString('en'), 'h_total')}
+            ${stat(h.repeated.toLocaleString('en'), 'h_repeated')}
+            ${stat(h.unique, 'h_unique')}
+            ${stat(fmtETB(a.winner.bid), 'lbl_winning_bid', 'win')}
+        </div>
+        <div class="h-winner">
+            <span class="crown"><i class="fa-solid fa-crown"></i></span>
+            <div><small>${t('lbl_winner')}</small><strong>${winnerName(a)}</strong><span class="masked">${maskPhone(a.winner.phone)}</span></div>
+            <span class="h-winner-bid">${fmtETB(a.winner.bid)} ${t('currency')}</span>
+        </div>
+        <ol class="h-list">${rows}</ol>
+        ${left > 0 ? `<button type="button" class="btn btn-outline btn-block" data-history-more="${shown + HISTORY_PAGE}">${t('show_more')(left.toLocaleString('en'))}</button>` : ''}`;
 }
 
 // ---------- Timers ----------
@@ -649,6 +765,8 @@ document.addEventListener('click', e => {
     const pick = e.target.closest('.lang-list button');
     if (pick) { changeLanguage(pick.dataset.lang); menu.classList.remove('open'); return; }
     if (menu && !e.target.closest('.lang-menu')) menu.classList.remove('open');
+    const header = qs('.site-header');
+    if (header && header.classList.contains('menu-open') && !e.target.closest('.mobile-menu, .menu-btn')) qs('.menu-btn').click();
 
     const action = e.target.closest('[data-action]');
     if (action) {
@@ -656,6 +774,18 @@ document.addEventListener('click', e => {
         if (a === 'theme') { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); applyTranslations(); }
         if (a === 'account') { e.preventDefault(); openAccount(); }
         if (a === 'signout') { session.signOut(); location.href = 'index.html'; }
+        if (a === 'install') { e.preventDefault(); installApp(); }
+        if (a === 'menu') {
+            const open = qs('.site-header').classList.toggle('menu-open');
+            action.setAttribute('aria-expanded', open);
+            action.querySelector('i').className = `fa-solid ${open ? 'fa-xmark' : 'fa-bars'}`;
+        }
+        if (a === 'back') {
+            // Go back if we came from inside the site, otherwise to the link's own target
+            e.preventDefault();
+            const internal = document.referrer && new URL(document.referrer).host === location.host && history.length > 1;
+            if (internal) history.back(); else location.href = action.getAttribute('href');
+        }
         return;
     }
 
@@ -673,11 +803,14 @@ document.addEventListener('click', e => {
         return;
     }
 
+    // Pointer taps are handled on pointerdown (with hold-to-repeat); this covers keyboard presses
     const step = e.target.closest('[data-step]');
-    if (step) {
-        const input = qs('.bid-input', step.closest('.bid-stepper'));
-        const v = (parseFloat(input.value) || 1) + Number(step.dataset.step);
-        input.value = fmtETB(Math.max(1, v));
+    if (step) { if (e.detail === 0) stepBid(step); return; }
+
+    const morePhones = e.target.closest('[data-more-phones]');
+    if (morePhones) {
+        const open = morePhones.previousElementSibling.classList.toggle('hidden') === false;
+        morePhones.textContent = open ? t('show_less') : morePhones.dataset.label;
         return;
     }
 
@@ -689,6 +822,28 @@ document.addEventListener('click', e => {
     }
 });
 
+// +/- change the bid by 0.01; holding the button keeps going and speeds up
+function stepBid(btn) {
+    const input = qs('.bid-input', btn.closest('.bid-stepper'));
+    const cents = Math.round((parseFloat(input.value) || 1) * 100) + Math.round(Number(btn.dataset.step) * 100);
+    input.value = fmtETB(Math.max(100, cents) / 100);
+    fitBid(input);
+}
+let stepTimer;
+const stopStep = () => clearTimeout(stepTimer);
+document.addEventListener('pointerdown', e => {
+    const btn = e.target.closest('[data-step]');
+    if (!btn || e.button > 0) return;
+    e.preventDefault();
+    stepBid(btn);
+    let delay = 400;
+    const repeat = () => { stepBid(btn); delay = Math.max(30, delay * 0.85); stepTimer = setTimeout(repeat, delay); };
+    stepTimer = setTimeout(repeat, delay);
+    btn.addEventListener('pointerleave', stopStep, { once: true });
+});
+['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, stopStep));
+window.addEventListener('blur', stopStep);
+
 // Keep bid inputs to a valid money format
 document.addEventListener('input', e => {
     if (!e.target.classList || !e.target.classList.contains('bid-input')) return;
@@ -696,11 +851,13 @@ document.addEventListener('input', e => {
     const [int, ...rest] = v.split('.');
     if (rest.length) v = int + '.' + rest.join('').slice(0, 2);
     e.target.value = v;
+    fitBid(e.target);
 });
 document.addEventListener('focusout', e => {
     if (e.target.classList && e.target.classList.contains('bid-input')) {
         const v = parseFloat(e.target.value);
         e.target.value = fmtETB(isNaN(v) || v < 1 ? 1 : v);
+        fitBid(e.target);
     }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
@@ -714,6 +871,40 @@ function initFaq() {
     }));
 }
 
+// ---------- Install as an app (PWA) ----------
+// Android/desktop Chrome fire `beforeinstallprompt`; iPhone Safari has no prompt, so we show how to add it by hand.
+let installEvent = null;
+let installIOS = false;
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+
+// Small "Install" pill in the header — sits in the bar, never covers the page
+function showInstall({ ios = false } = {}) {
+    installIOS = ios;
+    qsa('.install-pill, .install-link').forEach(el => el.classList.remove('hidden'));
+}
+
+async function installApp() {
+    // iPhone: no prompt exists, so explain the two taps
+    if (installIOS) {
+        openModal(`${modalHead(t('install_title'))}<p class="install-how"><img src="assets/icons/icon-192.png" alt="" width="40" height="40"> ${t('install_ios')}</p>`);
+        return;
+    }
+    if (!installEvent) return;
+    installEvent.prompt();
+    await installEvent.userChoice;
+    installEvent = null;
+    qsa('.install-pill, .install-link').forEach(el => el.classList.add('hidden'));
+}
+
+function initInstall() {
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js');
+    if (isStandalone()) return;
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvent = e; showInstall(); });
+    window.addEventListener('appinstalled', () => { qsa('.install-pill, .install-link').forEach(el => el.classList.add('hidden')); toast('✓ Joobiraa'); });
+    if (isIOS()) showInstall({ ios: true });
+}
+
 // ---------- boot ----------
 document.addEventListener('DOMContentLoaded', () => {
     renderChrome();
@@ -723,4 +914,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const pending = store.get('jb_toast');
     if (pending) { store.remove('jb_toast'); setTimeout(() => toast(pending), 300); }
     setInterval(tickTimers, 1000);
+    initInstall();
 });

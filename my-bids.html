@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0F1B2D">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-48.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
     <script src="js/boot.js"></script>
 </head>
 <body data-page="mybids">
@@ -67,7 +71,7 @@
                 : ['lost', 'status_lost'];
             const meta = kind === 'active'
                 ? `<span class="timer-text" data-ends="${a.endsAt}"></span>`
-                : `<span><i class="fa-solid fa-trophy"></i> ${a.winner.name === 'me' ? t('winner_you') : t('winner_banner')(a.winner.name, fmtETB(a.winner.bid))}</span>`;
+                : `<span><i class="fa-solid fa-trophy"></i> ${a.winner.name === 'me' ? t('winner_you') : t('winner_banner')(maskPhone(a.winner.phone), fmtETB(a.winner.bid))}</span>`;
             const actions = kind === 'active'
                 ? `<a href="${href}" class="btn btn-gold">${t('btn_bid_again')}</a>`
                 : kind === 'won' && !paid
@@ -89,7 +93,7 @@
 
         function emptyHTML(key, icon) {
             return `<div class="empty-state"><i class="fa-regular ${icon}"></i>${t(key)}<br><br>
-                <a href="index.html#auctions" class="btn btn-gold">${t('how_cta_browse')}</a></div>`;
+                <a href="auctions.html" class="btn btn-gold">${t('how_cta_browse')}</a></div>`;
         }
 
         function render() {

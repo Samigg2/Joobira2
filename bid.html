@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0F1B2D">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-48.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
     <script src="js/boot.js"></script>
 </head>
 <body data-page="auctions">
@@ -28,6 +32,8 @@
         const startAmount = parseFloat(params.get('amount'));
         let photoIndex = 0;
         let descOpen = false;
+        let historyOpen = false;
+        let historyShown = HISTORY_PAGE;
 
         function galleryHTML(a) {
             return `
@@ -57,6 +63,16 @@
             </div>`;
         }
 
+        function timerBoxHTML(ends) {
+            return `
+            <div class="detail-timer-box" data-ends="${ends}" data-style="boxes">
+                <div><strong data-t="d">--</strong><small>${t('d_days')}</small></div>
+                <div><strong data-t="h">--</strong><small>${t('d_hours')}</small></div>
+                <div><strong data-t="m">--</strong><small>${t('d_mins')}</small></div>
+                <div><strong data-t="s">--</strong><small>${t('d_secs')}</small></div>
+            </div>`;
+        }
+
         function bidPanelHTML(a) {
             if (a.status === 'ended') {
                 const mine = a.winner.name === 'me';
@@ -64,22 +80,26 @@
                 return `
                 <div class="panel" id="pay">
                     <div class="winner-strip"><i class="fa-solid fa-trophy"></i>
-                        ${mine ? t('winner_you') : t('winner_banner')(a.winner.name, fmtETB(a.winner.bid))}
+                        ${mine ? t('winner_you') : t('winner_banner')(maskPhone(a.winner.phone), fmtETB(a.winner.bid))}
                     </div>
                     <div style="margin-top:14px">${statsHTML(t('lbl_winning_bid'), fmtETB(a.winner.bid))}</div>
                     ${mine && paid ? `<p style="margin-top:12px"><span class="status paid">${t('status_paid')}</span></p>` : ''}
                     ${mine && !paid ? `<div class="pay-divider"></div><div id="payForm"></div>` : ''}
                 </div>`;
             }
+            if (a.status === 'upcoming') {
+                return `
+                <div class="panel" id="pay">
+                    <div class="panel-label">${t('starts_in')}</div>
+                    ${timerBoxHTML(a.startsAt)}
+                    ${statsHTML(t('lbl_current_bid'), fmtETB(a.price))}
+                    <p class="hint" style="margin-top:12px"><i class="fa-regular fa-bell"></i>${t('upcoming_note')}</p>
+                </div>`;
+            }
             return `
             <div class="panel" id="pay">
                 <div class="panel-label">${t('lbl_ends_in')}</div>
-                <div class="detail-timer-box" data-ends="${a.endsAt}" data-style="boxes">
-                    <div><strong data-t="d">--</strong><small>${t('d_days')}</small></div>
-                    <div><strong data-t="h">--</strong><small>${t('d_hours')}</small></div>
-                    <div><strong data-t="m">--</strong><small>${t('d_mins')}</small></div>
-                    <div><strong data-t="s">--</strong><small>${t('d_secs')}</small></div>
-                </div>
+                ${timerBoxHTML(a.endsAt)}
                 ${statsHTML(t('lbl_current_bid'), fmtETB(a.price))}
                 <div class="pay-divider"></div>
                 <div id="payForm"></div>
@@ -95,18 +115,19 @@
             }
             document.title = `${L(auction.name)} - Joobiraa`;
             const live = auction.status === 'live';
+            const ended = auction.status === 'ended';
             const cat = CATEGORIES.find(c => c.id === auction.cat);
             root.innerHTML = `
             <nav class="breadcrumb">
-                <a href="index.html#auctions"><i class="fa-solid fa-arrow-left"></i> ${t('nav_auctions')}</a>
+                <a href="${ended ? 'winners.html' : 'auctions.html'}" data-action="back"><i class="fa-solid fa-arrow-left"></i> ${t(ended ? 'nav_winners' : 'nav_auctions')}</a>
                 <span>/</span><span>${L(cat)}</span>
             </nav>
             <div class="detail-grid">
                 ${galleryHTML(auction)}
                 <div>
                     <div class="detail-status">
-                        <span class="badge ${live ? 'badge-live' : 'badge-ended'}">
-                            ${live ? '<span class="pulse-dot"></span>' : '<i class="fa-solid fa-flag-checkered"></i>'} ${t(live ? 'live' : 'ended')}
+                        <span class="badge badge-${live ? 'live' : ended ? 'ended' : 'upcoming'}">
+                            ${live ? '<span class="pulse-dot"></span>' : `<i class="fa-${ended ? 'solid fa-flag-checkered' : 'regular fa-clock'}"></i>`} ${t(live ? 'live' : ended ? 'ended' : 'upcoming')}
                         </span>
                         <span class="code-chip">${t('lbl_code')}: <strong>${auction.code}</strong></span>
                     </div>
@@ -126,6 +147,14 @@
                             </div>
                         </div>
                     </div>
+                    ${ended ? `
+                    <div class="panel accordion ${historyOpen ? 'open' : ''}" id="historyAccordion">
+                        <button type="button" class="accordion-toggle" aria-expanded="${historyOpen}">
+                            <span>${t('bid_history')} <span class="count-chip">${bidHistory(auction).total.toLocaleString('en')}</span></span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-body" id="historyBody">${historyOpen ? historyHTML(auction, historyShown) : ''}</div>
+                    </div>` : ''}
                 </div>
             </div>`;
 
@@ -145,6 +174,22 @@
                 qs('#descAccordion').classList.toggle('open', descOpen);
                 e.currentTarget.setAttribute('aria-expanded', descOpen);
             });
+            // Bid history is built only when opened (it can be thousands of rows)
+            const hist = qs('#historyAccordion');
+            if (hist) {
+                qs('.accordion-toggle', hist).addEventListener('click', e => {
+                    historyOpen = !historyOpen;
+                    if (historyOpen && !qs('#historyBody').innerHTML) qs('#historyBody').innerHTML = historyHTML(auction, historyShown);
+                    hist.classList.toggle('open', historyOpen);
+                    e.currentTarget.setAttribute('aria-expanded', historyOpen);
+                });
+                qs('#historyBody').addEventListener('click', e => {
+                    const more = e.target.closest('[data-history-more]');
+                    if (!more) return;
+                    historyShown = +more.dataset.historyMore;
+                    qs('#historyBody').innerHTML = historyHTML(auction, historyShown);
+                });
+            }
             tickTimers();
             // Card "Place bid" links here with #pay — jump to the payment form once it exists
             if (!render.scrolled && location.hash === '#pay') { render.scrolled = true; qs('#pay').scrollIntoView({ block: 'start' }); }

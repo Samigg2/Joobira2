@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Joobiraa - Auctions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0F1B2D">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-48.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <script src="js/boot.js"></script>
+</head>
+<body data-page="auctions">
+    <div id="site-header"></div>
+
+    <main>
+        <div class="container">
+            <div class="page-head">
+                <h1 class="page-title" data-i18n="title_all_auctions"></h1>
+                <p class="page-subtitle" data-i18n="desc_all_auctions"></p>
+            </div>
+
+            <div class="section" style="padding-top:12px">
+                <div class="tabs" role="tablist" id="statusTabs"></div>
+
+                <div class="toolbar">
+                    <div class="search-row">
+                        <label class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="search" id="searchInput" data-i18n-placeholder="search_placeholder" autocomplete="off">
+                        </label>
+                        <select id="sortSelect" class="sort-select" aria-label="Sort">
+                            <option value="ending" data-i18n="sort_ending"></option>
+                            <option value="popular" data-i18n="sort_popular"></option>
+                            <option value="price" data-i18n="sort_price"></option>
+                        </select>
+                    </div>
+                    <div class="chips" id="categoryChips" role="tablist"></div>
+                </div>
+
+                <div class="auctions-grid" id="auctionsGrid"></div>
+                <div class="empty-state hidden" id="auctionsEmpty">
+                    <i class="fa-regular fa-face-frown"></i>
+                    <span data-i18n="no_results"></span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        const STATUSES = [
+            { id: 'live', key: 'live' },
+            { id: 'upcoming', key: 'upcoming' },
+            { id: 'ended', key: 'ended' }
+        ];
+        const fromHash = location.hash.slice(1);
+        const state = { status: STATUSES.some(s => s.id === fromHash) ? fromHash : 'live', cat: 'all', q: '', sort: 'ending' };
+
+        // "Ending soon" means the nearest timer: end time for live, start time for upcoming
+        const timeOf = a => a.endsAt || a.startsAt || 0;
+
+        function renderTabs() {
+            qs('#statusTabs').innerHTML = STATUSES.map(s => {
+                const n = AUCTIONS.filter(a => a.status === s.id).length;
+                return `<button class="tab ${state.status === s.id ? 'active' : ''}" data-status="${s.id}" role="tab" aria-selected="${state.status === s.id}">
+                    ${t(s.key)}<span class="count">${n}</span></button>`;
+            }).join('');
+        }
+
+        function renderChips() {
+            qs('#categoryChips').innerHTML = CATEGORIES.map(c => `
+                <button type="button" class="chip ${state.cat === c.id ? 'active' : ''}" data-cat="${c.id}" role="tab" aria-selected="${state.cat === c.id}">
+                    <i class="fa-solid ${c.icon}"></i> ${L(c)}
+                </button>`).join('');
+        }
+
+        function renderAuctions() {
+            const q = state.q.trim().toLowerCase();
+            const sorters = {
+                ending: (a, b) => timeOf(a) - timeOf(b),
+                popular: (a, b) => b.bids - a.bids,
+                price: (a, b) => a.price - b.price
+            };
+            const list = AUCTIONS
+                .filter(a => a.status === state.status)
+                .filter(a => state.cat === 'all' || a.cat === state.cat)
+                .filter(a => !q || Object.values(a.name).some(n => n.toLowerCase().includes(q)))
+                .sort(sorters[state.sort]);
+            qs('#auctionsGrid').innerHTML = list.map(auctionCard).join('');
+            qs('#auctionsEmpty').classList.toggle('hidden', list.length > 0);
+            tickTimers();
+        }
+
+        function renderAll() { renderTabs(); renderChips(); renderAuctions(); }
+
+        function initPage() {
+            qs('#statusTabs').addEventListener('click', e => {
+                const tb = e.target.closest('[data-status]');
+                if (!tb) return;
+                state.status = tb.dataset.status;
+                history.replaceState(null, '', '#' + state.status);
+                renderTabs(); renderAuctions();
+            });
+            qs('#categoryChips').addEventListener('click', e => {
+                const chip = e.target.closest('[data-cat]');
+                if (!chip) return;
+                state.cat = chip.dataset.cat;
+                renderChips(); renderAuctions();
+            });
+            qs('#searchInput').addEventListener('input', e => { state.q = e.target.value; renderAuctions(); });
+            qs('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderAuctions(); });
+            document.addEventListener('langchange', renderAll);
+        }
+    </script>
+</body>
+</html>

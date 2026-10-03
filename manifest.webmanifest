@@ -1,0 +1,18 @@
+{
+    "name": "Joobiraa",
+    "short_name": "Joobiraa",
+    "description": "Lowest unique bid auctions in Ethiopia. Win new items from 1 ETB.",
+    "id": "./",
+    "start_url": "./index.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0F1B2D",
+    "theme_color": "#0F1B2D",
+    "lang": "om",
+    "icons": [
+        { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+        { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+}

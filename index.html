@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0F1B2D">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-48.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
     <script src="js/boot.js"></script>
 </head>
 <body data-page="home">
@@ -21,7 +25,7 @@
                 <h1 class="hero-title" data-i18n-html="hero_title"></h1>
                 <p class="hero-desc" data-i18n="hero_desc"></p>
                 <div class="hero-buttons">
-                    <a href="#auctions" class="btn btn-gold" data-i18n="how_cta_browse"></a>
+                    <a href="auctions.html" class="btn btn-gold" data-i18n="how_cta_browse"></a>
                     <a href="login.html" class="btn btn-ghost-light" id="heroSecondary"></a>
                 </div>
                 <div class="hero-stats">
@@ -45,40 +49,26 @@
         <!-- AUCTIONS -->
         <section id="auctions" class="section">
             <div class="container">
-                <div class="section-head">
-                    <h2 class="section-title" data-i18n="title_auctions"></h2>
-                    <p class="section-desc" data-i18n="subtitle_auctions"></p>
-                </div>
-
-                <div class="toolbar">
-                    <div class="search-row">
-                        <label class="search-box">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="search" id="searchInput" data-i18n-placeholder="search_placeholder" autocomplete="off">
-                        </label>
-                        <select id="sortSelect" class="sort-select" aria-label="Sort">
-                            <option value="ending" data-i18n="sort_ending"></option>
-                            <option value="popular" data-i18n="sort_popular"></option>
-                            <option value="price" data-i18n="sort_price"></option>
-                        </select>
+                <div class="section-head with-link">
+                    <div>
+                        <h2 class="section-title" data-i18n="title_auctions"></h2>
+                        <p class="section-desc" data-i18n="subtitle_auctions"></p>
                     </div>
-                    <div class="chips" id="categoryChips" role="tablist"></div>
+                    <a href="auctions.html" class="see-all"><span data-i18n="view_all"></span> <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-
                 <div class="auctions-grid" id="auctionsGrid"></div>
-                <div class="empty-state hidden" id="auctionsEmpty">
-                    <i class="fa-regular fa-face-frown"></i>
-                    <span data-i18n="no_results"></span>
-                </div>
             </div>
         </section>
 
         <!-- WINNERS -->
         <section id="winners" class="section">
             <div class="container">
-                <div class="section-head">
-                    <h2 class="section-title" data-i18n="title_winners"></h2>
-                    <p class="section-desc" data-i18n="desc_winners"></p>
+                <div class="section-head with-link">
+                    <div>
+                        <h2 class="section-title" data-i18n="title_winners"></h2>
+                        <p class="section-desc" data-i18n="desc_winners"></p>
+                    </div>
+                    <a href="winners.html" class="see-all"><span data-i18n="view_all"></span> <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
                 <div class="winners-grid" id="winnersGrid"></div>
             </div>
@@ -118,41 +108,15 @@
     <script src="js/data.js"></script>
     <script src="js/script.js"></script>
     <script>
-        const state = { cat: 'all', q: '', sort: 'ending' };
-
-        function renderChips() {
-            qs('#categoryChips').innerHTML = CATEGORIES.map(c => `
-                <button type="button" class="chip ${state.cat === c.id ? 'active' : ''}" data-cat="${c.id}" role="tab" aria-selected="${state.cat === c.id}">
-                    <i class="fa-solid ${c.icon}"></i> ${L(c)}
-                </button>`).join('');
-        }
+        const PREVIEW = 3; // home shows a short preview; the full lists live on their own pages
 
         function renderAuctions() {
-            const q = state.q.trim().toLowerCase();
-            const sorters = {
-                ending: (a, b) => a.endsAt - b.endsAt,
-                popular: (a, b) => b.bids - a.bids,
-                price: (a, b) => a.price - b.price
-            };
-            const list = AUCTIONS
-                .filter(a => a.status === 'live')
-                .filter(a => state.cat === 'all' || a.cat === state.cat)
-                .filter(a => !q || Object.values(a.name).some(n => n.toLowerCase().includes(q)))
-                .sort(sorters[state.sort]);
-            qs('#auctionsGrid').innerHTML = list.map(auctionCard).join('');
-            qs('#auctionsEmpty').classList.toggle('hidden', list.length > 0);
-            tickTimers();
+            qs('#auctionsGrid').innerHTML = AUCTIONS.filter(a => a.status === 'live')
+                .sort((a, b) => a.endsAt - b.endsAt).slice(0, PREVIEW).map(auctionCard).join('');
         }
 
         function renderWinners() {
-            qs('#winnersGrid').innerHTML = AUCTIONS.filter(a => a.status === 'ended' && a.winner.name !== 'me').map(a => `
-                <a class="winner-card" href="bid.html?id=${a.id}">
-                    <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
-                    <img src="${a.images[0]}" alt="${L(a.name)}" loading="lazy">
-                    <p class="winner-item">${L(a.name)}</p>
-                    <div class="winner-name">${a.winner.name}</div>
-                    <div class="winner-bid">${fmtETB(a.winner.bid)} ${t('currency')}</div>
-                </a>`).join('');
+            qs('#winnersGrid').innerHTML = AUCTIONS.filter(a => a.status === 'ended').slice(0, 4).map(winnerCard).join('');
         }
 
         function renderHeroTicket() {
@@ -177,18 +141,10 @@
 
         function renderAll() {
             qs('#howList').innerHTML = howItWorksHTML();
-            renderChips(); renderAuctions(); renderWinners(); renderHeroTicket(); renderHeroSecondary(); tickTimers();
+            renderAuctions(); renderWinners(); renderHeroTicket(); renderHeroSecondary(); tickTimers();
         }
 
         function initPage() {
-            qs('#categoryChips').addEventListener('click', e => {
-                const chip = e.target.closest('[data-cat]');
-                if (!chip) return;
-                state.cat = chip.dataset.cat;
-                renderChips(); renderAuctions();
-            });
-            qs('#searchInput').addEventListener('input', e => { state.q = e.target.value; renderAuctions(); });
-            qs('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderAuctions(); });
             document.addEventListener('langchange', renderAll);
         }
     </script>
