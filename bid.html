@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Joobiraa - Auction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/boot.js"></script>
+</head>
+<body data-page="auctions">
+    <div id="site-header"></div>
+
+    <main>
+        <div class="container" id="detail"></div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const auction = getAuction(params.get('id'));
+        const startAmount = parseFloat(params.get('amount'));
+        let photoIndex = 0;
+        let descOpen = false;
+
+        function galleryHTML(a) {
+            return `
+            <div class="detail-gallery">
+                <div class="gallery-main">
+                    <div class="gallery-track" id="galleryTrack">
+                        ${a.images.map((src, i) => `<img src="${src}" alt="${L(a.name)} — ${i + 1}">`).join('')}
+                    </div>
+                    ${favButton(a.id)}
+                    <span class="gallery-count" id="galleryCount">1 / ${a.images.length}</span>
+                    <button type="button" class="gallery-nav prev" data-nav="-1" aria-label="Previous photo"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button type="button" class="gallery-nav next" data-nav="1" aria-label="Next photo"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="gallery-thumbs" id="galleryThumbs">
+                    ${a.images.map((src, i) => `<button type="button" data-index="${i}" aria-label="Photo ${i + 1}"><img src="${src}" alt=""></button>`).join('')}
+                </div>
+            </div>`;
+        }
+
+        function statsHTML(label, value) {
+            return `
+            <div class="card-stats" style="margin-bottom:0">
+                <div class="stat-item"><span class="stat-label">${label}</span><span class="stat-value price">${value} <small>${t('currency')}</small></span></div>
+                <div class="stat-item"><span class="stat-label">${t('lbl_bids')}</span><span class="stat-value count"><i class="fa-solid fa-tag"></i> ${auction.bids}</span></div>
+            </div>`;
+        }
+
+        function bidPanelHTML(a) {
+            if (a.status === 'ended') {
+                const mine = a.winner.name === 'me';
+                const paid = myBids.paid().includes(a.id);
+                return `
+                <div class="panel" id="pay">
+                    <div class="winner-strip"><i class="fa-solid fa-trophy"></i>
+                        ${mine ? t('winner_you') : t('winner_banner')(a.winner.name, fmtETB(a.winner.bid))}
+                    </div>
+                    <div style="margin-top:14px">${statsHTML(t('lbl_winning_bid'), fmtETB(a.winner.bid))}</div>
+                    ${mine && paid ? `<p style="margin-top:12px"><span class="status paid">${t('status_paid')}</span></p>` : ''}
+                    ${mine && !paid ? `<div class="pay-divider"></div><div id="payForm"></div>` : ''}
+                </div>`;
+            }
+            return `
+            <div class="panel" id="pay">
+                <div class="panel-label">${t('lbl_ends_in')}</div>
+                <div class="detail-timer-box" data-ends="${a.endsAt}" data-style="boxes">
+                    <div><strong data-t="d">--</strong><small>${t('d_days')}</small></div>
+                    <div><strong data-t="h">--</strong><small>${t('d_hours')}</small></div>
+                    <div><strong data-t="m">--</strong><small>${t('d_mins')}</small></div>
+                    <div><strong data-t="s">--</strong><small>${t('d_secs')}</small></div>
+                </div>
+                ${statsHTML(t('lbl_current_bid'), fmtETB(a.price))}
+                <div class="pay-divider"></div>
+                <div id="payForm"></div>
+            </div>`;
+        }
+
+        function render() {
+            const root = qs('#detail');
+            if (!auction) {
+                root.innerHTML = `<div class="empty-state"><i class="fa-regular fa-face-frown"></i>${t('not_found')}<br><br>
+                    <a href="index.html" class="btn btn-gold">${t('nav_home')}</a></div>`;
+                return;
+            }
+            document.title = `${L(auction.name)} - Joobiraa`;
+            const live = auction.status === 'live';
+            const cat = CATEGORIES.find(c => c.id === auction.cat);
+            root.innerHTML = `
+            <nav class="breadcrumb">
+                <a href="index.html#auctions"><i class="fa-solid fa-arrow-left"></i> ${t('nav_auctions')}</a>
+                <span>/</span><span>${L(cat)}</span>
+            </nav>
+            <div class="detail-grid">
+                ${galleryHTML(auction)}
+                <div>
+                    <span class="badge ${live ? 'badge-live' : 'badge-ended'}">
+                        <i class="fa-solid ${live ? 'fa-gavel' : 'fa-flag-checkered'}"></i> ${t(live ? 'live' : 'ended')}
+                    </span>
+                    <h1 class="detail-title">${L(auction.name)}</h1>
+                    <div class="detail-meta">
+                        <span><i class="fa-regular fa-eye"></i> ${compact(auction.views)} ${t('lbl_views')}</span>
+                        <span><i class="fa-solid fa-users"></i> ${compact(auction.bidders)} ${t('lbl_bidders')}</span>
+                    </div>
+                    ${bidPanelHTML(auction)}
+                    <div class="panel accordion ${descOpen ? 'open' : ''}" id="descAccordion">
+                        <button type="button" class="accordion-toggle" aria-expanded="${descOpen}">
+                            ${t('lbl_description')} <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-body">
+                            <p class="description">${L(auction.desc)}</p>
+                            <div class="spec-title">${t('lbl_specs')}</div>
+                            <div class="spec-wrap">
+                                <table class="spec-table"><tbody>
+                                    ${auction.specs.map(([k, v]) => `<tr><th scope="row">${t(k)}</th><td>${dict.en[v] ? t(v) : v}</td></tr>`).join('')}
+                                </tbody></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+            const payForm = qs('#payForm');
+            if (payForm) {
+                renderPayForm(payForm, {
+                    auction,
+                    kind: live ? 'bid' : 'win',
+                    amount: startAmount,
+                    // Refresh the bid count (live) or show "Paid" (win) after a short pause on the success screen
+                    onDone: () => { if (!live) setTimeout(render, 2500); else qs('.stat-value.count', qs('#pay')).innerHTML = `<i class="fa-solid fa-tag"></i> ${auction.bids}`; }
+                });
+            }
+            wireGallery();
+            qs('#descAccordion .accordion-toggle').addEventListener('click', e => {
+                descOpen = !descOpen;
+                qs('#descAccordion').classList.toggle('open', descOpen);
+                e.currentTarget.setAttribute('aria-expanded', descOpen);
+            });
+            tickTimers();
+            // Card "Place bid" links here with #pay — jump to the payment form once it exists
+            if (!render.scrolled && location.hash === '#pay') { render.scrolled = true; qs('#pay').scrollIntoView({ block: 'start' }); }
+        }
+
+        function wireGallery() {
+            const track = qs('#galleryTrack');
+            const total = auction.images.length;
+            const thumbs = qsa('#galleryThumbs button');
+            const update = i => {
+                photoIndex = i;
+                qs('#galleryCount').textContent = `${i + 1} / ${total}`;
+                thumbs.forEach((b, j) => b.classList.toggle('active', i === j));
+                qs('.gallery-nav.prev').disabled = i === 0;
+                qs('.gallery-nav.next').disabled = i === total - 1;
+            };
+            const go = i => track.scrollTo({ left: i * track.clientWidth, behavior: 'smooth' });
+            qsa('.gallery-nav').forEach(b => b.addEventListener('click', () => go(Math.min(total - 1, Math.max(0, photoIndex + +b.dataset.nav)))));
+            thumbs.forEach(b => b.addEventListener('click', () => go(+b.dataset.index)));
+            track.addEventListener('scroll', () => update(Math.round(track.scrollLeft / track.clientWidth)), { passive: true });
+            update(photoIndex);
+            if (photoIndex) track.scrollLeft = photoIndex * track.clientWidth;
+        }
+
+        function initPage() {
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

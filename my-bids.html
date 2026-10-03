@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Joobiraa - My Bids</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/boot.js"></script>
+</head>
+<body data-page="mybids">
+    <div id="site-header"></div>
+
+    <main>
+        <div class="container">
+            <div class="page-head">
+                <h1 class="page-title" data-i18n="mybids_title"></h1>
+                <p class="page-subtitle" data-i18n="mybids_sub"></p>
+            </div>
+            <div class="section" style="padding-top:12px" id="content"></div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        const TABS = ['active', 'won', 'lost', 'favs'];
+        let tab = TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'active';
+
+        // Group the user's bids by auction
+        function grouped() {
+            const map = new Map();
+            myBids.all().forEach(b => {
+                const a = getAuction(b.id);
+                if (!a) return;
+                if (!map.has(a.id)) map.set(a.id, { a, amounts: [] });
+                map.get(a.id).amounts.push(b.amount);
+            });
+            return [...map.values()];
+        }
+
+        function buckets() {
+            const g = grouped();
+            return {
+                active: g.filter(x => x.a.status === 'live'),
+                won: g.filter(x => x.a.status === 'ended' && x.a.winner.name === 'me'),
+                lost: g.filter(x => x.a.status === 'ended' && x.a.winner.name !== 'me'),
+                favs: favs.all().map(getAuction).filter(Boolean)
+            };
+        }
+
+        function amountsHTML(amounts) {
+            return `<div class="amounts">${amounts.slice().sort((x, y) => x - y)
+                .map(v => `<span class="amount-chip">${fmtETB(v)}</span>`).join('')}</div>`;
+        }
+
+        function rowHTML({ a, amounts }, kind) {
+            const href = `bid.html?id=${a.id}`;
+            const paid = myBids.paid().includes(a.id);
+            const status = kind === 'active' ? ['live', 'status_live']
+                : kind === 'won' ? (paid ? ['paid', 'status_paid'] : ['won', 'status_won'])
+                : ['lost', 'status_lost'];
+            const meta = kind === 'active'
+                ? `<span class="timer-text" data-ends="${a.endsAt}"></span>`
+                : `<span><i class="fa-solid fa-trophy"></i> ${a.winner.name === 'me' ? t('winner_you') : t('winner_banner')(a.winner.name, fmtETB(a.winner.bid))}</span>`;
+            const actions = kind === 'active'
+                ? `<a href="${href}" class="btn btn-gold">${t('btn_bid_again')}</a>`
+                : kind === 'won' && !paid
+                    ? `<a href="${href}#pay" class="btn btn-gold">${t('btn_pay_now')}</a><a href="${href}" class="btn btn-outline">${t('btn_view')}</a>`
+                    : `<a href="${href}" class="btn btn-outline">${t('btn_view')}</a>`;
+            return `
+            <article class="bid-row">
+                <a href="${href}"><img src="${a.images[0]}" alt="" loading="lazy"></a>
+                <div>
+                    <span class="status ${status[0]}">${t(status[1])}</span>
+                    <h4><a href="${href}">${L(a.name)}</a></h4>
+                    <div class="meta">${meta}</div>
+                    ${amounts ? `<div class="meta" style="margin-top:6px">${t('lbl_your_bids')} (${amounts.length})</div>${amountsHTML(amounts)}` : ''}
+                </div>
+                <div class="actions">${actions}</div>
+            </article>`;
+        }
+
+        function emptyHTML(key, icon) {
+            return `<div class="empty-state"><i class="fa-regular ${icon}"></i>${t(key)}<br><br>
+                <a href="index.html#auctions" class="btn btn-gold">${t('how_cta_browse')}</a></div>`;
+        }
+
+        function render() {
+            const root = qs('#content');
+            if (!session.user()) {
+                root.innerHTML = `
+                <div class="signin-prompt">
+                    <i class="fa-solid fa-gavel"></i>
+                    <h2 class="section-title">${t('signin_needed')}</h2>
+                    <p>${t('signin_needed_d')}</p>
+                    <a href="login.html?next=my-bids.html" class="btn btn-gold"><i class="fa-solid fa-mobile-screen"></i> ${t('nav_signin')}</a>
+                </div>`;
+                return;
+            }
+            const b = buckets();
+            const labels = { active: 'tab_active', won: 'tab_won', lost: 'tab_lost', favs: 'tab_favs' };
+            let body;
+            if (tab === 'favs') {
+                const live = b.favs.filter(a => a.status === 'live');
+                const ended = b.favs.filter(a => a.status === 'ended');
+                body = b.favs.length
+                    ? `<div class="auctions-grid">${live.map(auctionCard).join('')}</div>
+                       <div class="list" style="margin-top:16px">${ended.map(a => rowHTML({ a }, a.winner.name === 'me' ? 'won' : 'lost')).join('')}</div>`
+                    : emptyHTML('empty_favs', 'fa-heart');
+            } else {
+                const icons = { active: 'fa-clock', won: 'fa-face-smile', lost: 'fa-folder-open' };
+                body = b[tab].length
+                    ? `<div class="list">${b[tab].map(x => rowHTML(x, tab)).join('')}</div>`
+                    : emptyHTML('empty_' + tab, icons[tab]);
+            }
+            root.innerHTML = `
+                <div class="tabs" role="tablist">
+                    ${TABS.map(id => `<button class="tab ${tab === id ? 'active' : ''}" data-tab="${id}" role="tab" aria-selected="${tab === id}">
+                        ${t(labels[id])}<span class="count">${b[id].length}</span></button>`).join('')}
+                </div>
+                ${body}`;
+            tickTimers();
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                const tb = e.target.closest('[data-tab]');
+                if (tb) { tab = tb.dataset.tab; history.replaceState(null, '', '#' + tab); render(); return; }
+            });
+            ['langchange', 'bidsupdated', 'favsupdated'].forEach(ev => document.addEventListener(ev, render));
+        }
+    </script>
+</body>
+</html>
