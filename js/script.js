@@ -515,13 +515,6 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
                 <input type="tel" inputmode="numeric" maxlength="9" value="${user ? user.phone : ''}" placeholder="9XXXXXXXX" autocomplete="tel-national" data-pay-phone>
             </div>
             <div class="form-error" data-pay-error></div>
-            <div class="pay-lines">
-                ${isBid
-                    ? `<div class="pay-line"><span>${t('lbl_bid_amount')}</span><span data-amount-echo>${startAmount} ${cur}</span></div>
-                       <div class="pay-line"><span>${t('pay_bid_price')}</span><span>${chargeTxt} ${cur}</span></div>`
-                    : `<div class="pay-line"><span>${t('pay_winning_bid')}</span><span>${chargeTxt} ${cur}</span></div>`}
-                <div class="pay-line total"><span>${t('pay_total')}</span><span>${chargeTxt} ${cur}</span></div>
-            </div>
             <button type="button" class="btn btn-gold btn-block" data-pay-confirm>
                 ${user ? `<i class="fa-solid fa-lock"></i> ${t('pay_confirm')(chargeTxt)}` : `<i class="fa-solid fa-mobile-screen"></i> ${t('sign_in_to_bid')}`}
             </button>
@@ -549,16 +542,7 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
     qsa('.pay-method', root).forEach(b => b.addEventListener('click', () => selectMethod(b.dataset.method)));
 
     const amountInput = qs('.bid-input', root);
-    const echo = () => {
-        const v = parseFloat(amountInput.value);
-        qs('[data-amount-echo]', root).textContent = `${fmtETB(isNaN(v) ? 0 : v)} ${cur}`;
-        err.textContent = '';
-    };
-    if (amountInput) {
-        amountInput.addEventListener('input', echo);
-        amountInput.addEventListener('blur', () => setTimeout(echo));
-        qsa('[data-step]', root).forEach(b => b.addEventListener('click', () => setTimeout(echo)));
-    }
+    if (amountInput) amountInput.addEventListener('input', () => { err.textContent = ''; });
 
     const phoneInput = qs('[data-pay-phone]', root);
     phoneInput.addEventListener('input', () => { phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9); err.textContent = ''; });
