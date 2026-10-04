@@ -9,12 +9,7 @@
     --ink-soft: #1B2C45;
     --gold: #F2B705;
     --gold-text: #8A6500;      /* gold that passes contrast on light surfaces */
-    --orange: #F26522;         /* Telebirr */
-    --cbe: #6A1B9A;            /* CBE Birr */
-    --telebirr: #1A8FD8;       /* Telebirr blue */
     --red: #E4572E;
-    --green: #1FAE7A;
-    --green-text: #137A55;
 
     --bg: #F7F5EF;
     --surface: #FFFFFF;
@@ -37,8 +32,6 @@
     --gold: #FCD535;
     --gold-text: #FCD535;
     --red: #F6465D;
-    --green: #2EBD85;
-    --green-text: #2EBD85;
     --bg: #0B0E11;
     --surface: #181A20;
     --surface-2: #1E2329;
@@ -318,16 +311,24 @@ main { flex: 1; }
 }
 .stat-item { display: flex; flex-direction: column; align-items: center; }
 .stat-item + .stat-item { border-left: 1px solid var(--border); }
-.stat-label { font-size: 0.75rem; color: var(--muted); }
-.stat-value { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
-.stat-value.price { color: var(--gold-text); }
-.stat-value.count { color: var(--orange); }
+.stat-label { font-size: 0.7rem; color: var(--muted); }
+.stat-value { font-size: 0.95rem; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+.stat-value.price { color: var(--text); }
+.stat-value.count { color: var(--text); }
+.stat-value.count i { color: var(--muted); }
 .stat-value.views { color: var(--text); }
 .stat-value.views i { color: var(--muted); }
 .timer { text-align: center; color: var(--red); font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; font-variant-numeric: tabular-nums; }
 .timer.ended { color: var(--muted); }
 .timer.upcoming { color: var(--gold-text); }
 .timer.upcoming span { color: var(--text); }
+/* Card countdown: same boxes as the detail page, a little tighter */
+.card-timer { gap: 6px; margin-bottom: 10px; }
+.card-timer div { padding: 6px 2px; }
+.card-timer strong { font-size: 1.25rem; color: var(--red); }
+.card-timer small { font-size: 0.65rem; }
+.card-timer.upcoming strong { color: var(--text); }
+.card-timer-label { font-size: 0.75rem; color: var(--muted); font-weight: 600; text-align: center; margin-bottom: 6px; }
 .card-winner { margin-bottom: 12px; }
 .masked { font-variant-numeric: tabular-nums; letter-spacing: 0.3px; }
 
@@ -351,7 +352,7 @@ main { flex: 1; }
 
 .winner-strip {
     display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--radius-sm);
-    background: color-mix(in srgb, var(--green) 12%, transparent); color: var(--green-text); font-weight: 600; font-size: 0.9rem;
+    background: color-mix(in srgb, var(--gold) 16%, var(--surface)); color: var(--text); font-weight: 600; font-size: 0.9rem;
 }
 
 /* ---------- Winners ---------- */
@@ -370,8 +371,9 @@ main { flex: 1; }
 .winner-item { color: var(--muted); font-size: 0.8rem; line-height: 1.3; margin-bottom: 4px; }
 .winner-name { font-weight: 700; font-size: 0.95rem; }
 .winner-phone { color: var(--muted); font-size: 0.8rem; margin-bottom: 2px; }
-.h-winner .masked { display: block; font-size: 0.8rem; color: var(--muted); }
-.winner-bid { color: var(--green-text); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+.h-winner .masked { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; color: var(--muted); margin-top: 1px; }
+.h-winner .masked i { font-size: 0.65rem; }
+.winner-bid { color: var(--text); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
 
 /* ---------- Impact ---------- */
 .impact {
@@ -380,9 +382,9 @@ main { flex: 1; }
 }
 .impact h2 { color: var(--gold); font-size: 1.4rem; margin-bottom: 8px; }
 .impact-stats { background: var(--ink); border-radius: var(--radius-sm); padding: 20px; text-align: center; }
-.impact-number { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--green); }
+.impact-number { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; color: var(--gold); }
 .impact-progress { height: 8px; background: rgba(255, 255, 255, 0.12); border-radius: 99px; margin-top: 14px; overflow: hidden; }
-.impact-bar { height: 100%; width: 20%; background: var(--green); }
+.impact-bar { height: 100%; width: 20%; background: var(--gold); }
 .impact-target { text-align: right; font-size: 0.8rem; margin-top: 8px; color: #9AA5B8; }
 
 /* ---------- Bid detail page ---------- */
@@ -390,6 +392,7 @@ main { flex: 1; }
 .breadcrumb a { text-decoration: none; }
 .breadcrumb a:hover { color: var(--text); }
 .detail-grid { display: flex; flex-direction: column; gap: 20px; }
+.detail-extra .panel + .panel { margin-top: 14px; }
 
 .gallery-main {
     position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
@@ -478,19 +481,27 @@ main { flex: 1; }
     display: flex; align-items: center; justify-content: center;
 }
 .h-winner small { display: block; font-size: 0.72rem; color: var(--muted); }
-.h-winner strong { font-size: 1rem; }
-.h-winner-bid { margin-left: auto; color: var(--green-text); font-weight: 700; font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; white-space: nowrap; }
+.h-winner strong { display: block; font-size: 1rem; line-height: 1.25; }
+.h-winner .who { min-width: 0; }
+.h-winner.big { padding: 14px; margin-bottom: 4px; }
+.h-winner.big .crown { width: 48px; height: 48px; font-size: 1.2rem; }
+.h-winner.big strong { font-size: 1.2rem; }
+.h-winner.big .h-winner-bid { font-size: 1.5rem; }
+.card-stats.two { grid-template-columns: repeat(2, 1fr); }
+.h-winner-bid { margin-left: auto; text-align: right; color: var(--text); font-weight: 700; font-family: 'Space Grotesk', sans-serif; font-size: 1.15rem; white-space: nowrap; line-height: 1.2; }
+.h-winner-bid small { display: block; font-family: 'Noto Sans Ethiopic', sans-serif; font-weight: 600; font-size: 0.7rem; color: var(--muted); }
+.h-winner-bid span { font-size: 0.7em; color: var(--muted); }
 .h-list { list-style: none; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 12px; }
 .h-row { padding: 10px 12px; }
 .h-row + .h-row { border-top: 1px solid var(--border); }
-.h-row.is-winner { background: color-mix(in srgb, var(--green) 10%, transparent); }
+.h-row.is-winner { background: color-mix(in srgb, var(--gold) 16%, var(--surface)); }
 .h-row-top { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 12px; margin-bottom: 8px; }
 .h-amount { font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
 .h-amount small { color: var(--muted); font-weight: 600; }
-.h-count { color: var(--orange); font-weight: 700; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 5px; }
+.h-count { color: var(--text); font-weight: 700; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 5px; }
 .h-unique { font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; min-width: 6.5em; justify-content: flex-end; }
-.h-unique.no { color: var(--red); }
-.h-unique.yes { color: var(--green-text); }
+.h-unique.no { color: var(--muted); }
+.h-unique.yes { color: var(--gold-text); }
 .h-phones { display: flex; flex-wrap: wrap; gap: 6px; }
 .h-phones-more { display: contents; }
 .h-phones-more.hidden { display: none; }
@@ -516,13 +527,12 @@ main { flex: 1; }
 }
 .pay-method .logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .pay-method small { display: block; font-weight: 500; color: var(--muted); font-size: 0.72rem; }
-.pay-method.active.telebirr { border-color: var(--telebirr); background: color-mix(in srgb, var(--telebirr) 8%, var(--surface)); }
-.pay-method.active.cbe { border-color: var(--cbe); background: color-mix(in srgb, var(--cbe) 10%, var(--surface)); }
+.pay-method.active { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 16%, var(--surface)); }
 .pay-result { text-align: center; padding: 12px 0 4px; }
 .pay-result .big-icon {
     width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px; font-size: 1.7rem;
     display: flex; align-items: center; justify-content: center;
-    background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green-text);
+    background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold-text);
 }
 .pay-result h3 { margin-bottom: 6px; }
 .pay-result p { color: var(--muted); margin-bottom: 16px; }
@@ -592,9 +602,9 @@ main { flex: 1; }
 .bid-row .actions .btn { min-height: 42px; font-size: 0.9rem; flex: 1; }
 .status { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
 .status.live { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); }
-.status.won { background: color-mix(in srgb, var(--green) 15%, transparent); color: var(--green-text); }
+.status.won { background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold-text); }
 .status.lost { background: var(--surface-2); color: var(--muted); }
-.status.paid { background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold-text); }
+.status.paid { background: var(--surface-2); color: var(--text); }
 .timer-text { color: var(--red); font-weight: 700; font-variant-numeric: tabular-nums; }
 .signin-prompt { text-align: center; padding: 40px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
 .signin-prompt i { font-size: 2.2rem; color: var(--gold-text); margin-bottom: 12px; }
@@ -659,8 +669,7 @@ body.modal-open { overflow: hidden; }
     width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: 1rem; text-decoration: none; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
-.phone-float { background: var(--orange); }
-.telegram-float { background: #0088cc; }
+.phone-float, .telegram-float { background: var(--ink); color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); }
 
 /* Install-app pill (PWA) — small, lives in the header */
 .install-pill {
@@ -747,8 +756,16 @@ body.modal-open { overflow: hidden; }
     .impact { flex-direction: row; align-items: center; padding: 40px; }
     .impact > * { flex: 1; }
 
-    .detail-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start; }
-    .detail-gallery { position: sticky; top: calc(var(--header-h) + 16px); }
+    /* Photo with description / bid history under it on the left; title, timer and payment on the right */
+    .detail-grid {
+        display: grid; grid-template-columns: 1.1fr 1fr; grid-template-rows: auto 1fr;
+        grid-template-areas: "gallery info" "extra info"; column-gap: 32px; row-gap: 16px; align-items: start;
+    }
+    .detail-gallery { grid-area: gallery; }
+    .detail-info { grid-area: info; }
+    .detail-extra { grid-area: extra; }
+    /* Finished auctions: Description and Bid history stay under the winner box on the right */
+    .detail-grid.ended { grid-template-rows: auto 1fr; grid-template-areas: "gallery info" "gallery extra"; }
     .detail-title { font-size: 1.7rem; }
 }
 

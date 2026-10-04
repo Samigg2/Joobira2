@@ -181,7 +181,7 @@ const dict = {
         footer_desc: 'Joobiraa is the auction platform where you win brand-new items at low prices.',
         footer_location: 'Addis Ababa, Ethiopia',
 
-        hero_title: 'Bid <em>Less</em>, Win <em>Big</em>', hero_desc: 'Win brand-new items starting from 1 ETB.',
+        hero_title: 'Bid Less, <em>Win Big</em>', hero_desc: 'Win brand-new items starting from 1 ETB.',
         title_auctions: 'Live Auctions', subtitle_auctions: 'Bid lowest, be unique, and win!',
         title_faq: 'Frequently Asked Questions', subtitle_faq: 'Find information about Joobiraa auctions and payments here',
         btn_bid: 'Place Bid', lbl_current_bid: 'Current Bid', lbl_bids: 'Bidders', stat_views: 'Views', currency: 'ETB',
@@ -651,10 +651,10 @@ function auctionCard(a) {
         ended: `<span class="badge badge-ended"><i class="fa-solid fa-flag-checkered"></i> ${t('ended')}</span>`
     }[a.status];
     const bottom = {
-        live: () => `<div class="timer" data-ends="${a.endsAt}"></div>
+        live: () => `${timerBoxes(a.endsAt, 'card-timer')}
         ${bidStepper()}
         <button type="button" class="btn btn-gold btn-block" data-bid="${a.id}">${t('btn_bid')}</button>`,
-        upcoming: () => `<div class="timer upcoming">${t('starts_in')} <span data-ends="${a.startsAt}"></span></div>
+        upcoming: () => `<div class="card-timer-label">${t('starts_in')}</div>${timerBoxes(a.startsAt, 'card-timer upcoming')}
         <a href="${href}" class="btn btn-outline btn-block"><i class="fa-regular fa-bell"></i> ${t('opens_soon')}</a>`,
         ended: () => `<div class="winner-strip card-winner"><i class="fa-solid fa-trophy"></i> ${t('lbl_winner')}: <strong>${winnerName(a)}</strong> <span class="masked">${maskPhone(a.winner.phone)}</span></div>
         <a href="${href}" class="btn btn-outline btn-block">${t('btn_results')}</a>`
@@ -685,6 +685,17 @@ function auctionCard(a) {
     </article>`;
 }
 
+// Countdown as 4 boxes (days / hours / mins / secs) — detail page and cards
+function timerBoxes(ends, cls = '') {
+    return `
+    <div class="detail-timer-box ${cls}" data-ends="${ends}" data-style="boxes">
+        <div><strong data-t="d">--</strong><small>${t('d_days')}</small></div>
+        <div><strong data-t="h">--</strong><small>${t('d_hours')}</small></div>
+        <div><strong data-t="m">--</strong><small>${t('d_mins')}</small></div>
+        <div><strong data-t="s">--</strong><small>${t('d_secs')}</small></div>
+    </div>`;
+}
+
 // Winners gallery card: the winner is shown by masked phone, never the full number
 function winnerCard(a) {
     return `
@@ -696,6 +707,20 @@ function winnerCard(a) {
         <div class="winner-phone masked">${maskPhone(a.winner.phone)}</div>
         <div class="winner-bid">${fmtETB(a.winner.bid)} ${t('currency')}</div>
     </a>`;
+}
+
+// Winner block: crown, name, masked phone and the winning amount — detail page and bid history
+function winnerBox(a, cls = '') {
+    return `
+    <div class="h-winner ${cls}">
+        <span class="crown"><i class="fa-solid fa-crown"></i></span>
+        <div class="who">
+            <small>${t(a.winner.name === 'me' ? 'winner_you' : 'lbl_winner')}</small>
+            <strong>${winnerName(a)}</strong>
+            <span class="masked"><i class="fa-solid fa-phone"></i> ${maskPhone(a.winner.phone)}</span>
+        </div>
+        <div class="h-winner-bid"><small>${t('lbl_winning_bid')}</small>${fmtETB(a.winner.bid)} <span>${t('currency')}</span></div>
+    </div>`;
 }
 
 // ---------- Bid history (ended auctions, inside a closed-by-default box) ----------
@@ -730,11 +755,7 @@ function historyHTML(a, shown = HISTORY_PAGE) {
             ${stat(h.unique, 'h_unique')}
             ${stat(fmtETB(a.winner.bid), 'lbl_winning_bid', 'win')}
         </div>
-        <div class="h-winner">
-            <span class="crown"><i class="fa-solid fa-crown"></i></span>
-            <div><small>${t('lbl_winner')}</small><strong>${winnerName(a)}</strong><span class="masked">${maskPhone(a.winner.phone)}</span></div>
-            <span class="h-winner-bid">${fmtETB(a.winner.bid)} ${t('currency')}</span>
-        </div>
+        ${winnerBox(a)}
         <ol class="h-list">${rows}</ol>
         ${left > 0 ? `<button type="button" class="btn btn-outline btn-block" data-history-more="${shown + HISTORY_PAGE}">${t('show_more')(left.toLocaleString('en'))}</button>` : ''}`;
 }

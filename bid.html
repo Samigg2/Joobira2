@@ -54,22 +54,13 @@
             </div>`;
         }
 
+        // Pass no label to leave out the price column (ended auctions show the amount in the winner block)
         function statsHTML(label, value) {
             return `
-            <div class="card-stats" style="margin-bottom:0">
-                <div class="stat-item"><span class="stat-label">${label}</span><span class="stat-value price">${value} <small>${t('currency')}</small></span></div>
+            <div class="card-stats ${label ? '' : 'two'}" style="margin-bottom:0">
+                ${label ? `<div class="stat-item"><span class="stat-label">${label}</span><span class="stat-value price">${value} <small>${t('currency')}</small></span></div>` : ''}
                 <div class="stat-item"><span class="stat-label">${t('lbl_bids')}</span><span class="stat-value count"><i class="fa-solid fa-users"></i> ${compact(auction.bids)}</span></div>
                 <div class="stat-item"><span class="stat-label">${t('stat_views')}</span><span class="stat-value views"><i class="fa-regular fa-eye"></i> ${compact(auction.views)}</span></div>
-            </div>`;
-        }
-
-        function timerBoxHTML(ends) {
-            return `
-            <div class="detail-timer-box" data-ends="${ends}" data-style="boxes">
-                <div><strong data-t="d">--</strong><small>${t('d_days')}</small></div>
-                <div><strong data-t="h">--</strong><small>${t('d_hours')}</small></div>
-                <div><strong data-t="m">--</strong><small>${t('d_mins')}</small></div>
-                <div><strong data-t="s">--</strong><small>${t('d_secs')}</small></div>
             </div>`;
         }
 
@@ -79,10 +70,8 @@
                 const paid = myBids.paid().includes(a.id);
                 return `
                 <div class="panel" id="pay">
-                    <div class="winner-strip"><i class="fa-solid fa-trophy"></i>
-                        ${mine ? t('winner_you') : t('winner_banner')(maskPhone(a.winner.phone), fmtETB(a.winner.bid))}
-                    </div>
-                    <div style="margin-top:14px">${statsHTML(t('lbl_winning_bid'), fmtETB(a.winner.bid))}</div>
+                    ${winnerBox(a, 'big')}
+                    ${statsHTML()}
                     ${mine && paid ? `<p style="margin-top:12px"><span class="status paid">${t('status_paid')}</span></p>` : ''}
                     ${mine && !paid ? `<div class="pay-divider"></div><div id="payForm"></div>` : ''}
                 </div>`;
@@ -91,7 +80,7 @@
                 return `
                 <div class="panel" id="pay">
                     <div class="panel-label">${t('starts_in')}</div>
-                    ${timerBoxHTML(a.startsAt)}
+                    ${timerBoxes(a.startsAt)}
                     ${statsHTML(t('lbl_current_bid'), fmtETB(a.price))}
                     <p class="hint" style="margin-top:12px"><i class="fa-regular fa-bell"></i>${t('upcoming_note')}</p>
                 </div>`;
@@ -99,7 +88,7 @@
             return `
             <div class="panel" id="pay">
                 <div class="panel-label">${t('lbl_ends_in')}</div>
-                ${timerBoxHTML(a.endsAt)}
+                ${timerBoxes(a.endsAt)}
                 ${statsHTML(t('lbl_current_bid'), fmtETB(a.price))}
                 <div class="pay-divider"></div>
                 <div id="payForm"></div>
@@ -122,9 +111,9 @@
                 <a href="${ended ? 'winners.html' : 'auctions.html'}" data-action="back"><i class="fa-solid fa-arrow-left"></i> ${t(ended ? 'nav_winners' : 'nav_auctions')}</a>
                 <span>/</span><span>${L(cat)}</span>
             </nav>
-            <div class="detail-grid">
+            <div class="detail-grid ${ended ? 'ended' : ''}">
                 ${galleryHTML(auction)}
-                <div>
+                <div class="detail-info">
                     <div class="detail-status">
                         <span class="badge badge-${live ? 'live' : ended ? 'ended' : 'upcoming'}">
                             ${live ? '<span class="pulse-dot"></span>' : `<i class="fa-${ended ? 'solid fa-flag-checkered' : 'regular fa-clock'}"></i>`} ${t(live ? 'live' : ended ? 'ended' : 'upcoming')}
@@ -133,6 +122,8 @@
                     </div>
                     <h1 class="detail-title" style="margin-bottom:14px">${L(auction.name)}</h1>
                     ${bidPanelHTML(auction)}
+                </div>
+                <div class="detail-extra">
                     <div class="panel accordion ${descOpen ? 'open' : ''}" id="descAccordion">
                         <button type="button" class="accordion-toggle" aria-expanded="${descOpen}">
                             ${t('lbl_description')} <i class="fa-solid fa-chevron-down"></i>
