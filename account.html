@@ -76,8 +76,8 @@
             <section class="profile-card">
                 <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
                 <div>
-                    <small>${t('account_phone')}</small>
-                    <strong>${fmtPhone(user.phone)}</strong>
+                    <strong>${user.name || t('nav_account')}</strong>
+                    <small><i class="fa-solid fa-phone"></i> ${fmtPhone(user.phone)}</small>
                 </div>
             </section>
             <div class="profile-stats">

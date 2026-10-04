@@ -61,6 +61,18 @@
                     <button type="submit" class="btn btn-gold btn-block" data-i18n="otp_verify"></button>
                 </form>
 
+                <!-- Step 3 (new accounts only): name -->
+                <form id="nameStep" class="hidden" novalidate>
+                    <div class="auth-icon verified"><i class="fa-solid fa-user-check"></i></div>
+                    <span class="verified-chip"><i class="fa-solid fa-circle-check"></i> <span data-i18n="verified"></span> · <span id="verifiedPhone"></span></span>
+                    <h1 class="auth-title" data-i18n="name_title"></h1>
+                    <p class="auth-sub" data-i18n="name_sub"></p>
+                    <label class="field-label" for="fullName" data-i18n="name_label"></label>
+                    <input id="fullName" class="text-input" type="text" autocomplete="name" maxlength="40" data-i18n-placeholder="name_ph">
+                    <div class="form-error" id="nameError"></div>
+                    <button type="submit" class="btn btn-gold btn-block" data-i18n="name_continue"></button>
+                </form>
+
                 <div class="auth-foot">
                     <a href="index.html"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back_home"></span></a>
                 </div>
@@ -104,6 +116,13 @@
             qsa('#otpBoxes input').forEach(i => { i.value = ''; });
             qs('#otpBoxes input').focus();
             startResendCountdown();
+        }
+
+        function finish(name) {
+            session.signIn(phone, name);
+            store.set('jb_toast', t('signed_in'));
+            const next = new URLSearchParams(location.search).get('next');
+            location.href = next && /^[\w-]+\.html/.test(next) ? next : 'index.html';
         }
 
         function initPage() {
@@ -153,11 +172,22 @@
                 e.preventDefault();
                 const code = boxes.map(b => b.value).join('');
                 if (code.length !== 6) { qs('#otpError').textContent = t('otp_err'); return; }
-                // Demo: any 6 digits are accepted. Real app: POST /auth/verify
-                session.signIn(phone);
-                store.set('jb_toast', t('signed_in'));
-                const next = new URLSearchParams(location.search).get('next');
-                location.href = next && /^[\w-]+\.html/.test(next) ? next : 'index.html';
+                // Demo: any 6 digits are accepted. Real app: POST /auth/verify (tells us if the account is new)
+                const known = session.names()[phone];
+                if (known) { finish(known); return; }
+                clearInterval(resendTimer);
+                qs('#otpStep').classList.add('hidden');
+                qs('#nameStep').classList.remove('hidden');
+                qs('#verifiedPhone').textContent = fmtPhone(phone);
+                qs('#fullName').focus();
+            });
+
+            qs('#fullName').addEventListener('input', () => { qs('#nameError').textContent = ''; });
+            qs('#nameStep').addEventListener('submit', e => {
+                e.preventDefault();
+                const name = qs('#fullName').value.trim().replace(/\s+/g, ' ');
+                if (name.length < 2) { qs('#nameError').textContent = t('err_name'); return; }
+                finish(name);
             });
 
             qs('#changeNumber').addEventListener('click', () => {

@@ -60,6 +60,8 @@ const dict = {
         pay_processing: 'Kaffaltiin hojjatamaa jira...', pay_processing_d: 'Gaaffii bilbila kee irratti dhufe mirkaneessi',
         pay_success_bid: 'Caalbaasiin kee galeera!', pay_success_win: 'Kaffaltiin xumurameera!',
         pay_success_d: 'Nagaheen SMS dhaan siif ergameera.', pay_done: 'Tole',
+        name_title: 'Maqaa kee galchi', name_sub: "Lakkoofsi kee mirkanaa'eera. Yoo mo'atte, maqaan kee galaarii mo'attootaa irratti mul'ata.",
+        name_label: 'Maqaa guutuu', name_ph: 'Fkn. Caaltuu Fayyisaa', name_continue: 'Itti fufi', err_name: 'Maqaa kee galchi', verified: "Mirkanaa'eera",
         signin_needed_acc: 'Herrega kee ilaaluuf seeni', acc_bids: 'Caalbaasii', acc_settings: "Qindaa'ina", acc_language: 'Afaan',
         acc_theme: 'Haala', acc_history: 'Seenaa kaffaltii', acc_help: 'Gargaarsa', hist_empty: 'Ammaaf kaffaltiin hin jiru',
         hist_bid: n => `Caalbaasii ETB ${n}`, hist_item: 'Kaffaltii meeshaa',
@@ -151,6 +153,8 @@ const dict = {
         pay_processing: 'ክፍያ በሂደት ላይ...', pay_processing_d: 'በስልክዎ ላይ የደረሰውን ጥያቄ ያረጋግጡ',
         pay_success_bid: 'ጨረታዎ ገብቷል!', pay_success_win: 'ክፍያው ተጠናቋል!',
         pay_success_d: 'ደረሰኝ በኤስኤምኤስ ተልኳል።', pay_done: 'እሺ',
+        name_title: 'ስምዎን ያስገቡ', name_sub: 'ስልክ ቁጥርዎ ተረጋግጧል። ካሸነፉ ስምዎ በአሸናፊዎች ዝርዝር ላይ ይታያል።',
+        name_label: 'ሙሉ ስም', name_ph: 'ለምሳሌ፡ አበበ ከበደ', name_continue: 'ቀጥል', err_name: 'እባክዎ ስምዎን ያስገቡ', verified: 'ተረጋግጧል',
         signin_needed_acc: 'መለያዎን ለማየት ይግቡ', acc_bids: 'ጨረታዎች', acc_settings: 'ቅንብሮች', acc_language: 'ቋንቋ',
         acc_theme: 'ገጽታ', acc_history: 'የክፍያ ታሪክ', acc_help: 'እገዛ', hist_empty: 'እስካሁን ምንም ክፍያ የለም',
         hist_bid: n => `ጨረታ ${n} ብር`, hist_item: 'የእቃ ክፍያ',
@@ -242,6 +246,8 @@ const dict = {
         pay_processing: 'Processing payment...', pay_processing_d: 'Approve the prompt on your phone',
         pay_success_bid: 'Your bid is in!', pay_success_win: 'Payment complete!',
         pay_success_d: 'A receipt was sent to you by SMS.', pay_done: 'Done',
+        name_title: 'Type your name', name_sub: 'Your number is verified. If you win, this name is shown on the winners list.',
+        name_label: 'Full name', name_ph: 'e.g. Abebe Kebede', name_continue: 'Continue', err_name: 'Please enter your name', verified: 'Verified',
         signin_needed_acc: 'Sign in to see your account', acc_bids: 'Bids', acc_settings: 'Settings', acc_language: 'Language',
         acc_theme: 'Appearance', acc_history: 'Payment history', acc_help: 'Help', hist_empty: 'No payments yet',
         hist_bid: n => `Bid ${n} ETB`, hist_item: 'Item payment',
@@ -308,11 +314,14 @@ function fmtDate(ms) {
 // ---------- session / favorites / bids (localStorage stand-ins for the API) ----------
 const session = {
     user() { return store.json('jb_user'); },
-    signIn(phone) {
-        store.set('jb_user', JSON.stringify({ phone }));
+    signIn(phone, name) {
+        store.set('jb_user', JSON.stringify({ phone, name }));
+        if (name) store.set('jb_names', JSON.stringify({ ...session.names(), [phone]: name }));
         myBids.seedDemo();
     },
-    signOut() { store.remove('jb_user'); }
+    signOut() { store.remove('jb_user'); },
+    // Demo stand-in for "does this phone already have an account?"
+    names() { return store.json('jb_names') || {}; }
 };
 const favs = {
     all() { return store.json('jb_favs') || []; },
@@ -565,7 +574,7 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
                         <span class="logo"><img src="assets/pay/telebirr.webp" alt="" width="48" height="27"></span><span>Telebirr<small>${t('pay_telebirr_sub')}</small></span>
                     </button>
                     <button type="button" class="pay-method cbe" data-method="cbe">
-                        <span class="logo"><img src="assets/pay/cbe.webp" alt="" width="30" height="29"></span><span>CBE Birr<small>${t('pay_cbe_sub')}</small></span>
+                        <span class="logo"><img src="assets/pay/cbe.webp" alt="" width="36" height="36" class="app-icon"></span><span>CBE Birr<small>${t('pay_cbe_sub')}</small></span>
                     </button>
                 </div>
             </div>
