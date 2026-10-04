@@ -11,8 +11,8 @@
     "theme_color": "#0F1B2D",
     "lang": "om",
     "icons": [
-        { "src": "assets/icons/icon-192.png?v=3", "sizes": "192x192", "type": "image/png" },
-        { "src": "assets/icons/icon-512.png?v=3", "sizes": "512x512", "type": "image/png" },
-        { "src": "assets/icons/maskable-512.png?v=3", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+        { "src": "assets/icons/icon-192.png?v=4", "sizes": "192x192", "type": "image/png" },
+        { "src": "assets/icons/icon-512.png?v=4", "sizes": "512x512", "type": "image/png" },
+        { "src": "assets/icons/maskable-512.png?v=4", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
     ]
 }
