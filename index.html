@@ -123,7 +123,7 @@
             const a = getAuction('dell');
             qs('#heroTicket').innerHTML = `
                 <div class="ticket-badge">● ${t('live')}</div>
-                <img src="${a.images[0]}" alt="${L(a.name)}">
+                <img class="ph" src="${a.images[0]}" alt="${L(a.name)}">
                 <h3>${L(a.name)}</h3>
                 <div class="ticket-row"><span>${t('lbl_bids')}</span><strong>${a.bids}</strong></div>
                 <div class="ticket-row"><span>${t('lbl_ends_in')}</span><strong data-ends="${a.endsAt}"></strong></div>`;

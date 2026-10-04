@@ -590,6 +590,68 @@ main { flex: 1; }
 .auth-foot a { color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .auth-foot a:hover { color: var(--text); }
 
+/* Photo placeholder: shimmer until the image has loaded */
+img.ph:not(.loaded) {
+    color: transparent;
+    background: linear-gradient(100deg, var(--surface-2) 30%, var(--bg) 50%, var(--surface-2) 70%);
+    background-size: 200% 100%; animation: shimmer 1.2s linear infinite;
+}
+img.ph { transition: opacity 0.3s; }
+
+/* ---------- Account ---------- */
+.container.narrow { max-width: 680px; }
+.profile-card {
+    display: flex; align-items: center; gap: 14px; padding: 18px; border-radius: var(--radius);
+    background: var(--ink); color: #fff;
+}
+.profile-avatar {
+    flex: none; width: 56px; height: 56px; border-radius: 50%; background: var(--gold); color: #0F1B2D;
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+}
+.profile-card small { display: block; color: #9AA5B8; font-size: 0.78rem; }
+.profile-card strong { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; letter-spacing: 0.5px; }
+.profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0 8px; }
+.profile-stats a {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 12px 6px; text-align: center; text-decoration: none; color: var(--text);
+}
+.profile-stats strong { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; line-height: 1.2; }
+.profile-stats span { font-size: 0.75rem; color: var(--muted); }
+.acc-title { font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin: 22px 0 8px; }
+.settings { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.setting {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; min-height: 56px;
+    color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.92rem;
+}
+.setting + .setting { border-top: 1px solid var(--border); }
+.setting > span:first-child { display: inline-flex; align-items: center; gap: 12px; }
+.setting > span:first-child i { width: 18px; text-align: center; color: var(--gold-text); }
+.setting > .fa-chevron-right, .setting .muted { color: var(--muted); font-size: 0.8rem; }
+.setting .muted { font-weight: 500; }
+.setting .muted i { font-weight: 900; margin-left: 4px; }
+.settings.links .setting:hover { background: var(--bg); }
+.segmented { display: inline-flex; background: var(--surface-2); padding: 3px; border-radius: 9px; gap: 2px; flex: none; }
+.segmented button {
+    min-width: 40px; height: 32px; padding: 0 10px; border: 0; border-radius: 7px; background: none; color: var(--muted);
+    font: inherit; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+}
+.segmented button.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); }
+.pay-history { list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 10px; }
+.pay-history li { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.pay-history li + li { border-top: 1px solid var(--border); }
+.ph-icon {
+    flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--surface-2); color: var(--gold-text);
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+}
+.ph-main { flex: 1; min-width: 0; }
+.ph-main a { display: block; font-weight: 600; font-size: 0.9rem; color: var(--text); text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ph-main small, .ph-amount small { display: block; font-size: 0.75rem; color: var(--muted); }
+.ph-amount { text-align: right; flex: none; }
+.ph-amount strong { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; }
+.ph-amount strong span { font-size: 0.75em; color: var(--muted); }
+.ph-amount .ref { font-size: 0.7rem; color: var(--muted); }
+.signout-btn { margin-top: 22px; color: var(--red); }
+
 /* ---------- My bids ---------- */
 .tabs { display: flex; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 12px; margin-bottom: 16px; }
 .tab {

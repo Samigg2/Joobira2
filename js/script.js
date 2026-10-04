@@ -60,6 +60,9 @@ const dict = {
         pay_processing: 'Kaffaltiin hojjatamaa jira...', pay_processing_d: 'Gaaffii bilbila kee irratti dhufe mirkaneessi',
         pay_success_bid: 'Caalbaasiin kee galeera!', pay_success_win: 'Kaffaltiin xumurameera!',
         pay_success_d: 'Nagaheen SMS dhaan siif ergameera.', pay_done: 'Tole',
+        signin_needed_acc: 'Herrega kee ilaaluuf seeni', acc_bids: 'Caalbaasii', acc_settings: "Qindaa'ina", acc_language: 'Afaan',
+        acc_theme: 'Haala', acc_history: 'Seenaa kaffaltii', acc_help: 'Gargaarsa', hist_empty: 'Ammaaf kaffaltiin hin jiru',
+        hist_bid: n => `Caalbaasii ETB ${n}`, hist_item: 'Kaffaltii meeshaa',
         pay_failed: 'Kaffaltiin hin xumuramne', pay_failed_d: "Maallaqni sirraa hin muramne, caalbaasiin kees hin galmoofne. Irra deebi'ii yaali.",
         pay_failed_win: "Maallaqni sirraa hin muramne. Irra deebi'ii yaali.",
         pay_retry: "Irra deebi'ii yaali", pay_change: 'Mala kaffaltii jijjiiri',
@@ -148,6 +151,9 @@ const dict = {
         pay_processing: 'ክፍያ በሂደት ላይ...', pay_processing_d: 'በስልክዎ ላይ የደረሰውን ጥያቄ ያረጋግጡ',
         pay_success_bid: 'ጨረታዎ ገብቷል!', pay_success_win: 'ክፍያው ተጠናቋል!',
         pay_success_d: 'ደረሰኝ በኤስኤምኤስ ተልኳል።', pay_done: 'እሺ',
+        signin_needed_acc: 'መለያዎን ለማየት ይግቡ', acc_bids: 'ጨረታዎች', acc_settings: 'ቅንብሮች', acc_language: 'ቋንቋ',
+        acc_theme: 'ገጽታ', acc_history: 'የክፍያ ታሪክ', acc_help: 'እገዛ', hist_empty: 'እስካሁን ምንም ክፍያ የለም',
+        hist_bid: n => `ጨረታ ${n} ብር`, hist_item: 'የእቃ ክፍያ',
         pay_failed: 'ክፍያው አልተጠናቀቀም', pay_failed_d: 'ምንም ገንዘብ አልተቆረጠም፣ ጨረታዎም አልተመዘገበም። እባክዎ እንደገና ይሞክሩ።',
         pay_failed_win: 'ምንም ገንዘብ አልተቆረጠም። እባክዎ እንደገና ይሞክሩ።',
         pay_retry: 'እንደገና ይሞክሩ', pay_change: 'የክፍያ መንገድ ይቀይሩ',
@@ -236,6 +242,9 @@ const dict = {
         pay_processing: 'Processing payment...', pay_processing_d: 'Approve the prompt on your phone',
         pay_success_bid: 'Your bid is in!', pay_success_win: 'Payment complete!',
         pay_success_d: 'A receipt was sent to you by SMS.', pay_done: 'Done',
+        signin_needed_acc: 'Sign in to see your account', acc_bids: 'Bids', acc_settings: 'Settings', acc_language: 'Language',
+        acc_theme: 'Appearance', acc_history: 'Payment history', acc_help: 'Help', hist_empty: 'No payments yet',
+        hist_bid: n => `Bid ${n} ETB`, hist_item: 'Item payment',
         pay_failed: 'Payment not completed', pay_failed_d: 'No money was taken and your bid was not placed. Please try again.',
         pay_failed_win: 'No money was taken. Please try again.',
         pay_retry: 'Try again', pay_change: 'Change payment method',
@@ -325,7 +334,7 @@ const myBids = {
     seedDemo() {
         if (store.get('jb_bids')) return;
         const now = Date.now();
-        store.set('jb_bids', JSON.stringify(DEMO_MY_BIDS.map((b, i) => ({ ...b, at: now - (i + 1) * 3600e3 }))));
+        store.set('jb_bids', JSON.stringify(DEMO_MY_BIDS.map((b, i) => ({ ...b, ref: receiptRef(), at: now - (i + 1) * 3600e3 }))));
     },
     add(id, amount, ref) {
         const list = myBids.all();
@@ -402,7 +411,7 @@ function renderChrome() {
                 </div>
                 <button class="icon-btn" type="button" data-action="theme" aria-label="Toggle dark mode"><i data-theme-icon class="fa-solid fa-moon"></i></button>
                 <a href="login.html" class="btn-signin"><i class="fa-solid fa-mobile-screen"></i><span data-i18n="nav_signin"></span></a>
-                <a href="#" class="avatar" data-action="account" aria-label="Account"><i class="fa-solid fa-user"></i></a>
+                <a href="account.html" class="avatar" aria-label="Account"><i class="fa-solid fa-user"></i></a>
                 <button class="icon-btn menu-btn" type="button" data-action="menu" aria-expanded="false" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
@@ -430,7 +439,7 @@ function renderChrome() {
         ${tab('winners.html', 'fa-trophy', 'nav_winners', 'winners')}
         ${tab('my-bids.html', 'fa-gavel', 'nav_mybids', 'mybids')}
         ${session.user()
-            ? tab('#', 'fa-user', 'nav_account', 'account', 'account')
+            ? tab('account.html', 'fa-user', 'nav_account', 'account')
             : tab('login.html', 'fa-right-to-bracket', 'nav_signin', 'login')}
     </nav>
     <div class="floating-buttons">
@@ -527,22 +536,6 @@ function howItWorksHTML() {
             <div><h3>${t(`how_s${n}_t`)}</h3><p>${t(`how_s${n}_d`)}</p></div>
         </li>`;
     return `<ol class="how-list">${step(1)}${step(2)}${step(3)}</ol>`;
-}
-
-// ---------- Account sheet ----------
-function openAccount() {
-    const user = session.user();
-    if (!user) { location.href = 'login.html'; return; }
-    openModal(`
-        ${modalHead(t('nav_account'))}
-        <div class="pay-summary">
-            <div><div class="kind">${t('account_phone')}</div><div class="name">${fmtPhone(user.phone)}</div></div>
-        </div>
-        <a href="my-bids.html" class="btn btn-outline btn-block"><i class="fa-solid fa-gavel"></i> ${t('nav_mybids')}</a>
-        <button class="btn btn-outline btn-block" style="margin-top:10px" data-action="theme"><i data-theme-icon class="fa-solid fa-moon"></i> <span data-theme-label></span></button>
-        <button class="btn btn-dark btn-block" style="margin-top:10px" data-action="signout"><i class="fa-solid fa-right-from-bracket"></i> ${t('signout')}</button>`);
-    setTheme(currentTheme());
-    applyTranslations();
 }
 
 // ---------- Payment (inline on the detail page, no popup) ----------
@@ -708,7 +701,7 @@ function auctionCard(a) {
     <article class="auction-card" data-bid-scope>
         <div class="card-top">${badge}</div>
         <div class="card-media">
-            <a href="${href}"><img class="card-img" src="${a.images[0]}" alt="${L(a.name)}" loading="lazy"></a>
+            <a href="${href}"><img class="card-img ph" src="${a.images[0]}" alt="${L(a.name)}" loading="lazy"></a>
             ${favButton(a.id)}
         </div>
         <a class="card-title" href="${href}">${L(a.name)}</a>
@@ -746,7 +739,7 @@ function winnerCard(a) {
     return `
     <a class="winner-card" href="bid.html?id=${a.id}">
         <div class="winner-trophy"><i class="fa-solid fa-trophy"></i></div>
-        <img src="${a.images[0]}" alt="${L(a.name)}" loading="lazy">
+        <img class="ph" src="${a.images[0]}" alt="${L(a.name)}" loading="lazy">
         <p class="winner-item">${L(a.name)}</p>
         <div class="winner-name">${winnerName(a)}</div>
         <div class="winner-phone masked">${maskPhone(a.winner.phone)}</div>
@@ -838,7 +831,6 @@ document.addEventListener('click', e => {
     if (action) {
         const a = action.dataset.action;
         if (a === 'theme') { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); applyTranslations(); }
-        if (a === 'account') { e.preventDefault(); openAccount(); }
         if (a === 'signout') { session.signOut(); location.href = 'index.html'; }
         if (a === 'install') { e.preventDefault(); installApp(); }
         if (a === 'menu') {
@@ -909,6 +901,11 @@ document.addEventListener('pointerdown', e => {
 });
 ['pointerup', 'pointercancel'].forEach(ev => document.addEventListener(ev, stopStep));
 window.addEventListener('blur', stopStep);
+
+// List photos show a shimmer until they arrive (class "ph"); errors stop the shimmer too
+['load', 'error'].forEach(ev => document.addEventListener(ev, e => {
+    if (e.target.tagName === 'IMG' && e.target.classList.contains('ph')) e.target.classList.add('loaded');
+}, true));
 
 // Keep bid inputs to a valid money format
 document.addEventListener('input', e => {

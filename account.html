@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Joobiraa - Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0F1B2D">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-48.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <script src="js/boot.js"></script>
+</head>
+<body data-page="account">
+    <div id="site-header"></div>
+
+    <main>
+        <div class="container narrow">
+            <div class="page-head">
+                <h1 class="page-title" data-i18n="nav_account"></h1>
+            </div>
+            <div class="section" style="padding-top:12px" id="content"></div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        const HISTORY_STEP = 5;
+        let historyShown = HISTORY_STEP;
+
+        // Every payment the user made: one per bid (the auction's bid price) plus item payments for wins
+        function payments() {
+            const bids = myBids.all().map(b => {
+                const a = getAuction(b.id);
+                return a && { kind: 'bid', a, amount: a.price, bid: b.amount, ref: b.ref, at: b.at };
+            });
+            const receipts = myBids.receipts();
+            const wins = myBids.paid().map(id => {
+                const a = getAuction(id);
+                return a && { kind: 'item', a, amount: a.winner.bid, ref: receipts[id], at: null };
+            });
+            return [...wins, ...bids].filter(Boolean);
+        }
+
+        function segmented(items, active, attr) {
+            return `<div class="segmented">${items.map(([id, label]) =>
+                `<button type="button" class="${id === active ? 'active' : ''}" ${attr}="${id}">${label}</button>`).join('')}</div>`;
+        }
+
+        function render() {
+            const root = qs('#content');
+            const user = session.user();
+            if (!user) {
+                root.innerHTML = `
+                <div class="signin-prompt">
+                    <i class="fa-solid fa-user"></i>
+                    <h2 class="section-title">${t('signin_needed_acc')}</h2>
+                    <p>${t('signin_needed_d')}</p>
+                    <a href="login.html?next=account.html" class="btn btn-gold"><i class="fa-solid fa-mobile-screen"></i> ${t('nav_signin')}</a>
+                </div>`;
+                return;
+            }
+            const all = myBids.all();
+            const won = AUCTIONS.filter(a => a.status === 'ended' && a.winner.name === 'me').length;
+            const list = payments();
+            const method = store.get('jb_paymethod') || 'telebirr';
+
+            root.innerHTML = `
+            <section class="profile-card">
+                <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+                <div>
+                    <small>${t('account_phone')}</small>
+                    <strong>${fmtPhone(user.phone)}</strong>
+                </div>
+            </section>
+            <div class="profile-stats">
+                <a href="my-bids.html#active"><strong>${all.length}</strong><span>${t('acc_bids')}</span></a>
+                <a href="my-bids.html#won"><strong>${won}</strong><span>${t('tab_won')}</span></a>
+                <a href="my-bids.html#favs"><strong>${favs.all().length}</strong><span>${t('tab_favs')}</span></a>
+            </div>
+
+            <h2 class="acc-title">${t('acc_settings')}</h2>
+            <div class="settings">
+                <div class="setting">
+                    <span><i class="fa-solid fa-globe"></i> ${t('acc_language')}</span>
+                    ${segmented(LANGS.map(l => [l.id, l.code]), currentLang, 'data-set-lang')}
+                </div>
+                <div class="setting">
+                    <span><i class="fa-solid fa-circle-half-stroke"></i> ${t('acc_theme')}</span>
+                    ${segmented([['light', `<i class="fa-solid fa-sun"></i>`], ['dark', `<i class="fa-solid fa-moon"></i>`]], currentTheme(), 'data-set-theme')}
+                </div>
+                <div class="setting">
+                    <span><i class="fa-solid fa-wallet"></i> ${t('pay_method')}</span>
+                    ${segmented([['telebirr', 'Telebirr'], ['cbe', 'CBE Birr']], method, 'data-set-method')}
+                </div>
+            </div>
+
+            <h2 class="acc-title">${t('acc_history')}</h2>
+            ${list.length ? `
+            <ul class="pay-history">
+                ${list.slice(0, historyShown).map(p => `
+                <li>
+                    <span class="ph-icon"><i class="fa-solid ${p.kind === 'bid' ? 'fa-gavel' : 'fa-trophy'}"></i></span>
+                    <div class="ph-main">
+                        <a href="bid.html?id=${p.a.id}">${L(p.a.name)}</a>
+                        <small>${p.kind === 'bid' ? t('hist_bid')(fmtETB(p.bid)) : t('hist_item')}${p.at ? ` · ${fmtDate(p.at)}` : ''}</small>
+                    </div>
+                    <div class="ph-amount">
+                        <strong>${fmtETB(p.amount)} <span>${t('currency')}</span></strong>
+                        <small class="ref">${p.ref || '—'}</small>
+                    </div>
+                </li>`).join('')}
+            </ul>
+            ${list.length > historyShown ? `<button type="button" class="btn btn-outline btn-block" data-more-history>${t('show_more')(list.length - historyShown)}</button>` : ''}`
+            : `<div class="empty-state" style="padding:24px 16px"><i class="fa-solid fa-receipt"></i>${t('hist_empty')}</div>`}
+
+            <h2 class="acc-title">${t('acc_help')}</h2>
+            <div class="settings links">
+                <a class="setting" href="faq.html"><span><i class="fa-solid fa-circle-question"></i> ${t('nav_faq')}</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="setting" href="tel:0912120330"><span><i class="fa-solid fa-phone"></i> ${t('nav_contact')}</span><span class="muted">0912120330 <i class="fa-solid fa-chevron-right"></i></span></a>
+                <a class="setting" href="#"><span><i class="fa-solid fa-file-lines"></i> ${t('footer_terms')}</span><i class="fa-solid fa-chevron-right"></i></a>
+                <a class="setting" href="#"><span><i class="fa-solid fa-shield-halved"></i> ${t('footer_privacy')}</span><i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+
+            <button type="button" class="btn btn-outline btn-block signout-btn" data-action="signout">
+                <i class="fa-solid fa-right-from-bracket"></i> ${t('signout')}
+            </button>`;
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                const lang = e.target.closest('[data-set-lang]');
+                if (lang) { changeLanguage(lang.dataset.setLang); return; }
+                const theme = e.target.closest('[data-set-theme]');
+                if (theme) { setTheme(theme.dataset.setTheme); render(); return; }
+                const m = e.target.closest('[data-set-method]');
+                if (m) { store.set('jb_paymethod', m.dataset.setMethod); render(); return; }
+                if (e.target.closest('[data-more-history]')) { historyShown += HISTORY_STEP; render(); }
+            });
+            ['langchange', 'favsupdated'].forEach(ev => document.addEventListener(ev, render));
+        }
+    </script>
+</body>
+</html>

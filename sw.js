@@ -2,9 +2,9 @@
 // Pages: network first (fresh prices and timers), cached copy if offline.
 // CSS/JS/images/fonts: cached copy first, refreshed in the background.
 // The real app must never cache API responses (bids, payments) here.
-const CACHE = 'joobiraa-v2';
+const CACHE = 'joobiraa-v3';
 const SHELL = [
-    './', 'index.html', 'auctions.html', 'winners.html', 'bid.html', 'my-bids.html', 'faq.html', 'login.html',
+    './', 'index.html', 'auctions.html', 'winners.html', 'bid.html', 'my-bids.html', 'account.html', 'faq.html', 'login.html',
     'css/style.css', 'js/boot.js', 'js/script.js', 'js/data.js',
     'assets/icons/icon-192.png', 'assets/pay/telebirr.webp', 'assets/pay/cbe.webp'
 ];
