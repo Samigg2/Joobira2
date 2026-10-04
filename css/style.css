@@ -111,19 +111,26 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 8px); }
 .lang-pill .fa-chevron-down { font-size: 0.6rem; transition: transform 0.2s; }
 .lang-menu.open .fa-chevron-down { transform: rotate(180deg); }
 .lang-list {
-    position: absolute; right: 0; top: calc(100% + 6px); width: 150px; list-style: none; z-index: 70;
-    background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius-sm);
-    box-shadow: var(--shadow); padding: 4px; display: none;
+    position: absolute; right: 0; top: calc(100% + 8px); width: 210px; list-style: none; z-index: 70;
+    background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: 0 16px 40px -12px rgba(15, 27, 45, 0.35); padding: 6px;
+    opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.15s, transform 0.15s, visibility 0.15s;
 }
-.lang-menu.open .lang-list { display: block; }
+.lang-menu.open .lang-list { opacity: 1; visibility: visible; transform: none; }
+.lang-list li + li { margin-top: 2px; }
 .lang-list button {
-    width: 100%; display: flex; align-items: center; gap: 8px; padding: 7px 8px;
-    border: 0; background: none; color: inherit; border-radius: 6px; cursor: pointer; font-size: 0.82rem; text-align: left;
+    width: 100%; height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 10px;
+    border: 0; background: none; color: inherit; border-radius: 10px; cursor: pointer; font: inherit; font-size: 0.9rem;
+    font-weight: 600; text-align: left; white-space: nowrap;
 }
 .lang-list button:hover { background: var(--surface-2); }
-.lang-list .code { width: 24px; font-weight: 700; font-size: 0.7rem; color: var(--muted); }
-.lang-list button.active, .lang-list button.active .code { color: var(--gold-text); font-weight: 700; }
-.lang-list .fa-check { margin-left: auto; font-size: 0.7rem; visibility: hidden; }
+.lang-list .code {
+    flex: none; width: 30px; height: 24px; border-radius: 6px; background: var(--surface-2); color: var(--muted);
+    display: inline-flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+}
+.lang-list button.active { background: color-mix(in srgb, var(--gold) 14%, var(--surface)); }
+.lang-list button.active .code { background: var(--gold); color: #0F1B2D; }
+.lang-list .fa-check { margin-left: auto; font-size: 0.8rem; color: var(--gold-text); visibility: hidden; }
 .lang-list button.active .fa-check { visibility: visible; }
 
 .btn-signin {
