@@ -260,7 +260,7 @@ const dict = {
 
 const LANGS = [
     { id: 'om', code: 'OM', name: 'Afaan Oromoo', locale: 'om-ET' },
-    { id: 'am', code: 'AM', name: 'አማርኛ', locale: 'am-ET' },
+    { id: 'am', code: 'አማ', name: 'አማርኛ', locale: 'am-ET' },
     { id: 'en', code: 'EN', name: 'English', locale: 'en-GB' }
 ];
 
@@ -381,7 +381,7 @@ function renderChrome() {
                         <i class="fa-solid fa-globe"></i><span class="code">OM</span><i class="fa-solid fa-chevron-down"></i>
                     </button>
                     <ul class="lang-list" role="listbox">
-                        ${LANGS.map(l => `<li><button type="button" data-lang="${l.id}"><span class="code">${l.code}</span>${l.name}<i class="fa-solid fa-check"></i></button></li>`).join('')}
+                        ${LANGS.map(l => `<li><button type="button" data-lang="${l.id}" title="${l.name}" aria-label="${l.name}">${l.code}</button></li>`).join('')}
                     </ul>
                 </div>
                 <button class="icon-btn" type="button" data-action="theme" aria-label="Toggle dark mode"><i data-theme-icon class="fa-solid fa-moon"></i></button>
