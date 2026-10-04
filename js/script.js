@@ -60,6 +60,10 @@ const dict = {
         pay_processing: 'Kaffaltiin hojjatamaa jira...', pay_processing_d: 'Gaaffii bilbila kee irratti dhufe mirkaneessi',
         pay_success_bid: 'Caalbaasiin kee galeera!', pay_success_win: 'Kaffaltiin xumurameera!',
         pay_success_d: 'Nagaheen SMS dhaan siif ergameera.', pay_done: 'Tole',
+        pay_failed: 'Kaffaltiin hin xumuramne', pay_failed_d: "Maallaqni sirraa hin muramne, caalbaasiin kees hin galmoofne. Irra deebi'ii yaali.",
+        pay_failed_win: "Maallaqni sirraa hin muramne. Irra deebi'ii yaali.",
+        pay_retry: "Irra deebi'ii yaali", pay_change: 'Mala kaffaltii jijjiiri',
+        pay_nonrefund: "Kaffaltiin caalbaasii hin deebi'u.", pay_receipt: 'Lakk. nagahee', pay_amount: 'Hanga', pay_via: 'Karaa',
         err_min_bid: 'Gatiin xiqqaan ETB 1.00 dha', err_phone: 'Lakkoofsa bilbilaa sirrii galchi (9XXXXXXXX)',
 
         login_title: "Seeni ykn galmaa'i", login_sub: 'Lakkoofsa bilbila keetiif koodii yeroo tokkoo ni ergina.',
@@ -144,6 +148,10 @@ const dict = {
         pay_processing: 'ክፍያ በሂደት ላይ...', pay_processing_d: 'በስልክዎ ላይ የደረሰውን ጥያቄ ያረጋግጡ',
         pay_success_bid: 'ጨረታዎ ገብቷል!', pay_success_win: 'ክፍያው ተጠናቋል!',
         pay_success_d: 'ደረሰኝ በኤስኤምኤስ ተልኳል።', pay_done: 'እሺ',
+        pay_failed: 'ክፍያው አልተጠናቀቀም', pay_failed_d: 'ምንም ገንዘብ አልተቆረጠም፣ ጨረታዎም አልተመዘገበም። እባክዎ እንደገና ይሞክሩ።',
+        pay_failed_win: 'ምንም ገንዘብ አልተቆረጠም። እባክዎ እንደገና ይሞክሩ።',
+        pay_retry: 'እንደገና ይሞክሩ', pay_change: 'የክፍያ መንገድ ይቀይሩ',
+        pay_nonrefund: 'የጨረታ ክፍያ ተመላሽ አይደረግም።', pay_receipt: 'የደረሰኝ ቁጥር', pay_amount: 'መጠን', pay_via: 'በ',
         err_min_bid: 'ዝቅተኛው ዋጋ 1.00 ብር ነው', err_phone: 'ትክክለኛ ስልክ ቁጥር ያስገቡ (9XXXXXXXX)',
 
         login_title: 'ይግቡ ወይም ይመዝገቡ', login_sub: 'ወደ ስልክዎ የአንድ ጊዜ ኮድ እንልካለን።',
@@ -228,6 +236,10 @@ const dict = {
         pay_processing: 'Processing payment...', pay_processing_d: 'Approve the prompt on your phone',
         pay_success_bid: 'Your bid is in!', pay_success_win: 'Payment complete!',
         pay_success_d: 'A receipt was sent to you by SMS.', pay_done: 'Done',
+        pay_failed: 'Payment not completed', pay_failed_d: 'No money was taken and your bid was not placed. Please try again.',
+        pay_failed_win: 'No money was taken. Please try again.',
+        pay_retry: 'Try again', pay_change: 'Change payment method',
+        pay_nonrefund: 'Bid payments are non-refundable.', pay_receipt: 'Receipt no.', pay_amount: 'Amount', pay_via: 'Paid with',
         err_min_bid: 'Minimum bid is 1.00 ETB', err_phone: 'Enter a valid phone number (9XXXXXXXX)',
 
         login_title: 'Sign in or create account', login_sub: "We'll send a one-time code to your phone.",
@@ -315,13 +327,17 @@ const myBids = {
         const now = Date.now();
         store.set('jb_bids', JSON.stringify(DEMO_MY_BIDS.map((b, i) => ({ ...b, at: now - (i + 1) * 3600e3 }))));
     },
-    add(id, amount) {
+    add(id, amount, ref) {
         const list = myBids.all();
-        list.unshift({ id, amount, at: Date.now() });
+        list.unshift({ id, amount, ref, at: Date.now() });
         store.set('jb_bids', JSON.stringify(list));
     },
     paid() { return store.json('jb_paid') || []; },
-    markPaid(id) { store.set('jb_paid', JSON.stringify([...myBids.paid(), id])); }
+    markPaid(id, ref) {
+        store.set('jb_paid', JSON.stringify([...myBids.paid(), id]));
+        store.set('jb_receipts', JSON.stringify({ ...myBids.receipts(), [id]: ref }));
+    },
+    receipts() { return store.json('jb_receipts') || {}; }
 };
 
 // ---------- theme ----------
@@ -570,6 +586,7 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
                 ${user ? `<i class="fa-solid fa-lock"></i> ${t('pay_confirm')(chargeTxt)}` : `<i class="fa-solid fa-mobile-screen"></i> ${t('sign_in_to_bid')}`}
             </button>
             <p class="hint"><i class="fa-solid fa-circle-info"></i>${t('pay_hint')}</p>
+            ${isBid ? `<p class="hint"><i class="fa-solid fa-ban"></i>${t('pay_nonrefund')}</p>` : ''}
         </div>
         <div data-pay-step="processing" class="pay-result hidden">
             <div class="spinner"></div>
@@ -579,8 +596,20 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
         <div data-pay-step="success" class="pay-result hidden">
             <div class="big-icon"><i class="fa-solid fa-check"></i></div>
             <h3>${t(isBid ? 'pay_success_bid' : 'pay_success_win')}</h3>
-            <p><strong>${chargeTxt} ${cur}</strong> · <span data-paid-via></span><br>${t('pay_success_d')}</p>
+            <dl class="receipt">
+                <div><dt>${t('pay_amount')}</dt><dd>${chargeTxt} ${cur}</dd></div>
+                <div><dt>${t('pay_via')}</dt><dd data-paid-via></dd></div>
+                <div><dt>${t('pay_receipt')}</dt><dd class="ref" data-receipt></dd></div>
+            </dl>
+            <p>${t('pay_success_d')}</p>
             ${isBid ? `<button type="button" class="btn btn-outline btn-block" data-pay-again>${t('btn_bid_again')}</button>` : ''}
+        </div>
+        <div data-pay-step="failed" class="pay-result failed hidden">
+            <div class="big-icon"><i class="fa-solid fa-xmark"></i></div>
+            <h3>${t('pay_failed')}</h3>
+            <p>${t(isBid ? 'pay_failed_d' : 'pay_failed_win')}</p>
+            <button type="button" class="btn btn-gold btn-block" data-pay-retry><i class="fa-solid fa-rotate-right"></i> ${t('pay_retry')}</button>
+            <button type="button" class="btn btn-outline btn-block" style="margin-top:10px" data-pay-change>${t('pay_change')}</button>
         </div>`;
 
     const err = qs('[data-pay-error]', root);
@@ -609,19 +638,35 @@ function renderPayForm(root, { auction, kind, amount, onDone }) {
         if (amountInput && !(bidAmount >= 1)) { err.textContent = t('err_min_bid'); return; }
         if (!/^[79]\d{8}$/.test(phoneInput.value)) { err.textContent = t('err_phone'); return; }
         store.set('jb_paymethod', method);
-        const show = step => qsa('[data-pay-step]', root).forEach(el => el.classList.toggle('hidden', el.dataset.payStep !== step));
+        pay(bidAmount);
+    });
+
+    const show = step => qsa('[data-pay-step]', root).forEach(el => el.classList.toggle('hidden', el.dataset.payStep !== step));
+    // Simulated USSD/app approval. DEMO: a phone number ending in 00 fails, to show the "not completed" screen.
+    // The real app only shows success after the server has verified the payment with Chapa.
+    const pay = bidAmount => {
         show('processing');
-        // Simulated USSD/app push approval
         setTimeout(() => {
+            if (phoneInput.value.endsWith('00')) { show('failed'); return; }
+            const ref = receiptRef();
             qs('[data-paid-via]', root).textContent = method === 'cbe' ? 'CBE Birr' : 'Telebirr';
+            qs('[data-receipt]', root).textContent = ref;
             show('success');
-            if (isBid) { myBids.add(auction.id, bidAmount); auction.bids++; }
-            else myBids.markPaid(auction.id);
+            if (isBid) { myBids.add(auction.id, bidAmount, ref); auction.bids++; }
+            else myBids.markPaid(auction.id, ref);
             if (onDone) onDone();
         }, 1800);
-    });
+    };
+    qs('[data-pay-retry]', root).addEventListener('click', () => qs('[data-pay-confirm]', root).click());
+    qs('[data-pay-change]', root).addEventListener('click', () => show('form'));
     const again = qs('[data-pay-again]', root);
     if (again) again.addEventListener('click', () => renderPayForm(root, { auction, kind, onDone }));
+}
+
+// Demo receipt number; the real one is the Chapa reference for the payment
+function receiptRef() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    return Array.from({ length: 10 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
 }
 
 // ---------- Cards ----------

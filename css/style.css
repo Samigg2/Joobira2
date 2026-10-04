@@ -535,6 +535,17 @@ main { flex: 1; }
     background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold-text);
 }
 .pay-result h3 { margin-bottom: 6px; }
+.pay-result.failed .big-icon { background: color-mix(in srgb, var(--red) 12%, transparent); color: var(--red); }
+.receipt {
+    margin: 12px 0 10px; padding: 4px 12px; text-align: left; font-size: 0.88rem;
+    background: var(--bg); border: 1px dashed var(--border); border-radius: var(--radius-sm);
+}
+.receipt div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; }
+.receipt div + div { border-top: 1px dashed var(--border); }
+.receipt dt { color: var(--muted); }
+.receipt dd { font-weight: 700; }
+.ref { font-family: 'Space Grotesk', sans-serif; letter-spacing: 1px; color: var(--text); }
+.paid-line { margin-top: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 0.85rem; color: var(--muted); }
 .pay-result p { color: var(--muted); margin-bottom: 16px; }
 .spinner {
     width: 44px; height: 44px; border: 4px solid var(--surface-2); border-top-color: var(--gold);

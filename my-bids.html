@@ -85,6 +85,7 @@
                     <h4><a href="${href}">${L(a.name)}</a></h4>
                     <div class="meta">${t('lbl_code')}: ${a.code}</div>
                     <div class="meta">${meta}</div>
+                    ${paid && myBids.receipts()[a.id] ? `<div class="meta">${t('pay_receipt')}: <strong class="ref">${myBids.receipts()[a.id]}</strong></div>` : ''}
                     ${amounts ? `<div class="meta" style="margin-top:6px">${t('lbl_your_bids')} (${amounts.length})</div>${amountsHTML(amounts)}` : ''}
                 </div>
                 <div class="actions">${actions}</div>

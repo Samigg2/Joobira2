@@ -72,7 +72,7 @@
                 <div class="panel" id="pay">
                     ${winnerBox(a, 'big')}
                     ${statsHTML()}
-                    ${mine && paid ? `<p style="margin-top:12px"><span class="status paid">${t('status_paid')}</span></p>` : ''}
+                    ${mine && paid ? `<p class="paid-line"><span class="status paid">${t('status_paid')}</span> ${myBids.receipts()[a.id] ? `${t('pay_receipt')}: <strong class="ref">${myBids.receipts()[a.id]}</strong>` : ''}</p>` : ''}
                     ${mine && !paid ? `<div class="pay-divider"></div><div id="payForm"></div>` : ''}
                 </div>`;
             }
