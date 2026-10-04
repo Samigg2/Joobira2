@@ -160,6 +160,15 @@ const DEMO_MY_BIDS = [
     { id: 'm-dell', amount: 3.42 }, { id: 'm-dell', amount: 5.90 }
 ];
 
+// Demo notifications (newest first). `ago` is minutes before page load.
+const DEMO_NOTIFS = [
+    { id: 'n1', type: 'ending', auction: 'iphone17', hours: 6, ago: 20 },
+    { id: 'n2', type: 'paid', auction: 's26', amount: 75, ref: 'RFPCVQMGBB', ago: 95 },
+    { id: 'n3', type: 'open', auction: 'dell', ago: 60 * 26 },
+    { id: 'n4', type: 'won', auction: 'm-dell', ago: 60 * 30 },
+    { id: 'n5', type: 'lost', auction: 'w-ebike', ago: 60 * 50 }
+];
+
 const PAGE_LOADED_AT = Date.now();
 AUCTIONS.forEach((a, i) => {
     if (a.status === 'live') a.endsAt = PAGE_LOADED_AT + a.endsIn * 1000;

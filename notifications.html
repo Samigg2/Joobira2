@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Joobiraa - Notifications</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#0F1B2D">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-48.png">
+    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+    <script src="js/boot.js"></script>
+</head>
+<body data-page="notifs">
+    <div id="site-header"></div>
+
+    <main>
+        <div class="container narrow">
+            <div class="page-head">
+                <h1 class="page-title" data-i18n="nav_notifs"></h1>
+            </div>
+            <div class="section" style="padding-top:12px" id="content"></div>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        const ICONS = { ending: 'fa-clock', won: 'fa-trophy', paid: 'fa-receipt', open: 'fa-bell', lost: 'fa-flag-checkered' };
+
+        function text(n, a) {
+            const name = L(a.name);
+            return {
+                ending: [t('n_ending_t'), t('n_ending')(name, n.hours)],
+                won: [t('n_won_t'), t('n_won')(name)],
+                paid: [t('n_paid_t'), t('n_paid')(fmtETB(n.amount), n.ref)],
+                open: [t('n_open_t'), t('n_open')(name)],
+                lost: [t('n_lost_t'), t('n_lost')(name)]
+            }[n.type];
+        }
+
+        function itemHTML(n, read) {
+            const a = getAuction(n.auction);
+            if (!a) return '';
+            const at = PAGE_LOADED_AT - n.ago * 60e3;
+            const [title, body] = text(n, a);
+            return `
+            <li><a class="notif ${read ? '' : 'unread'}" href="bid.html?id=${a.id}">
+                <span class="notif-icon ${n.type === 'ending' ? 'urgent' : ''}"><i class="fa-solid ${ICONS[n.type]}"></i></span>
+                <span class="notif-body"><strong>${title}</strong><p>${body}</p><small>${fmtDate(at)}</small></span>
+            </a></li>`;
+        }
+
+        function render() {
+            const root = qs('#content');
+            if (!session.user()) {
+                root.innerHTML = `
+                <div class="signin-prompt">
+                    <i class="fa-regular fa-bell"></i>
+                    <h2 class="section-title">${t('signin_needed_notif')}</h2>
+                    <p>${t('signin_needed_d')}</p>
+                    <a href="login.html?next=notifications.html" class="btn btn-gold"><i class="fa-solid fa-mobile-screen"></i> ${t('nav_signin')}</a>
+                </div>`;
+                return;
+            }
+            const read = notifs.readIds();
+            const list = notifs.all();
+            if (!list.length) { root.innerHTML = `<div class="empty-state"><i class="fa-regular fa-bell-slash"></i>${t('notif_empty')}</div>`; return; }
+            const today = list.filter(n => n.ago < 60 * 24);
+            const earlier = list.filter(n => n.ago >= 60 * 24);
+            const group = (key, items) => items.length ? `
+                <h2 class="acc-title">${t(key)}</h2>
+                <ul class="notif-list">${items.map(n => itemHTML(n, read.includes(n.id))).join('')}</ul>` : '';
+            root.innerHTML = `
+                ${notifs.unread() ? `<div class="notif-head"><span></span><button type="button" class="link-btn" data-mark-all>${t('notif_markall')}</button></div>` : ''}
+                ${group('notif_today', today)}
+                ${group('notif_earlier', earlier)}`;
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                if (!e.target.closest('[data-mark-all]')) return;
+                notifs.markAll();
+                qsa('.bell-dot').forEach(d => d.remove());
+                render();
+            });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

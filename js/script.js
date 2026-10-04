@@ -10,7 +10,7 @@ const dict = {
         nav_home: 'Mana', nav_auctions: 'Caalbaasii', nav_winners: "Mo'attoota", nav_mybids: 'Caalbaasii Koo',
         nav_faq: 'Gaaffiilee', nav_account: 'Herrega', nav_signin: 'Seeni', nav_contact: 'Nu Qunnamaa',
         footer_about: "Waa'ee Keenya", footer_terms: 'Seerota fi Haalawwan', footer_privacy: 'Imaammata Iccitii',
-        footer_desc: "Joobiraa iddoo caalbaasii meeshaalee haaraa gatii xiqqaan itti mo'attaniidha.",
+        footer_desc: "Meeshaa haaraa gatii xiqqaan mo'adhu.",
         footer_location: 'Finfinnee, Itoophiyaa',
 
         hero_title: "Gatii <em>Xiqqaan</em> Mo'adhaa", hero_desc: "Qarshii 1 irraa jalqabee meeshaalee haaraa mo'adhaa.",
@@ -73,7 +73,7 @@ const dict = {
 
         login_title: "Seeni ykn galmaa'i", login_sub: 'Lakkoofsa bilbila keetiif koodii yeroo tokkoo ni ergina.',
         login_phone: 'Lakkoofsa bilbilaa', login_send: 'Koodii mirkaneessaa ergi',
-        agree_policy: '<a href="#">Imaammata Iccitii</a> nan fudhadha.', err_agree: 'Maaloo imaammata iccitii fudhadhu',
+        agree_policy: '<a href="privacy.html">Imaammata Iccitii</a> nan fudhadha.', err_agree: 'Maaloo imaammata iccitii fudhadhu',
         otp_title: 'Koodii galchi', otp_sub: p => `Koodii lakkoofsa 6 <strong>${p}</strong> tti ergame galchi`,
         otp_verify: 'Mirkaneessii seeni', otp_resend: "Koodii irra deebi'ii ergi", otp_resend_in: s => `Sekondii ${s} booda`,
         otp_change: 'Lakkoofsa jijjiiri', otp_err: 'Koodii lakkoofsa 6 guutuu galchi',
@@ -103,7 +103,7 @@ const dict = {
         nav_home: 'መነሻ', nav_auctions: 'ጨረታዎች', nav_winners: 'አሸናፊዎች', nav_mybids: 'የኔ ጨረታዎች',
         nav_faq: 'ጥያቄዎች', nav_account: 'መለያ', nav_signin: 'ይግቡ', nav_contact: 'ያግኙን',
         footer_about: 'ስለ እኛ', footer_terms: 'ደንብና ግዴታዎች', footer_privacy: 'የግላዊነት ፖሊሲ',
-        footer_desc: 'Joobiraa (ጁቢራ) አዳዲስ እቃዎችን በርካሽ ዋጋ የሚያገኙበት የጨረታ መድረክ።',
+        footer_desc: 'አዳዲስ እቃዎችን በአነስተኛ ዋጋ ያሸንፉ።',
         footer_location: 'አዲስ አበባ፣ ኢትዮጵያ',
 
         hero_title: 'በአነስተኛ ዋጋ <em>አሸንፉ</em>', hero_desc: 'ከ1 ብር ጀምሮ አዳዲስ እቃዎችን ያሸንፉ።',
@@ -166,7 +166,7 @@ const dict = {
 
         login_title: 'ይግቡ ወይም ይመዝገቡ', login_sub: 'ወደ ስልክዎ የአንድ ጊዜ ኮድ እንልካለን።',
         login_phone: 'ስልክ ቁጥር', login_send: 'የማረጋገጫ ኮድ ላክ',
-        agree_policy: '<a href="#">የግላዊነት ፖሊሲውን</a> እስማማለሁ።', err_agree: 'እባክዎ በግላዊነት ፖሊሲው ይስማሙ',
+        agree_policy: '<a href="privacy.html">የግላዊነት ፖሊሲውን</a> እስማማለሁ።', err_agree: 'እባክዎ በግላዊነት ፖሊሲው ይስማሙ',
         otp_title: 'ኮዱን ያስገቡ', otp_sub: p => `ወደ <strong>${p}</strong> የተላከውን ባለ 6 አሃዝ ኮድ ያስገቡ`,
         otp_verify: 'አረጋግጥ እና ግባ', otp_resend: 'ኮድ እንደገና ላክ', otp_resend_in: s => `እንደገና መላክ በ ${s}ሴ`,
         otp_change: 'ቁጥር ቀይር', otp_err: 'ሙሉ ባለ 6 አሃዝ ኮድ ያስገቡ',
@@ -196,7 +196,7 @@ const dict = {
         nav_home: 'Home', nav_auctions: 'Auctions', nav_winners: 'Winners', nav_mybids: 'My Bids',
         nav_faq: 'FAQ', nav_account: 'Account', nav_signin: 'Sign in', nav_contact: 'Contact Us',
         footer_about: 'About Us', footer_terms: 'Terms & Conditions', footer_privacy: 'Privacy Policy',
-        footer_desc: 'Joobiraa is the auction platform where you win brand-new items at low prices.',
+        footer_desc: 'Win brand-new items at the lowest price.',
         footer_location: 'Addis Ababa, Ethiopia',
 
         hero_title: 'Bid Less, <em>Win Big</em>', hero_desc: 'Win brand-new items starting from 1 ETB.',
@@ -259,7 +259,7 @@ const dict = {
 
         login_title: 'Sign in or create account', login_sub: "We'll send a one-time code to your phone.",
         login_phone: 'Phone number', login_send: 'Send verification code',
-        agree_policy: 'I agree to the <a href="#">Privacy Policy</a>.', err_agree: 'Please agree to the Privacy Policy',
+        agree_policy: 'I agree to the <a href="privacy.html">Privacy Policy</a>.', err_agree: 'Please agree to the Privacy Policy',
         otp_title: 'Enter the code', otp_sub: p => `Enter the 6-digit code sent to <strong>${p}</strong>`,
         otp_verify: 'Verify & sign in', otp_resend: 'Resend code', otp_resend_in: s => `Resend in ${s}s`,
         otp_change: 'Change number', otp_err: 'Enter the full 6-digit code',
@@ -284,6 +284,59 @@ const dict = {
         install_btn: 'Install', install_ios: 'Tap Share <i class="fa-solid fa-arrow-up-from-bracket"></i> then "Add to Home Screen"', install_menu: 'Install app'
     }
 };
+
+// ---------- Strings for notifications, charity, legal, offline/404, notify-me ----------
+Object.assign(dict.om, {
+    nav_notifs: 'Beeksisa', notif_markall: 'Hunda dubbisi', notif_today: "Har'a", notif_earlier: 'Kanaan dura',
+    notif_empty: 'Beeksisni hin jiru', signin_needed_notif: 'Beeksisa ilaaluuf seeni',
+    n_ending_t: 'Dhiyootti xumurama', n_ending: (n, h) => `${n} sa'aatii ${h} keessatti xumurama.`,
+    n_won_t: "Mo'atteetta!", n_won: n => `${n} mo'atteetta. Gareen keenya si bilbila.`,
+    n_paid_t: 'Kaffaltiin galeera', n_paid: (a, r) => `ETB ${a} · Lakk. nagahee ${r}`,
+    n_open_t: 'Caalbaasiin banameera', n_open: n => `${n} amma dorgommiif banameera.`,
+    n_lost_t: 'Caalbaasiin xumurame', n_lost: n => `${n} xumurameera. Kan biraa yaali!`,
+    notify_me: 'Na beeksisi', notify_on: 'Ni beeksifna', notify_toast: 'Yeroo banamu SMS siif ergina',
+    winner_contact: "Gareen keenya sa'aatii 24 keessatti si bilbila: eenyummaa kee mirkaneessuu fi meeshaa itti fudhattu qindeessuuf.",
+    imp_more: "Bal'inaan ilaali", imp_quarter: 'Kurmaana kana', imp_target: 'Kaayyoo kurmaanaa', imp_how_t: 'Akkamitti herregama?',
+    imp_how_d: 'Caalbaasii hunda irraa kaffaltii tajaajilaa 20% ofumaan deeggarsa hawaasaaf qooddama.',
+    imp_example: 'Fkn. caalbaasii ETB 75 → ETB 15 hawaasaaf', imp_given: 'Deeggarsa kenname', imp_updated: "Kan haaromfame: har'a",
+    legal_note: "Barreeffamni kun fakkeenya; barreeffamni dhumaa abukaatoo irraa dhufa.", legal_updated: "Kan haaromfame: Onkoloolessa 2026",
+    off_title: 'Interneetiin hin jiru', off_desc: "Walqunnamtii kee mirkaneessiitii irra deebi'ii yaali.",
+    nf_title: 'Fuulli hin argamne', nf_desc: 'Liinkiin kun hin hojjatu ykn fuulli haqameera.'
+});
+Object.assign(dict.am, {
+    nav_notifs: 'ማሳወቂያዎች', notif_markall: 'ሁሉም ተነቧል', notif_today: 'ዛሬ', notif_earlier: 'ቀደም ብሎ',
+    notif_empty: 'ማሳወቂያ የለም', signin_needed_notif: 'ማሳወቂያዎችን ለማየት ይግቡ',
+    n_ending_t: 'በቅርቡ ያበቃል', n_ending: (n, h) => `${n} በ${h} ሰዓት ውስጥ ያበቃል።`,
+    n_won_t: 'አሸንፈዋል!', n_won: n => `${n} አሸንፈዋል። ቡድናችን ይደውልልዎታል።`,
+    n_paid_t: 'ክፍያ ተቀብለናል', n_paid: (a, r) => `${a} ብር · ደረሰኝ ${r}`,
+    n_open_t: 'ጨረታው ተከፍቷል', n_open: n => `${n} አሁን ለጨረታ ክፍት ነው።`,
+    n_lost_t: 'ጨረታው ተጠናቋል', n_lost: n => `${n} ተጠናቋል። ሌላ ይሞክሩ!`,
+    notify_me: 'አሳውቁኝ', notify_on: 'እናሳውቅዎታለን', notify_toast: 'ሲከፈት በኤስኤምኤስ እናሳውቅዎታለን',
+    winner_contact: 'ቡድናችን መታወቂያዎን ለማረጋገጥና እቃውን የሚረከቡበትን ለማመቻቸት በ24 ሰዓት ውስጥ ይደውልልዎታል።',
+    imp_more: 'ዝርዝር ይመልከቱ', imp_quarter: 'በዚህ ሩብ ዓመት', imp_target: 'የሩብ ዓመት ግብ', imp_how_t: 'እንዴት ይሰላል?',
+    imp_how_d: 'ከእያንዳንዱ ጨረታ የአገልግሎት ክፍያ 20% በራስ-ሰር ለማኅበረሰብ ድጋፍ ይመደባል።',
+    imp_example: 'ለምሳሌ፡ የ75 ብር ጨረታ → 15 ብር ለማኅበረሰብ', imp_given: 'የተሰጡ ድጋፎች', imp_updated: 'የተዘመነው፡ ዛሬ',
+    legal_note: 'ይህ ጽሑፍ ናሙና ነው፤ የመጨረሻው ጽሑፍ ከሕግ ባለሙያ ይመጣል።', legal_updated: 'የተዘመነው፡ ጥቅምት 2026',
+    off_title: 'ኢንተርኔት የለም', off_desc: 'ግንኙነትዎን አረጋግጠው እንደገና ይሞክሩ።',
+    nf_title: 'ገጹ አልተገኘም', nf_desc: 'ይህ ሊንክ አይሰራም ወይም ገጹ ተወግዷል።'
+});
+Object.assign(dict.en, {
+    nav_notifs: 'Notifications', notif_markall: 'Mark all read', notif_today: 'Today', notif_earlier: 'Earlier',
+    notif_empty: 'No notifications yet', signin_needed_notif: 'Sign in to see your notifications',
+    n_ending_t: 'Ending soon', n_ending: (n, h) => `${n} ends in ${h} hours.`,
+    n_won_t: 'You won!', n_won: n => `You won the ${n}. Our team will call you.`,
+    n_paid_t: 'Payment received', n_paid: (a, r) => `${a} ETB · Receipt ${r}`,
+    n_open_t: 'Bidding is open', n_open: n => `${n} is now open for bids.`,
+    n_lost_t: 'Auction ended', n_lost: n => `${n} has ended. Try another one!`,
+    notify_me: 'Notify me', notify_on: "We'll notify you", notify_toast: "We'll SMS you when bidding opens",
+    winner_contact: 'Our team will call you within 24 hours to check your ID and arrange pickup or delivery.',
+    imp_more: 'See details', imp_quarter: 'This quarter', imp_target: 'Quarterly target', imp_how_t: 'How is it calculated?',
+    imp_how_d: '20% of every bid service fee is set aside automatically for community support.',
+    imp_example: 'Example: a 75 ETB bid → 15 ETB to the community', imp_given: 'Support given', imp_updated: 'Updated: today',
+    legal_note: 'Sample text — the final wording will come from the lawyer.', legal_updated: 'Last updated: October 2026',
+    off_title: "You're offline", off_desc: 'Check your connection and try again.',
+    nf_title: 'Page not found', nf_desc: "This link doesn't work or the page was removed."
+});
 
 const LANGS = [
     { id: 'om', code: 'OM', name: 'Afaan Oromoo', locale: 'om-ET' },
@@ -334,6 +387,26 @@ const favs = {
         return i === -1;
     }
 };
+// Demo notifications (the API will send these); read state kept on the device
+const notifs = {
+    all() { return typeof DEMO_NOTIFS === 'undefined' ? [] : DEMO_NOTIFS; },
+    readIds() { return store.json('jb_notif_read') || []; },
+    unread() { return session.user() ? notifs.all().filter(n => !notifs.readIds().includes(n.id)).length : 0; },
+    markAll() { store.set('jb_notif_read', JSON.stringify(notifs.all().map(n => n.id))); }
+};
+// "Notify me" for upcoming auctions
+const reminders = {
+    all() { return store.json('jb_notify') || []; },
+    has(id) { return reminders.all().includes(id); },
+    toggle(id) {
+        const list = reminders.all();
+        const i = list.indexOf(id);
+        i === -1 ? list.push(id) : list.splice(i, 1);
+        store.set('jb_notify', JSON.stringify(list));
+        return i === -1;
+    }
+};
+
 const myBids = {
     all() {
         if (session.user()) myBids.seedDemo();
@@ -418,7 +491,8 @@ function renderChrome() {
                         ${LANGS.map(l => `<li><button type="button" data-lang="${l.id}" title="${l.name}" aria-label="${l.name}">${l.code}</button></li>`).join('')}
                     </ul>
                 </div>
-                <button class="icon-btn" type="button" data-action="theme" aria-label="Toggle dark mode"><i data-theme-icon class="fa-solid fa-moon"></i></button>
+                <button class="icon-btn theme-btn" type="button" data-action="theme" aria-label="Toggle dark mode"><i data-theme-icon class="fa-solid fa-moon"></i></button>
+                <a href="notifications.html" class="icon-btn bell" aria-label="Notifications"><i class="fa-regular fa-bell"></i>${notifs.unread() ? `<span class="bell-dot">${notifs.unread()}</span>` : ''}</a>
                 <a href="login.html" class="btn-signin"><i class="fa-solid fa-mobile-screen"></i><span data-i18n="nav_signin"></span></a>
                 <a href="account.html" class="avatar" aria-label="Account"><i class="fa-solid fa-user"></i></a>
                 <button class="icon-btn menu-btn" type="button" data-action="menu" aria-expanded="false" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
@@ -429,7 +503,9 @@ function renderChrome() {
             ${menuLink('auctions.html', 'fa-store', 'nav_auctions', 'auctions')}
             ${menuLink('winners.html', 'fa-trophy', 'nav_winners', 'winners')}
             ${menuLink('my-bids.html', 'fa-gavel', 'nav_mybids', 'mybids')}
+            ${menuLink('impact.html', 'fa-hand-holding-heart', 'title_impact', 'impact')}
             ${menuLink('faq.html', 'fa-circle-question', 'nav_faq', 'faq')}
+            <a href="#" class="menu-theme" data-action="theme"><i data-theme-icon class="fa-solid fa-moon"></i><span data-theme-label></span></a>
             <a href="#" class="install-link hidden" data-action="install"><i class="fa-solid fa-download"></i><span data-i18n="install_menu"></span></a>
         </nav>
     </header>`;
@@ -460,38 +536,32 @@ function renderChrome() {
     const footer = qs('#site-footer');
     if (footer) footer.outerHTML = `
     <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <a href="index.html" class="brand">JOO<span>BIRAA</span></a>
-                    <p data-i18n="footer_desc"></p>
-                    <div class="social-icons">
-                        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-                        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="https://t.me/+251912120330" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
-                    </div>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="brand">JOO<span>BIRAA</span></a>
+                <p data-i18n="footer_desc"></p>
+            </div>
+            <nav class="footer-nav" aria-label="Footer">
+                <a href="index.html" data-i18n="nav_home"></a>
+                <a href="auctions.html" data-i18n="nav_auctions"></a>
+                <a href="my-bids.html" data-i18n="nav_mybids"></a>
+            </nav>
+            <div class="footer-side">
+                <div class="footer-contact">
+                    <a href="tel:0912120330"><i class="fa-solid fa-phone"></i> 0912120330</a>
+                    <a href="mailto:joobiraa219@gmail.com"><i class="fa-solid fa-envelope"></i> joobiraa219@gmail.com</a>
                 </div>
-                <div class="footer-links">
-                    <h4 data-i18n="nav_contact"></h4>
-                    <ul>
-                        <li><a href="tel:0912120330"><i class="fa-solid fa-phone"></i> 0912120330</a></li>
-                        <li><a href="mailto:joobiraa219@gmail.com"><i class="fa-solid fa-envelope"></i> joobiraa219@gmail.com</a></li>
-                        <li><a href="#"><i class="fa-solid fa-location-dot"></i> <span data-i18n="footer_location"></span></a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <h4 data-i18n="footer_about"></h4>
-                    <ul>
-                        <li><a href="auctions.html" data-i18n="nav_auctions"></a></li>
-                        <li><a href="winners.html" data-i18n="nav_winners"></a></li>
-                        <li><a href="faq.html" data-i18n="nav_faq"></a></li>
-                        <li><a href="#" data-i18n="footer_terms"></a></li>
-                        <li><a href="#" data-i18n="footer_privacy"></a></li>
-                    </ul>
+                <div class="social-icons">
+                    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://t.me/+251912120330" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
                 </div>
             </div>
-            <div class="footer-bottom">&copy; 2026 Joobiraa. All rights reserved.</div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; 2026 Joobiraa</span>
+            <span class="footer-legal"><a href="terms.html" data-i18n="footer_terms"></a> · <a href="privacy.html" data-i18n="footer_privacy"></a></span>
         </div>
     </footer>`;
 
@@ -702,7 +772,7 @@ function auctionCard(a) {
         ${bidStepper()}
         <button type="button" class="btn btn-gold btn-block" data-bid="${a.id}">${t('btn_bid')}</button>`,
         upcoming: () => `<div class="card-timer-label">${t('starts_in')}</div>${timerBoxes(a.startsAt, 'card-timer upcoming')}
-        <a href="${href}" class="btn btn-outline btn-block"><i class="fa-regular fa-bell"></i> ${t('opens_soon')}</a>`,
+        ${notifyButton(a.id)}`,
         ended: () => `<div class="winner-strip card-winner"><i class="fa-solid fa-trophy"></i> ${t('lbl_winner')}: <strong>${winnerName(a)}</strong> <span class="masked">${maskPhone(a.winner.phone)}</span></div>
         <a href="${href}" class="btn btn-outline btn-block">${t('btn_results')}</a>`
     }[a.status]();
@@ -741,6 +811,12 @@ function timerBoxes(ends, cls = '') {
         <div><strong data-t="m">--</strong><small>${t('d_mins')}</small></div>
         <div><strong data-t="s">--</strong><small>${t('d_secs')}</small></div>
     </div>`;
+}
+
+function notifyButton(id) {
+    const on = reminders.has(id);
+    return `<button type="button" class="btn btn-block ${on ? 'btn-notify-on' : 'btn-outline'}" data-notify="${id}" aria-pressed="${on}">
+        <i class="fa-${on ? 'solid fa-bell' : 'regular fa-bell'}"></i> ${t(on ? 'notify_on' : 'notify_me')}${on ? ' <i class="fa-solid fa-check"></i>' : ''}</button>`;
 }
 
 // Winners gallery card: the winner is shown by masked phone, never the full number
@@ -839,7 +915,7 @@ document.addEventListener('click', e => {
     const action = e.target.closest('[data-action]');
     if (action) {
         const a = action.dataset.action;
-        if (a === 'theme') { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); applyTranslations(); }
+        if (a === 'theme') { e.preventDefault(); setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); applyTranslations(); }
         if (a === 'signout') { session.signOut(); location.href = 'index.html'; }
         if (a === 'install') { e.preventDefault(); installApp(); }
         if (a === 'menu') {
@@ -874,6 +950,15 @@ document.addEventListener('click', e => {
     const step = e.target.closest('[data-step]');
     if (step) { if (e.detail === 0) stepBid(step); return; }
 
+    const notify = e.target.closest('[data-notify]');
+    if (notify) {
+        if (!session.user()) { store.set('jb_toast', t('signin_required')); location.href = 'login.html?next=' + encodeURIComponent(location.pathname.split('/').pop() + location.search); return; }
+        const on = reminders.toggle(notify.dataset.notify);
+        qsa(`[data-notify="${notify.dataset.notify}"]`).forEach(b => { b.outerHTML = notifyButton(notify.dataset.notify); });
+        if (on) toast(t('notify_toast'));
+        return;
+    }
+
     const morePhones = e.target.closest('[data-more-phones]');
     if (morePhones) {
         const open = morePhones.previousElementSibling.classList.toggle('hidden') === false;
@@ -888,6 +973,12 @@ document.addEventListener('click', e => {
         location.href = `bid.html?id=${bid.dataset.bid}&amount=${encodeURIComponent(input ? input.value : '1.00')}#pay`;
     }
 });
+
+// The phone menu closes by itself once the page starts scrolling
+window.addEventListener('scroll', () => {
+    const header = qs('.site-header');
+    if (header && header.classList.contains('menu-open')) qs('.menu-btn').click();
+}, { passive: true });
 
 // +/- change the bid by 0.01; holding the button keeps going and speeds up
 function stepBid(btn) {

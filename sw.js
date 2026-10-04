@@ -2,9 +2,10 @@
 // Pages: network first (fresh prices and timers), cached copy if offline.
 // CSS/JS/images/fonts: cached copy first, refreshed in the background.
 // The real app must never cache API responses (bids, payments) here.
-const CACHE = 'joobiraa-v5';
+const CACHE = 'joobiraa-v6';
 const SHELL = [
     './', 'index.html', 'auctions.html', 'winners.html', 'bid.html', 'my-bids.html', 'account.html', 'faq.html', 'login.html',
+    'notifications.html', 'impact.html', 'terms.html', 'privacy.html', 'offline.html',
     'css/style.css', 'js/boot.js', 'js/script.js', 'js/data.js',
     'assets/icons/icon-192.png', 'assets/pay/telebirr.webp', 'assets/pay/cbe.webp'
 ];
@@ -26,7 +27,7 @@ self.addEventListener('fetch', e => {
     if (req.mode === 'navigate') {
         e.respondWith(fetch(req)
             .then(res => { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); return res; })
-            .catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match('index.html'))));
+            .catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match('offline.html'))));
         return;
     }
 

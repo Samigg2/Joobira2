@@ -71,6 +71,7 @@
                 return `
                 <div class="panel" id="pay">
                     ${winnerBox(a, 'big')}
+                    ${mine ? `<p class="winner-note"><i class="fa-solid fa-headset"></i> ${t('winner_contact')}</p>` : ''}
                     ${statsHTML()}
                     ${mine && paid ? `<p class="paid-line"><span class="status paid">${t('status_paid')}</span> ${myBids.receipts()[a.id] ? `${t('pay_receipt')}: <strong class="ref">${myBids.receipts()[a.id]}</strong>` : ''}</p>` : ''}
                     ${mine && !paid ? `<div class="pay-divider"></div><div id="payForm"></div>` : ''}
@@ -82,7 +83,8 @@
                     <div class="panel-label">${t('starts_in')}</div>
                     ${timerBoxes(a.startsAt)}
                     ${statsHTML(t('lbl_current_bid'), fmtETB(a.price))}
-                    <p class="hint" style="margin-top:12px"><i class="fa-regular fa-bell"></i>${t('upcoming_note')}</p>
+                    <p class="hint" style="margin:12px 0"><i class="fa-regular fa-bell"></i>${t('upcoming_note')}</p>
+                    ${notifyButton(a.id)}
                 </div>`;
             }
             return `
