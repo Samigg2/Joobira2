@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Payments</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="payments" data-title="a_nav_payments" data-owner-only>
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const PER = 15;
+        const state = { q: '', type: 'all', status: 'all', method: 'all', pg: 0 };
+        const statusPill = s => pill({ success: 'success', failed: 'failed', pending: 'gold' }[s], t('a_st_' + s));
+
+        function filtered() {
+            const q = state.q.trim().toLowerCase();
+            return ADMIN_PAYMENTS.filter(p => {
+                const u = userById(p.user);
+                return (state.type === 'all' || p.type === state.type) && (state.status === 'all' || p.status === state.status)
+                    && (state.method === 'all' || p.method === state.method)
+                    && (!q || p.ref.toLowerCase().includes(q) || u.name.toLowerCase().includes(q) || u.phone.includes(q.replace(/^0/, '')));
+            });
+        }
+
+        function render() {
+            const rows = filtered();
+            const ok = rows.filter(p => p.status === 'success');
+            const sel = (id, opts) => `<select class="select" data-filter="${id}">${opts.map(([v, l]) => `<option value="${v}" ${state[id] === v ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
+            const cols = [
+                { key: 'time', label: t('a_col_time'), cell: p => fmtDate(p.at) },
+                { key: 'user', label: t('a_nav_users'), cls: 'main', cell: p => { const u = userById(p.user); return `<span class="cell-item"><span>${u.name}<small class="mono">${fmtPhone(u.phone)}</small></span></span>`; } },
+                { key: 'auction', label: t('col_item'), cell: p => `<a href="auction.html?id=${p.auction}" style="color:inherit">${L(getAuction(p.auction).name)}</a>` },
+                { key: 'type', label: t('a_type'), cell: p => t(p.type === 'bid' ? 'a_type_bid' : 'hist_item') },
+                { key: 'amount', label: t('h_amount'), cls: 'r', cell: p => `<span class="num-cell">${fmtETB(p.amount)}</span>` },
+                { key: 'method', label: t('pay_method'), cell: p => p.method === 'cbe' ? 'CBE Birr' : 'Telebirr' },
+                { key: 'ref', label: t('pay_receipt'), cell: p => `<span class="mono adm-sub">${p.ref}</span>` },
+                { key: 'status', label: t('a_col_status'), cell: p => statusPill(p.status) }
+            ];
+            qs('#content').innerHTML = `
+            <div class="stat-cards" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-coins"></i>${t('pay_total')}</div><div class="val">${num(ok.reduce((s, p) => s + p.amount, 0))} <small>${t('currency')}</small></div></div>
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-circle-check"></i>${t('a_st_success')}</div><div class="val">${ok.length}</div></div>
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-circle-xmark"></i>${t('a_st_failed')}</div><div class="val">${rows.filter(p => p.status === 'failed').length}</div></div>
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-hourglass-half"></i>${t('a_st_pending')}</div><div class="val">${rows.filter(p => p.status === 'pending').length}</div></div>
+            </div>
+            <div class="filters">
+                <label class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="q" value="${state.q}" placeholder="${t('a_search')}"></label>
+                ${sel('type', [['all', t('a_all') + ' · ' + t('a_type')], ['bid', t('a_type_bid')], ['item', t('hist_item')]])}
+                ${sel('status', [['all', t('a_all') + ' · ' + t('a_col_status')], ['success', t('a_st_success')], ['failed', t('a_st_failed')], ['pending', t('a_st_pending')]])}
+                ${sel('method', [['all', t('a_all') + ' · ' + t('pay_method')], ['telebirr', 'Telebirr'], ['cbe', 'CBE Birr']])}
+                <button type="button" class="btn btn-outline btn-sm" data-export><i class="fa-solid fa-download"></i> ${t('a_export')}</button>
+            </div>
+            ${tableHTML(cols, rows.slice(state.pg * PER, (state.pg + 1) * PER))}
+            ${pagerHTML(state.pg, rows.length, PER)}`;
+        }
+
+        function initPage() {
+            const root = qs('#content');
+            root.addEventListener('change', e => { const f = e.target.dataset.filter; if (f) { state[f] = e.target.value; state.pg = 0; render(); } });
+            root.addEventListener('input', e => {
+                if (e.target.id !== 'q') return;
+                state.q = e.target.value; state.pg = 0;
+                const pos = e.target.selectionStart; render(); const i = qs('#q'); i.focus(); i.setSelectionRange(pos, pos);
+            });
+            root.addEventListener('click', e => {
+                const p = e.target.closest('[data-page]');
+                if (p && !p.disabled) { state.pg = +p.dataset.page; render(); return; }
+                if (e.target.closest('[data-export]')) {
+                    downloadCSV('joobiraa-payments.csv', ['time', 'name', 'phone', 'auction', 'type', 'amount_etb', 'method', 'receipt', 'status'],
+                        filtered().map(p => { const u = userById(p.user); return [new Date(p.at).toISOString(), u.name, '0' + u.phone, getAuction(p.auction).name.en, p.type, fmtETB(p.amount), p.method, p.ref, p.status]; }));
+                }
+            });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

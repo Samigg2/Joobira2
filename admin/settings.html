@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="settings" data-title="acc_settings">
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        function render() {
+            const owner = admin.isOwner();
+            const s = { phone: '0912120330', email: 'joobiraa219@gmail.com', charity: 20, ...(store.json('jb_adm_settings') || {}) };
+            const cols = [
+                { key: 'name', label: t('name_label'), cls: 'main', cell: a => `<span class="cell-item"><span class="adm-avatar" style="width:36px;height:36px;flex:none">${a.name[0]}</span><span>${a.name}<small>${a.email}</small></span></span>` },
+                { key: 'role', label: t('a_role'), cell: a => pill(a.role === 'owner' ? 'gold' : 'muted', t(a.role === 'owner' ? 'a_role_owner' : 'a_role_staff')) },
+                { key: 'last', label: t('a_last_login'), cell: a => fmtDate(a.lastLogin) },
+                { key: 'act', label: '', cls: 'no-label', cell: a => a.role === 'owner' ? '' : `<div class="row-actions"><button type="button" class="btn btn-danger btn-xs" data-remove="${a.email}"><i class="fa-solid fa-user-minus"></i></button></div>` }
+            ];
+            qs('#content').innerHTML = `
+            <div class="adm-grid split">
+                <section class="card">
+                    <div class="adm-h" style="margin-bottom:12px">${t('a_general')}</div>
+                    <div class="form-grid two">
+                        <div class="f-field"><label>${t('nav_contact')} · ${t('account_phone')}</label><input class="input" id="sPhone" value="${s.phone}"></div>
+                        <div class="f-field"><label>${t('nav_contact')} · Email</label><input class="input" id="sEmail" value="${s.email}"></div>
+                        <div class="f-field"><label>${t('a_charity_pct')}</label><input class="input" type="number" min="0" max="100" id="sCharity" value="${s.charity}" ${owner ? '' : 'disabled'}>
+                            ${owner ? '' : `<p class="f-hint"><i class="fa-solid fa-lock"></i> ${t('a_owner_only')}</p>`}</div>
+                    </div>
+                    <div class="form-actions"><button type="button" class="btn btn-gold btn-sm" data-save>${t('a_save')}</button></div>
+                </section>
+                <section class="card">
+                    <div class="card-head"><div class="adm-h">${t('a_admins')}</div>${owner ? `<button type="button" class="btn btn-outline btn-xs" data-add><i class="fa-solid fa-plus"></i> ${t('a_add_admin')}</button>` : ''}</div>
+                    ${owner ? tableHTML(cols, ADMIN_ACCOUNTS) : `<p class="hint"><i class="fa-solid fa-lock"></i>${t('a_staff_note')}</p>`}
+                    ${owner ? `<p class="hint" style="margin-top:10px"><i class="fa-solid fa-circle-info"></i>${t('a_staff_note')}</p>` : ''}
+                </section>
+            </div>`;
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                if (e.target.closest('[data-save]')) {
+                    store.set('jb_adm_settings', JSON.stringify({ phone: qs('#sPhone').value, email: qs('#sEmail').value, charity: +qs('#sCharity').value }));
+                    toast(t('a_saved')); return;
+                }
+                const rm = e.target.closest('[data-remove]');
+                if (rm) { const i = ADMIN_ACCOUNTS.findIndex(a => a.email === rm.dataset.remove); ADMIN_ACCOUNTS.splice(i, 1); render(); return; }
+                if (e.target.closest('[data-add]')) {
+                    const sheet = openModal(`${modalHead(t('a_add_admin'))}
+                        <div class="form-grid">
+                            <div class="f-field"><label>${t('name_label')}</label><input class="input" id="nName"></div>
+                            <div class="f-field"><label>${t('a_email')}</label><input class="input" id="nEmail"></div>
+                            <div class="f-field"><label>${t('a_role')}</label><select class="select" id="nRole"><option value="staff">${t('a_role_staff')}</option><option value="owner">${t('a_role_owner')}</option></select></div>
+                        </div>
+                        <div class="form-actions"><button type="button" class="btn btn-outline btn-sm" data-close>${t('a_close')}</button><button type="button" class="btn btn-gold btn-sm" id="nSave">${t('a_save')}</button></div>`);
+                    qs('#nSave', sheet).addEventListener('click', () => {
+                        const name = qs('#nName', sheet).value.trim(), email = qs('#nEmail', sheet).value.trim();
+                        if (!name || !email) return;
+                        ADMIN_ACCOUNTS.push({ name, email, role: qs('#nRole', sheet).value, lastLogin: Date.now() });
+                        closeModal(); render(); toast(t('a_saved'));
+                    });
+                }
+            });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

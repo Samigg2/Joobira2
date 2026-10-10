@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Edit auction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="auctions" data-title="a_edit_title">
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const editing = getAuction(new URLSearchParams(location.search).get('id'));
+        const toLocal = ms => { const d = new Date(ms - new Date(ms).getTimezoneOffset() * 60e3); return d.toISOString().slice(0, 16); };
+        const form = editing ? {
+            name: { ...editing.name }, desc: { ...editing.desc }, cat: editing.cat, price: editing.price,
+            start: toLocal(editing.startsAt), end: toLocal(editing.endsAt),
+            specs: editing.specs.map(([k, v]) => [dict.en[k] ? t(k) : k, dict.en[v] ? t(v) : v]),
+            photos: editing.images.map(img)
+        } : {
+            name: { om: '', am: '', en: '' }, desc: { om: '', am: '', en: '' }, cat: 'phones', price: 75,
+            start: toLocal(PAGE_LOADED_AT + DAY), end: toLocal(PAGE_LOADED_AT + 15 * DAY),
+            specs: [['', ''], ['', '']], photos: [null, null, null]
+        };
+        let lang = 'om';
+
+        function previewHTML() {
+            const a = {
+                id: 'preview', status: 'live', cat: form.cat, price: +form.price || 0, bids: editing ? editing.bids : 0, views: editing ? editing.views : 0,
+                name: { om: form.name.om || '—', am: form.name.am || form.name.om || '—', en: form.name.en || form.name.om || '—' },
+                images: [form.photos.find(Boolean) || img('assets/icons/icon-512.png')], endsAt: new Date(form.end).getTime()
+            };
+            return auctionCard(a);
+        }
+
+        function render() {
+            const missing = l => !form.name[l].trim();
+            qs('#content').innerHTML = `
+            <div class="adm-row"><a href="auctions.html" class="back-link" style="margin:0"><i class="fa-solid fa-arrow-left"></i> ${t('nav_auctions')}</a>
+                ${editing ? pill(editing.status, statusLabel(editing.status)) : ''}</div>
+            <div class="adm-grid edit">
+                <div style="display:grid;gap:16px">
+                    <section class="card">
+                        <div class="adm-h" style="margin-bottom:12px">${t('a_basic')}</div>
+                        <div class="lang-tabs">${LANGS.map(l => `<button type="button" class="${lang === l.id ? 'active' : ''} ${missing(l.id) ? 'missing' : ''}" data-lang-tab="${l.id}">${l.code}</button>`).join('')}</div>
+                        <div class="form-grid">
+                            <div class="f-field"><label>${t('a_name')} (${LANGS.find(l => l.id === lang).name})</label><input class="input" data-f="name" value="${form.name[lang].replace(/"/g, '&quot;')}"></div>
+                            <div class="f-field"><label>${t('lbl_description')} (${LANGS.find(l => l.id === lang).name})</label><textarea class="textarea" data-f="desc">${form.desc[lang]}</textarea></div>
+                        </div>
+                        <div class="form-grid two" style="margin-top:14px">
+                            <div class="f-field"><label>${t('a_col_cat')}</label><select class="select" data-f="cat">${CATEGORIES.filter(c => c.id !== 'all').map(c => `<option value="${c.id}" ${form.cat === c.id ? 'selected' : ''}>${L(c)}</option>`).join('')}</select></div>
+                            <div class="f-field"><label>${t('a_col_price')} (ETB)</label><input class="input" type="number" min="1" step="1" data-f="price" value="${form.price}"><p class="f-hint">${t('imp_how_d')}</p></div>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <div class="adm-h" style="margin-bottom:12px">${t('a_schedule')}</div>
+                        <div class="form-grid two">
+                            <div class="f-field"><label>${t('a_col_start')}</label><input class="input" type="datetime-local" data-f="start" value="${form.start}"></div>
+                            <div class="f-field"><label>${t('a_col_end')}</label><input class="input" type="datetime-local" data-f="end" value="${form.end}"></div>
+                        </div>
+                    </section>
+                    <section class="card">
+                        <div class="adm-h">${t('a_photos')}</div>
+                        <p class="adm-sub" style="margin-bottom:12px">${t('a_photo_hint')}</p>
+                        <div class="photo-slots">${form.photos.map((p, i) => `
+                            <label class="photo-slot ${p ? 'filled' : ''}">
+                                ${i === 0 ? pill('gold tag', '1') : ''}
+                                ${p ? `<img src="${p}" alt="">
+                                    <span class="slot-actions">${i ? `<button type="button" data-photo-first="${i}" title="1"><i class="fa-solid fa-star"></i></button>` : ''}<button type="button" data-photo-remove="${i}" aria-label="Remove"><i class="fa-solid fa-xmark"></i></button></span>`
+                                    : `<i class="fa-solid fa-camera" style="font-size:1.3rem"></i>${t('a_upload')}<input type="file" accept="image/*" data-photo="${i}">`}
+                            </label>`).join('')}</div>
+                    </section>
+                    <section class="card">
+                        <div class="adm-h" style="margin-bottom:12px">${t('lbl_specs')}</div>
+                        <div class="spec-rows">${form.specs.map(([k, v], i) => `
+                            <div class="spec-row"><input class="input" placeholder="${t('a_spec_name')}" data-spec="${i}" data-part="0" value="${k}"><input class="input" placeholder="${t('a_spec_value')}" data-spec="${i}" data-part="1" value="${v}">
+                            <button type="button" class="icon-btn" data-spec-remove="${i}" aria-label="Remove"><i class="fa-solid fa-trash-can"></i></button></div>`).join('')}</div>
+                        <button type="button" class="btn btn-outline btn-xs" style="margin-top:10px" data-spec-add><i class="fa-solid fa-plus"></i> ${t('a_add_row')}</button>
+                    </section>
+                </div>
+                <aside class="sticky">
+                    <section class="card">
+                        <div class="adm-h" style="margin-bottom:12px">${t('a_preview')}</div>
+                        <div class="preview-card" id="preview">${previewHTML()}</div>
+                        <div class="form-error" id="formError"></div>
+                        <div class="form-actions" style="margin-top:4px">
+                            <button type="button" class="btn btn-outline btn-sm" data-save="draft">${t('a_save_draft')}</button>
+                            <button type="button" class="btn btn-gold btn-sm" data-save="publish"><i class="fa-solid fa-paper-plane"></i> ${t('a_publish')}</button>
+                        </div>
+                    </section>
+                </aside>
+            </div>`;
+            tickTimers();
+        }
+
+        const refreshPreview = () => { qs('#preview').innerHTML = previewHTML(); tickTimers(); };
+
+        function save(kind) {
+            const err = qs('#formError');
+            if (LANGS.some(l => !form.name[l.id].trim())) { err.textContent = t('a_lang_missing'); return; }
+            if (!(+form.price > 0)) { err.textContent = t('a_err_price'); return; }
+            const startsAt = new Date(form.start).getTime(), endsAt = new Date(form.end).getTime();
+            const status = kind === 'draft' ? 'draft' : startsAt > Date.now() ? 'upcoming' : 'live';
+            const saved = store.json('jb_adm_auctions') || [];
+            const id = editing ? editing.id : 'n' + Date.now();
+            const record = {
+                id, code: editing ? editing.code : String(AUCTIONS.length + 1).padStart(2, '0'), status, cat: form.cat, price: +form.price,
+                bids: editing ? editing.bids : 0, views: editing ? editing.views : 0, name: form.name, desc: form.desc,
+                // demo: uploaded photos are not kept, so new items reuse a placeholder photo
+                images: editing ? editing.images : [IMG + 'images.jpeg', IMG + 'images.jpeg', IMG + 'images.jpeg'],
+                specs: form.specs.filter(([k, v]) => k && v), startsAt, endsAt
+            };
+            store.set('jb_adm_auctions', JSON.stringify([...saved.filter(x => x.id !== id), record]));
+            store.set('jb_toast', t(kind === 'draft' ? 'a_saved' : 'a_published'));
+            location.href = 'auctions.html#' + status;
+        }
+
+        function initPage() {
+            const root = qs('#content');
+            root.addEventListener('input', e => {
+                const f = e.target.dataset.f;
+                if (f === 'name' || f === 'desc') form[f][lang] = e.target.value;
+                else if (f) form[f] = e.target.value;
+                if (e.target.dataset.spec) form.specs[e.target.dataset.spec][e.target.dataset.part] = e.target.value;
+                if (f === 'name') qsa('[data-lang-tab]').forEach(b => b.classList.toggle('missing', !form.name[b.dataset.langTab].trim()));
+                qs('#formError').textContent = '';
+                refreshPreview();
+            });
+            root.addEventListener('change', e => {
+                if (e.target.dataset.photo === undefined) return;
+                const file = e.target.files[0];
+                if (!file) return;
+                const r = new FileReader();
+                r.onload = () => { form.photos[e.target.dataset.photo] = r.result; render(); };
+                r.readAsDataURL(file);
+            });
+            root.addEventListener('click', e => {
+                const lt = e.target.closest('[data-lang-tab]');
+                if (lt) { lang = lt.dataset.langTab; render(); return; }
+                const rm = e.target.closest('[data-photo-remove]');
+                if (rm) { e.preventDefault(); form.photos[rm.dataset.photoRemove] = null; render(); return; }
+                const first = e.target.closest('[data-photo-first]');
+                if (first) { e.preventDefault(); const i = +first.dataset.photoFirst; [form.photos[0], form.photos[i]] = [form.photos[i], form.photos[0]]; render(); return; }
+                if (e.target.closest('[data-spec-add]')) { form.specs.push(['', '']); render(); return; }
+                const sr = e.target.closest('[data-spec-remove]');
+                if (sr) { form.specs.splice(+sr.dataset.specRemove, 1); render(); return; }
+                const sv = e.target.closest('[data-save]');
+                if (sv) save(sv.dataset.save);
+            });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

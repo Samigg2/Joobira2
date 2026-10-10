@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Auctions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="auctions" data-title="nav_auctions">
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const TABS = ['live', 'upcoming', 'draft', 'ended', 'all'];
+        const state = { tab: TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'live', q: '', cat: 'all', sort: 'end', dir: 1 };
+
+        const cols = () => [
+            { key: 'item', label: t('col_item'), cls: 'main', cell: a => `<a class="cell-item" href="auction.html?id=${a.id}"><img src="${img(a.images[0])}" alt=""><span>${L(a.name)}<small>#${a.code}</small></span></a>`, sort: a => L(a.name) },
+            { key: 'cat', label: t('a_col_cat'), cell: a => L(CATEGORIES.find(c => c.id === a.cat)) },
+            { key: 'price', label: t('a_col_price'), cls: 'r', cell: a => `<span class="num-cell">${fmtETB(a.price)}</span>`, sort: a => a.price },
+            { key: 'bids', label: t('lbl_bids'), cls: 'r', cell: a => `<span class="num-cell">${num(a.bids)}</span>`, sort: a => a.bids },
+            { key: 'start', label: t('a_col_start'), cell: a => fmtDate(a.startsAt), sort: a => a.startsAt },
+            { key: 'end', label: t('a_col_end'), cell: a => fmtDate(a.endsAt), sort: a => a.endsAt },
+            { key: 'status', label: t('a_col_status'), cell: a => pill(a.status, statusLabel(a.status)) },
+            { key: 'act', label: '', cls: 'no-label', cell: a => `<div class="row-actions">
+                ${['draft', 'upcoming'].includes(a.status) ? `<a class="btn btn-outline btn-xs" href="auction-edit.html?id=${a.id}"><i class="fa-solid fa-pen"></i> ${t('a_edit')}</a>` : ''}
+                <a class="btn btn-outline btn-xs" href="auction.html?id=${a.id}">${t('btn_view')}</a></div>` }
+        ];
+
+        function render() {
+            const q = state.q.trim().toLowerCase();
+            const count = s => AUCTIONS.filter(a => s === 'all' || a.status === s).length;
+            const label = s => s === 'all' ? t('a_all') : statusLabel(s);
+            let rows = AUCTIONS.filter(a => (state.tab === 'all' || a.status === state.tab)
+                && (state.cat === 'all' || a.cat === state.cat)
+                && (!q || Object.values(a.name).some(n => n.toLowerCase().includes(q)) || a.code.includes(q)));
+            rows = sortRows(rows, cols(), state.sort, state.dir);
+            qs('#content').innerHTML = `
+            <div class="adm-row">
+                <div class="tabs" style="margin:0;flex:1;max-width:620px">${TABS.map(s => `<button class="tab ${state.tab === s ? 'active' : ''}" data-tab="${s}">${label(s)}<span class="count">${count(s)}</span></button>`).join('')}</div>
+                <a href="auction-edit.html" class="btn btn-gold btn-sm"><i class="fa-solid fa-plus"></i> ${t('a_new_auction')}</a>
+            </div>
+            <div class="filters">
+                <label class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="q" value="${state.q}" placeholder="${t('a_search')}"></label>
+                <select class="select" id="cat">${CATEGORIES.map(c => `<option value="${c.id}" ${state.cat === c.id ? 'selected' : ''}>${L(c)}</option>`).join('')}</select>
+            </div>
+            <div id="table">${tableHTML(cols(), rows, { sortKey: state.sort, sortDir: state.dir })}</div>`;
+        }
+
+        function initPage() {
+            const root = qs('#content');
+            root.addEventListener('click', e => {
+                const tb = e.target.closest('[data-tab]');
+                if (tb) { state.tab = tb.dataset.tab; history.replaceState(null, '', '#' + state.tab); render(); return; }
+                const th = e.target.closest('[data-sort]');
+                if (th) { state.dir = state.sort === th.dataset.sort ? -state.dir : 1; state.sort = th.dataset.sort; render(); }
+            });
+            root.addEventListener('input', e => {
+                if (e.target.id === 'q') { state.q = e.target.value; const pos = e.target.selectionStart; render(); const i = qs('#q'); i.focus(); i.setSelectionRange(pos, pos); }
+            });
+            root.addEventListener('change', e => { if (e.target.id === 'cat') { state.cat = e.target.value; render(); } });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

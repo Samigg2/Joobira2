@@ -846,6 +846,9 @@ function winnerBox(a, cls = '') {
     </div>`;
 }
 
+// Feature switches: set to true to show a feature again (code is kept)
+const FEATURES = { bidHistory: false, install: false };
+
 // ---------- Bid history (ended auctions, inside a closed-by-default box) ----------
 const HISTORY_PAGE = 15;
 const CHIPS_SHOWN = 6;
@@ -1062,7 +1065,7 @@ async function installApp() {
 
 function initInstall() {
     if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js');
-    if (isStandalone()) return;
+    if (!FEATURES.install || isStandalone()) return;
     window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvent = e; showInstall(); });
     window.addEventListener('appinstalled', () => { qsa('.install-pill, .install-link').forEach(el => el.classList.add('hidden')); toast('✓ Joobiraa'); });
     if (isIOS()) showInstall({ ios: true });
@@ -1070,12 +1073,14 @@ function initInstall() {
 
 // ---------- boot ----------
 document.addEventListener('DOMContentLoaded', () => {
-    renderChrome();
+    // Admin pages (body data-app="admin") get the admin sidebar instead of the public header/footer
+    const isAdmin = document.body.dataset.app === 'admin';
+    if (isAdmin) renderAdminChrome(); else renderChrome();
     initFaq();
     if (typeof initPage === 'function') initPage();
     applyTranslations();
     const pending = store.get('jb_toast');
     if (pending) { store.remove('jb_toast'); setTimeout(() => toast(pending), 300); }
     setInterval(tickTimers, 1000);
-    initInstall();
+    if (!isAdmin) initInstall();
 });

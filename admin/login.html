@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Sign in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="login">
+
+    <main id="page" class="al">
+        <aside class="al-brand">
+            <div class="al-logo"><img src="../assets/icons/icon-192.png" alt="" width="52" height="52"><span class="brand">JOO<span>BIRAA</span></span><small>Admin</small></div>
+            <h2 class="al-head" data-i18n="a_login_head"></h2>
+            <ul class="al-feats">
+                <li><i class="fa-solid fa-gavel"></i><span data-i18n="a_feat1"></span></li>
+                <li><i class="fa-solid fa-trophy"></i><span data-i18n="a_feat2"></span></li>
+                <li><i class="fa-solid fa-chart-column"></i><span data-i18n="a_feat3"></span></li>
+            </ul>
+            <small class="al-copy">&copy; 2026 Joobiraa</small>
+        </aside>
+
+        <section class="al-form-side">
+            <div class="al-tools">
+                <div class="lang-menu">
+                    <button class="lang-pill" type="button" aria-haspopup="listbox" aria-label="Language">
+                        <i class="fa-solid fa-globe"></i><span class="code">OM</span><i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <ul class="lang-list" role="listbox" id="langList"></ul>
+                </div>
+                <button class="icon-btn" type="button" data-action="theme" aria-label="Toggle dark mode"><i data-theme-icon class="fa-solid fa-moon"></i></button>
+            </div>
+
+            <div class="al-box">
+                <!-- Step 1: email or phone + password -->
+                <form id="credStep" novalidate>
+                    <h1 class="al-title" data-i18n="a_login_title"></h1>
+                    <p class="al-sub" data-i18n="a_login_sub"></p>
+                    <label class="f-label" for="email" data-i18n="a_email"></label>
+                    <div class="al-input"><i class="fa-regular fa-user"></i><input id="email" type="text" autocomplete="username" placeholder="owner@joobiraa.et"></div>
+                    <label class="f-label" for="pass" data-i18n="a_password"></label>
+                    <div class="al-input"><i class="fa-solid fa-lock"></i><input id="pass" type="password" autocomplete="current-password" placeholder="••••••••">
+                        <button type="button" class="al-eye" id="eye" aria-label="Show password"><i class="fa-regular fa-eye"></i></button></div>
+                    <div class="al-row">
+                        <label class="check-row" style="margin:0"><input type="checkbox" id="remember"><span data-i18n="a_remember"></span></label>
+                        <a href="#" id="forgot" data-i18n="a_forgot"></a>
+                    </div>
+                    <div class="form-error" id="credError"></div>
+                    <button type="submit" class="btn btn-gold btn-block"><span data-i18n="nav_signin"></span> <i class="fa-solid fa-arrow-right"></i></button>
+                </form>
+
+                <!-- Step 2: OTP (skipped on a remembered device) -->
+                <form id="otpStep" class="hidden" novalidate>
+                    <button type="button" class="back-link" id="backBtn" style="border:0;background:none;padding:0;cursor:pointer"><i class="fa-solid fa-arrow-left"></i> <span data-i18n="back"></span></button>
+                    <h1 class="al-title" data-i18n="otp_title"></h1>
+                    <p class="al-sub" id="otpSub"></p>
+                    <div class="otp-boxes" id="otpBoxes"></div>
+                    <div class="form-error" id="otpError"></div>
+                    <button type="submit" class="btn btn-gold btn-block" data-i18n="otp_verify"></button>
+                    <p class="al-sub" style="margin:14px 0 0;text-align:center"><button type="button" class="link-btn" id="resend" disabled></button></p>
+                </form>
+            </div>
+            <p class="al-secure"><i class="fa-solid fa-shield-halved"></i> <span data-i18n="a_secure_note"></span></p>
+        </section>
+    </main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        let resendTimer;
+        const DEVICE_DAYS = 30;
+        const remembered = () => +store.get('jb_admin_device') > Date.now();
+
+        function account() {
+            const id = qs('#email').value.trim().toLowerCase().replace(/^0|^\+251/, '');
+            return ADMIN_ACCOUNTS.find(a => a.email === id || a.phone === id) || ADMIN_ACCOUNTS.find(a => a.role === admin.role()) || ADMIN_ACCOUNTS[0];
+        }
+
+        function startResend() {
+            let s = 60;
+            const btn = qs('#resend');
+            clearInterval(resendTimer);
+            const tick = () => { btn.textContent = s > 0 ? t('otp_resend_in')(s) : t('otp_resend'); btn.disabled = s > 0; if (s-- <= 0) clearInterval(resendTimer); };
+            tick(); resendTimer = setInterval(tick, 1000);
+        }
+
+        function finish() {
+            if (qs('#remember').checked) store.set('jb_admin_device', Date.now() + DEVICE_DAYS * DAY);
+            const acc = account();
+            admin.setRole(acc.role);
+            admin.signIn(acc.name);
+            location.href = 'index.html';
+        }
+
+        function initPage() {
+            if (admin.user()) { location.replace('index.html'); return; }
+            qs('#langList').innerHTML = LANGS.map(l => `<li><button type="button" data-lang="${l.id}">${l.code}</button></li>`).join('');
+            qs('#otpBoxes').innerHTML = Array.from({ length: 6 }, (_, i) => `<input type="text" inputmode="numeric" maxlength="1" aria-label="Digit ${i + 1}">`).join('');
+            qs('#remember').checked = remembered();
+
+            qs('#eye').addEventListener('click', () => {
+                const p = qs('#pass'), show = p.type === 'password';
+                p.type = show ? 'text' : 'password';
+                qs('#eye i').className = `fa-regular ${show ? 'fa-eye-slash' : 'fa-eye'}`;
+            });
+            qs('#forgot').addEventListener('click', e => { e.preventDefault(); toast(t('a_forgot_toast')); });
+            ['#email', '#pass'].forEach(s => qs(s).addEventListener('input', () => { qs('#credError').textContent = ''; }));
+
+            // Demo: any email/phone + password works. Real app: server checks the password, then sends the OTP.
+            qs('#credStep').addEventListener('submit', e => {
+                e.preventDefault();
+                if (!qs('#email').value.trim() || !qs('#pass').value) { qs('#credError').textContent = t('a_err_login'); return; }
+                if (remembered()) { finish(); return; }
+                const acc = account();
+                qs('#otpSub').textContent = t('a_code_sent')(`+251 ${acc.phone.slice(0, 2)} ••• ${acc.phone.slice(-4)}`);
+                qs('#credStep').classList.add('hidden');
+                qs('#otpStep').classList.remove('hidden');
+                qs('#otpBoxes input').focus();
+                startResend();
+            });
+            qs('#backBtn').addEventListener('click', () => { qs('#otpStep').classList.add('hidden'); qs('#credStep').classList.remove('hidden'); clearInterval(resendTimer); });
+            qs('#resend').addEventListener('click', startResend);
+
+            const boxes = qsa('#otpBoxes input');
+            boxes.forEach((b, i) => {
+                b.addEventListener('input', () => {
+                    b.value = b.value.replace(/\D/g, '').slice(0, 1);
+                    qs('#otpError').textContent = '';
+                    if (b.value && i < 5) boxes[i + 1].focus();
+                    if (boxes.every(x => x.value)) qs('#otpStep').requestSubmit();
+                });
+                b.addEventListener('keydown', e => { if (e.key === 'Backspace' && !b.value && i) boxes[i - 1].focus(); });
+            });
+            qs('#otpStep').addEventListener('submit', e => {
+                e.preventDefault();
+                if (boxes.some(b => !b.value)) { qs('#otpError').textContent = t('otp_err'); return; }
+                finish();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -140,7 +140,7 @@
                             </div>
                         </div>
                     </div>
-                    ${ended ? `
+                    ${ended && FEATURES.bidHistory ? `
                     <div class="panel accordion ${historyOpen ? 'open' : ''}" id="historyAccordion">
                         <button type="button" class="accordion-toggle" aria-expanded="${historyOpen}">
                             <span>${t('bid_history')} <span class="count-chip">${bidHistory(auction).total.toLocaleString('en')}</span></span>

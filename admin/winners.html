@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Winners</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="winners" data-title="nav_winners">
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const FILTERS = ['all', 'call', 'scheduled', 'picked', 'unpaid'];
+        let filter = FILTERS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'all';
+        const fl = { all: 'a_all', call: 'a_to_call', scheduled: 'a_st_ready', picked: 'a_st_picked', unpaid: 'a_unpaid' };
+        const toLocal = ms => new Date(ms - new Date(ms).getTimezoneOffset() * 60e3).toISOString().slice(0, 16);
+
+        function group(a) {
+            const s = admState.steps()[a.id], p = admState.pickup(a.id);
+            return s === 0 ? 'unpaid' : s === 2 ? 'picked' : p.scheduled ? 'scheduled' : 'call';
+        }
+
+        const cols = () => [
+            { key: 'item', label: t('col_item'), cls: 'main', cell: a => `<a class="cell-item" href="auction.html?id=${a.id}"><img src="${img(a.images[0])}" alt=""><span>${L(a.name)}<small>#${a.code} · ${fmtDay(a.endsAt)}</small></span></a>` },
+            { key: 'winner', label: t('lbl_winner'), cell: a => `<span class="pickup-cell"><b>${a.winner.fullName}</b><small><a href="tel:0${a.winner.phone}" class="mono" style="color:inherit">${fmtPhone(a.winner.phone)}</a></small></span>` },
+            { key: 'bid', label: t('lbl_winning_bid'), cls: 'r', cell: a => `<span class="num-cell">${fmtETB(a.winner.bid)}</span>` },
+            { key: 'status', label: t('a_col_status'), cell: a => {
+                const s = admState.steps()[a.id];
+                if (s === 0) { const left = Math.max(0, 7 - Math.floor((Date.now() - a.endsAt) / DAY)); return `<span class="pickup-cell">${pill('muted', t('a_unpaid'))}<small>${t('a_days_left')(left)}</small></span>`; }
+                return s === 2 ? pill('success', `<i class="fa-solid fa-check"></i> ${t('a_st_picked')}`) : pill('gold', t('a_st_ready'));
+            } },
+            { key: 'pickup', label: t('a_pickup'), cell: a => {
+                const s = admState.steps()[a.id], p = admState.pickup(a.id), note = admState.notes()[a.id];
+                const main = s === 2 ? `${fmtDate(p.at)}<small>${t('a_handed_by')}: ${p.by}</small>${p.idChecked ? `<span class="ok"><i class="fa-solid fa-id-card"></i> ${t('a_id_ok')}</span>` : ''}`
+                    : s === 1 ? (p.scheduled ? `${t('a_scheduled_f')(fmtDate(p.scheduled))}` : `<span class="adm-sub">${t('a_not_scheduled')}</span>`) : '<span class="adm-sub">—</span>';
+                return `<span class="pickup-cell">${main}${note ? `<small><i class="fa-regular fa-note-sticky"></i> ${note}</small>` : ''}</span>`;
+            } },
+            { key: 'act', label: '', cls: 'no-label', cell: a => {
+                const s = admState.steps()[a.id];
+                return `<div class="row-actions">
+                    <a class="btn btn-outline btn-xs" href="tel:0${a.winner.phone}" aria-label="${t('a_call')}"><i class="fa-solid fa-phone"></i></a>
+                    ${s === 1 ? `<button type="button" class="btn btn-outline btn-xs" data-schedule="${a.id}"><i class="fa-regular fa-calendar"></i> ${t('a_schedule_pickup')}</button>
+                    <button type="button" class="btn btn-gold btn-xs" data-picked="${a.id}"><i class="fa-solid fa-box"></i> ${t('a_mark_picked')}</button>` : ''}
+                </div>`;
+            } }
+        ];
+
+        function render() {
+            const all = AUCTIONS.filter(a => a.status === 'ended');
+            const order = { call: 0, scheduled: 1, unpaid: 2, picked: 3 };
+            const rows = all.filter(a => filter === 'all' || group(a) === filter).sort((x, y) => order[group(x)] - order[group(y)] || y.endsAt - x.endsAt);
+            qs('#content').innerHTML = `
+            <div class="tabs" style="max-width:760px">${FILTERS.map(f => `<button class="tab ${filter === f ? 'active' : ''}" data-filter="${f}">${t(fl[f])}<span class="count">${all.filter(a => f === 'all' || group(a) === f).length}</span></button>`).join('')}</div>
+            ${tableHTML(cols(), rows)}`;
+        }
+
+        function scheduleModal(id) {
+            const p = admState.pickup(id);
+            const sheet = openModal(`${modalHead(t('a_schedule_pickup'))}
+                <div class="form-grid">
+                    <div class="f-field"><label>${t('a_pickup_at')}</label><input class="input" type="datetime-local" id="mAt" value="${toLocal(p.scheduled || Date.now() + DAY)}"></div>
+                    <div class="f-field"><label>${t('a_notes')}</label><input class="input" id="mNote" value="${(admState.notes()[id] || '').replace(/"/g, '&quot;')}"></div>
+                </div>
+                <div class="form-actions"><button type="button" class="btn btn-outline btn-sm" data-close>${t('a_close')}</button><button type="button" class="btn btn-gold btn-sm" id="mSave">${t('a_save')}</button></div>`);
+            qs('#mSave', sheet).addEventListener('click', () => {
+                admState.setPickup(id, { scheduled: new Date(qs('#mAt', sheet).value).getTime() });
+                admState.setNote(id, qs('#mNote', sheet).value.trim());
+                closeModal(); render(); toast(t('a_saved'));
+            });
+        }
+
+        function pickedModal(id) {
+            const me = admin.user().name;
+            const sheet = openModal(`${modalHead(t('a_mark_picked'))}
+                <div class="form-grid">
+                    <div class="f-field"><label>${t('a_pickup_at')}</label><input class="input" type="datetime-local" id="mAt" value="${toLocal(Date.now())}"></div>
+                    <div class="f-field"><label>${t('a_handed_by')}</label><select class="select" id="mBy">${ADMIN_ACCOUNTS.map(a => `<option ${a.name === me ? 'selected' : ''}>${a.name}</option>`).join('')}</select></div>
+                    <label class="check-row" style="margin:0"><input type="checkbox" id="mId"><span>${t('a_id_checked_box')}</span></label>
+                    <div class="form-error" id="mErr" style="margin:0"></div>
+                </div>
+                <div class="form-actions"><button type="button" class="btn btn-outline btn-sm" data-close>${t('a_close')}</button><button type="button" class="btn btn-gold btn-sm" id="mSave"><i class="fa-solid fa-check"></i> ${t('a_confirm')}</button></div>`);
+            qs('#mSave', sheet).addEventListener('click', () => {
+                if (!qs('#mId', sheet).checked) { qs('#mErr', sheet).textContent = t('a_id_required'); return; }
+                admState.setPickup(id, { at: new Date(qs('#mAt', sheet).value).getTime(), by: qs('#mBy', sheet).value, idChecked: true });
+                admState.setStep(id, 2);
+                closeModal(); render(); toast(t('a_saved'));
+            });
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                const f = e.target.closest('[data-filter]');
+                if (f) { filter = f.dataset.filter; history.replaceState(null, '', '#' + filter); render(); return; }
+                const s = e.target.closest('[data-schedule]');
+                if (s) { scheduleModal(s.dataset.schedule); return; }
+                const p = e.target.closest('[data-picked]');
+                if (p) pickedModal(p.dataset.picked);
+            });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

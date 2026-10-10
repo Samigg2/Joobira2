@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Users</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="users" data-title="a_nav_users">
+
+    <main id="page"><div id="content"></div></main>
+
+    <div class="drawer-scrim" data-drawer-close></div>
+    <aside class="drawer" id="drawer" aria-hidden="true"></aside>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const PER = 12;
+        const state = { q: '', status: 'all', sort: 'joined', dir: -1, pg: 0 };
+
+        const cols = () => [
+            { key: 'name', label: t('name_label'), cls: 'main', cell: u => `<a href="#" class="cell-item" data-user="${u.id}"><span class="adm-avatar" style="width:36px;height:36px;flex:none">${u.name[0]}</span><span>${u.name}<small class="mono">${fmtPhone(u.phone)}</small></span></a>`, sort: u => u.name },
+            { key: 'joined', label: t('a_joined'), cell: u => fmtDay(u.joined), sort: u => u.joined },
+            { key: 'bids', label: t('acc_bids'), cls: 'r', cell: u => `<span class="num-cell">${u.bids}</span>`, sort: u => u.bids },
+            { key: 'wins', label: t('tab_won'), cls: 'r', cell: u => `<span class="num-cell">${u.wins}</span>`, sort: u => u.wins },
+            ...(admin.isOwner() ? [{ key: 'paid', label: t('a_total_paid'), cls: 'r', cell: u => `<span class="num-cell">${num(u.paid)}</span>`, sort: u => u.paid }] : []),
+            { key: 'status', label: t('a_col_status'), cell: u => admState.blocked(u) ? pill('blocked', t('a_blocked')) : pill('active', t('a_active')) },
+            { key: 'act', label: '', cls: 'no-label', cell: u => `<div class="row-actions"><button type="button" class="btn btn-outline btn-xs" data-user="${u.id}">${t('btn_view')}</button>
+                <button type="button" class="btn ${admState.blocked(u) ? 'btn-outline' : 'btn-danger'} btn-xs" data-block="${u.id}">${t(admState.blocked(u) ? 'a_unblock' : 'a_block')}</button></div>` }
+        ];
+
+        function render() {
+            const q = state.q.trim().toLowerCase();
+            let rows = ADMIN_USERS.filter(u => (!q || u.name.toLowerCase().includes(q) || u.phone.includes(q.replace(/^0|\D/g, '')))
+                && (state.status === 'all' || (state.status === 'blocked') === admState.blocked(u)));
+            rows = sortRows(rows, cols(), state.sort, state.dir);
+            qs('#content').innerHTML = `
+            <div class="filters">
+                <label class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input type="search" id="q" value="${state.q}" placeholder="${t('a_search')}"></label>
+                <div class="segmented">${['all', 'active', 'blocked'].map(s => `<button type="button" class="${state.status === s ? 'active' : ''}" data-status="${s}">${t(s === 'all' ? 'a_all' : 'a_' + s)}</button>`).join('')}</div>
+                <span class="adm-sub">${t('a_users_count')(rows.length)}</span>
+            </div>
+            ${tableHTML(cols(), rows.slice(state.pg * PER, (state.pg + 1) * PER), { sortKey: state.sort, sortDir: state.dir })}
+            ${pagerHTML(state.pg, rows.length, PER)}`;
+        }
+
+        function openUser(id) {
+            const u = userById(id);
+            const owner = admin.isOwner();
+            const pays = ADMIN_PAYMENTS.filter(p => p.user === id).slice(0, 8);
+            const won = AUCTIONS.filter(a => a.status === 'ended' && a.winner.user === id);
+            qs('#drawer').innerHTML = `
+                <div class="drawer-head"><div class="cell-item"><span class="adm-avatar">${u.name[0]}</span><span><span class="adm-h">${u.name}</span><small class="mono">${fmtPhone(u.phone)}</small></span></div>
+                    <button type="button" class="icon-btn" style="color:var(--text);border-color:var(--border)" data-drawer-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+                <div class="drawer-body">
+                    <div class="kv">
+                        <div><small>${t('a_joined')}</small><strong>${fmtDay(u.joined)}</strong></div>
+                        <div><small>${t('a_col_status')}</small>${admState.blocked(u) ? pill('blocked', t('a_blocked')) : pill('active', t('a_active'))}</div>
+                        <div><small>${t('acc_bids')}</small><strong>${u.bids}</strong></div>
+                        <div><small>${t('tab_won')}</small><strong>${u.wins}</strong></div>
+                        ${owner ? `<div style="grid-column:1/-1"><small>${t('a_total_paid')}</small><strong>${num(u.paid)} ${t('currency')}</strong></div>` : ''}
+                    </div>
+                    ${won.length ? `<div class="acc-title" style="margin-top:0">${t('tab_won')}</div><ul class="mini-list">${won.map(a => `<li><img src="${img(a.images[0])}" alt=""><div class="grow"><strong>${L(a.name)}</strong><small>${fmtETB(a.winner.bid)} ${t('currency')} · ${t(STEP_KEYS[admState.steps()[a.id]])}</small></div></li>`).join('')}</ul>` : ''}
+                    ${owner && pays.length ? `<div class="acc-title">${t('acc_history')}</div><ul class="mini-list">${pays.map(p => { const a = getAuction(p.auction); return `<li><div class="grow"><strong>${L(a.name)}</strong><small>${fmtDate(p.at)} · <span class="mono">${p.ref}</span></small></div><span class="num-cell">${fmtETB(p.amount)}</span></li>`; }).join('')}</ul>` : ''}
+                    <div class="form-actions"><a class="btn btn-outline btn-sm" href="tel:0${u.phone}"><i class="fa-solid fa-phone"></i> ${t('a_call')}</a>
+                        <button type="button" class="btn ${admState.blocked(u) ? 'btn-outline' : 'btn-danger'} btn-sm" data-block="${u.id}">${t(admState.blocked(u) ? 'a_unblock' : 'a_block')}</button></div>
+                </div>`;
+            qs('#drawer').classList.add('open'); qs('.drawer-scrim').classList.add('open');
+        }
+        const closeDrawer = () => { qs('#drawer').classList.remove('open'); qs('.drawer-scrim').classList.remove('open'); };
+
+        function initPage() {
+            document.addEventListener('click', e => {
+                if (e.target.closest('[data-drawer-close]')) { closeDrawer(); return; }
+                const usr = e.target.closest('[data-user]');
+                if (usr) { e.preventDefault(); openUser(usr.dataset.user); return; }
+                const b = e.target.closest('[data-block]');
+                if (b) {
+                    const u = userById(b.dataset.block);
+                    admState.setBlocked(u, !admState.blocked(u));
+                    toast(t(admState.blocked(u) ? 'a_blocked' : 'a_active'));
+                    render();
+                    if (qs('#drawer').classList.contains('open')) openUser(u.id);
+                    return;
+                }
+                const st = e.target.closest('[data-status]');
+                if (st) { state.status = st.dataset.status; state.pg = 0; render(); return; }
+                const th = e.target.closest('[data-sort]');
+                if (th) { state.dir = state.sort === th.dataset.sort ? -state.dir : 1; state.sort = th.dataset.sort; render(); return; }
+                const p = e.target.closest('[data-page]');
+                if (p && !p.disabled) { state.pg = +p.dataset.page; render(); }
+            });
+            qs('#content').addEventListener('input', e => {
+                if (e.target.id !== 'q') return;
+                state.q = e.target.value; state.pg = 0;
+                const pos = e.target.selectionStart; render(); const i = qs('#q'); i.focus(); i.setSelectionRange(pos, pos);
+            });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

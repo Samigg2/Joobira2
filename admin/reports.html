@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Reports</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="reports" data-title="a_nav_reports" data-owner-only>
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        let period = 'daily', view = 'chart';
+
+        function series() {
+            if (period === 'daily') return ADMIN_REVENUE.slice(-30).map(d => ({ label: fmtDay(d.day), revenue: d.revenue, bids: d.bids }));
+            const size = period === 'weekly' ? 7 : 30;
+            const out = [];
+            for (let end = ADMIN_REVENUE.length; end > 0 && out.length < (period === 'weekly' ? 12 : 3); end -= size) {
+                const chunk = ADMIN_REVENUE.slice(Math.max(0, end - size), end);
+                out.unshift({ label: period === 'weekly' ? fmtDay(chunk[0].day) : new Date(chunk[chunk.length - 1].day).toLocaleDateString(LANGS.find(l => l.id === currentLang).locale, { month: 'short', year: 'numeric' }),
+                    revenue: chunk.reduce((s, d) => s + d.revenue, 0), bids: chunk.reduce((s, d) => s + d.bids, 0) });
+            }
+            return out;
+        }
+
+        function render() {
+            const s = series();
+            const total = s.reduce((x, d) => x + d.revenue, 0), bids = s.reduce((x, d) => x + d.bids, 0);
+            const perAuction = AUCTIONS.filter(a => ['live', 'ended'].includes(a.status)).map(a => ({ a, rev: a.bids * a.price })).sort((x, y) => y.rev - x.rev);
+            const months = (() => { const save = period; period = 'monthly'; const m = series(); period = save; return m; })();
+            const table = (head, rows) => `<div class="tbl-wrap"><table class="tbl"><thead><tr>${head.map((h, i) => `<th class="${i ? 'r' : ''}">${h}</th>`).join('')}</tr></thead>
+                <tbody>${rows.map(r => `<tr>${r.map((c, i) => `<td class="${i ? 'r' : 'main'}" data-label="${head[i]}">${i ? `<span class="num-cell">${c}</span>` : c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+            qs('#content').innerHTML = `
+            <div class="adm-row">
+                <div class="segmented">${['daily', 'weekly', 'monthly'].map(p => `<button type="button" class="${period === p ? 'active' : ''}" data-period="${p}">${t('a_' + p)}</button>`).join('')}</div>
+                <div class="seg-row">
+                    <div class="segmented">${['chart', 'table'].map(v => `<button type="button" class="${view === v ? 'active' : ''}" data-view="${v}"><i class="fa-solid ${v === 'chart' ? 'fa-chart-column' : 'fa-table'}"></i> ${t('a_show_' + v)}</button>`).join('')}</div>
+                    <button type="button" class="btn btn-outline btn-sm" data-export><i class="fa-solid fa-download"></i> ${t('a_export')}</button>
+                </div>
+            </div>
+            <div class="stat-cards" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-coins"></i>${t('a_revenue')}</div><div class="val">${num(total)} <small>${t('currency')}</small></div></div>
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-gavel"></i>${t('acc_bids')}</div><div class="val">${num(bids)}</div></div>
+                <div class="stat-card"><div class="lbl"><i class="fa-solid fa-hand-holding-heart"></i>${t('a_charity')} (20%)</div><div class="val">${num(total * 0.2)} <small>${t('currency')}</small></div></div>
+            </div>
+            <section class="card" style="margin-bottom:16px">
+                <div class="card-head"><div class="adm-h">${t('a_revenue_chart')}</div></div>
+                ${view === 'chart' ? `<div class="chart" id="chart" data-label="${t('a_revenue_chart')}"></div>`
+                    : table([t('a_period'), t('acc_bids'), t('a_revenue') + ' (ETB)', t('a_charity') + ' (ETB)'], s.map(d => [d.label, num(d.bids), num(d.revenue), num(d.revenue * 0.2)]))}
+            </section>
+            <div class="adm-grid split">
+                <section class="card"><div class="card-head"><div class="adm-h">${t('a_per_auction')}</div></div>
+                    ${table([t('col_item'), t('acc_bids'), t('a_revenue') + ' (ETB)', t('a_charity') + ' (ETB)'], perAuction.map(({ a, rev }) => [`<a href="auction.html?id=${a.id}" style="color:inherit">${L(a.name)}</a>`, num(a.bids), num(rev), num(rev * 0.2)]))}</section>
+                <section class="card"><div class="card-head"><div class="adm-h">${t('a_charity_month')}</div></div>
+                    ${table([t('a_period'), t('a_charity') + ' (ETB)'], months.map(m => [m.label, num(m.revenue * 0.2)]))}</section>
+            </div>`;
+            if (view === 'chart') barChart(qs('#chart'), s, { value: d => d.revenue, label: d => d.label, tip: d => `${d.label}: ${num(d.revenue)} ${t('currency')} · ${t('a_bids_n')(d.bids)}` });
+        }
+
+        function initPage() {
+            const root = qs('#content');
+            root.addEventListener('click', e => {
+                const p = e.target.closest('[data-period]');
+                if (p) { period = p.dataset.period; render(); return; }
+                const v = e.target.closest('[data-view]');
+                if (v) { view = v.dataset.view; render(); return; }
+                if (e.target.closest('[data-export]')) downloadCSV(`joobiraa-revenue-${period}.csv`, ['period', 'bids', 'revenue_etb', 'charity_etb'], series().map(d => [d.label, d.bids, d.revenue, Math.round(d.revenue * 0.2)]));
+            });
+            let w = innerWidth;
+            addEventListener('resize', () => { if (innerWidth !== w && view === 'chart') { w = innerWidth; render(); } });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

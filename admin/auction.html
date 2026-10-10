@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Auction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="auctions" data-title="nav_auctions">
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const a = getAuction(new URLSearchParams(location.search).get('id'));
+        const PER = 20;
+        let pg = 0, sortBy = 'amount';
+
+        // Flat bid log. Ended: from bidHistory(); live: generated, amounts stay hidden until the end.
+        function bidLog() {
+            if (a._log) return a._log;
+            let seed = [...a.id].reduce((h, c) => (h * 33 + c.charCodeAt(0)) >>> 0, 11);
+            const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 2 ** 32;
+            const ref = () => Array.from({ length: 10 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(rnd() * 32)]).join('');
+            const end = Math.min(a.endsAt || Date.now(), Date.now()), span = end - (a.startsAt || end - 14 * DAY);
+            const log = [];
+            if (a.status === 'ended') {
+                bidHistory(a).rows.forEach(r => r.phones.forEach(p => log.push({ at: end - rnd() * span, phone: p, amount: r.amount, unique: r.n === 1, winner: r.winner, ref: ref() })));
+            } else {
+                for (let i = 0; i < a.bids; i++) log.push({ at: end - rnd() * span, phone: '9' + String(Math.floor(rnd() * 1e8)).padStart(8, '0'), ref: ref() });
+            }
+            return (a._log = log);
+        }
+
+        function render() {
+            const root = qs('#content');
+            if (!a) { root.innerHTML = `<div class="empty-state">${t('not_found')}</div>`; return; }
+            const owner = admin.isOwner();
+            const ended = a.status === 'ended';
+            const revenue = a.bids * a.price;
+            const card = (icon, key, val) => `<div class="stat-card"><div class="lbl"><i class="fa-solid ${icon}"></i>${t(key)}</div><div class="val">${val}</div></div>`;
+            let log = bidLog().slice();
+            log.sort(ended && sortBy === 'amount' ? (x, y) => x.amount - y.amount : (x, y) => y.at - x.at);
+            const cols = [
+                { key: 'time', label: t('a_col_time'), cell: r => fmtDate(r.at) },
+                { key: 'phone', label: t('account_phone'), cell: r => `<span class="mono">${fmtPhone(r.phone)}</span>` },
+                { key: 'amount', label: t('h_amount'), cls: 'r', cell: r => ended ? `<span class="num-cell">${fmtETB(r.amount)}</span>` : '<span class="adm-sub">•••</span>' },
+                ...(ended ? [{ key: 'u', label: t('unique_yes') + '?', cell: r => r.winner ? pill('gold', `<i class="fa-solid fa-crown"></i> ${t('lbl_winner')}`) : r.unique ? pill('muted', t('unique_yes')) : `<span class="adm-sub">${t('unique_no')}</span>` }] : []),
+                { key: 'ref', label: t('pay_receipt'), cell: r => `<span class="mono adm-sub">${r.ref}</span>` }
+            ];
+            const step = admState.steps()[a.id];
+            root.innerHTML = `
+            <div class="adm-row"><a href="auctions.html#${a.status}" class="back-link" style="margin:0"><i class="fa-solid fa-arrow-left"></i> ${t('nav_auctions')}</a></div>
+            <section class="card" style="margin-bottom:16px">
+                <div class="adm-row" style="margin:0">
+                    <div class="cell-item"><img src="${img(a.images[0])}" alt="" style="width:64px;height:64px"><span><span class="adm-h">${L(a.name)}</span>
+                        <small>#${a.code} · ${L(CATEGORIES.find(c => c.id === a.cat))} · ${fmtDate(a.startsAt)} → ${fmtDate(a.endsAt)}</small></span></div>
+                    <div class="row-actions">
+                        ${pill(a.status, statusLabel(a.status))}
+                        ${['draft', 'upcoming'].includes(a.status) ? `<a class="btn btn-outline btn-xs" href="auction-edit.html?id=${a.id}"><i class="fa-solid fa-pen"></i> ${t('a_edit')}</a>` : ''}
+                        ${a.status === 'live' ? `<button type="button" class="btn btn-outline btn-xs" data-end>${t('a_end_now')}</button>` : ''}
+                        ${['live', 'upcoming'].includes(a.status) ? `<button type="button" class="btn btn-danger btn-xs" data-cancel>${t('a_cancel')}</button>` : ''}
+                    </div>
+                </div>
+            </section>
+            <div class="stat-cards">
+                ${card('fa-users', 'lbl_bids', num(a.bids))}
+                ${card('fa-eye', 'stat_views', compact(a.views))}
+                ${card('fa-tag', 'a_col_price', `${fmtETB(a.price)} <small>${t('currency')}</small>`)}
+                ${owner ? card('fa-coins', 'a_revenue', `${num(revenue)} <small>${t('currency')}</small>`) : ''}
+                ${owner ? card('fa-hand-holding-heart', 'a_charity', `${num(revenue * 0.2)} <small>${t('currency')}</small>`) : ''}
+                ${a.status === 'live' ? `<div class="stat-card"><div class="lbl"><i class="fa-solid fa-clock"></i>${t('lbl_ends_in')}</div><div class="val" style="font-size:1rem;color:var(--red)"><span data-ends="${a.endsAt}"></span></div></div>` : ''}
+            </div>
+            ${ended ? `<section class="card" style="margin-bottom:16px">
+                <div class="card-head"><div class="adm-h">${t('lbl_winner')}</div><a href="winners.html" class="see-all">${t('nav_winners')} <i class="fa-solid fa-arrow-right"></i></a></div>
+                <div class="adm-row" style="margin:0">
+                    <div><strong>${a.winner.fullName}</strong> · <a href="tel:0${a.winner.phone}" class="mono">${fmtPhone(a.winner.phone)}</a><div class="adm-sub">${t('lbl_winning_bid')}: <b>${fmtETB(a.winner.bid)} ${t('currency')}</b></div></div>
+                    ${pill(step >= 1 ? 'gold' : 'muted', t(STEP_KEYS[step]))}
+                </div></section>` : ''}
+            <section class="card">
+                <div class="card-head"><div class="adm-h">${t('a_bid_log')} <span class="count-chip">${num(log.length)}</span></div>
+                    ${ended ? `<div class="segmented"><button type="button" class="${sortBy === 'amount' ? 'active' : ''}" data-sortby="amount">${t('h_amount')}</button><button type="button" class="${sortBy === 'time' ? 'active' : ''}" data-sortby="time">${t('a_col_time')}</button></div>` : ''}</div>
+                ${ended ? '' : `<p class="hint" style="margin:-4px 0 10px"><i class="fa-solid fa-lock"></i>${t('a_live_hidden')}</p>`}
+                ${tableHTML(cols, log.slice(pg * PER, (pg + 1) * PER))}
+                ${pagerHTML(pg, log.length, PER)}
+            </section>`;
+            tickTimers();
+        }
+
+        function confirmBox(title, withReason, onOk) {
+            const sheet = openModal(`${modalHead(title)}
+                ${withReason ? `<p class="hint" style="margin-bottom:12px"><i class="fa-solid fa-circle-info"></i>${t('a_cancel_note')}</p>
+                <label class="f-label">${t('a_cancel_reason')}</label><textarea class="textarea" id="reason"></textarea>` : ''}
+                <div class="form-actions"><button type="button" class="btn btn-outline btn-sm" data-close>${t('a_close')}</button>
+                <button type="button" class="btn ${withReason ? 'btn-danger' : 'btn-gold'} btn-sm" id="ok">${t('a_confirm')}</button></div>`);
+            qs('#ok', sheet).addEventListener('click', () => { if (withReason && !qs('#reason', sheet).value.trim()) { qs('#reason', sheet).focus(); return; } closeModal(); onOk(); });
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                const p = e.target.closest('[data-page]');
+                if (p && !p.disabled) { pg = +p.dataset.page; render(); return; }
+                const s = e.target.closest('[data-sortby]');
+                if (s) { sortBy = s.dataset.sortby; pg = 0; render(); return; }
+                // Demo only: the real app does this on the server
+                if (e.target.closest('[data-end]')) confirmBox(t('a_end_now'), false, () => { toast(t('a_ended_now')); });
+                if (e.target.closest('[data-cancel]')) confirmBox(t('a_cancel'), true, () => { a.status = 'cancelled'; toast(t('a_cancelled')); render(); });
+            });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>

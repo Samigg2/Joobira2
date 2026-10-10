@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Joobiraa Admin - Overview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" type="image/png" href="../assets/icons/favicon-48.png">
+    <script src="../js/boot.js"></script>
+</head>
+<body data-app="admin" data-page="overview" data-title="a_nav_overview">
+
+    <main id="page"><div id="content"></div></main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/script.js"></script>
+    <script src="../js/admin-data.js"></script>
+    <script src="../js/admin.js"></script>
+    <script>
+        const owner = admin.isOwner();
+        const ui = { range: 30, metric: owner ? 'revenue' : 'bids', type: 'bars' };
+        const hourLabel = h => `${String(h).padStart(2, '0')}:00`;
+
+        function activity() {
+            const out = [];
+            ADMIN_PAYMENTS.slice(0, 14).forEach(p => {
+                const u = userById(p.user), a = getAuction(p.auction);
+                if (p.status === 'failed') out.push({ at: p.at, icon: 'fa-circle-xmark', bad: true, text: t('act_failed')(maskPhone(u.phone), L(a.name)) });
+                else if (p.type === 'item') out.push({ at: p.at, icon: 'fa-receipt', text: t('act_item')(u.name, L(a.name)), amount: p.amount });
+                else if (p.status === 'success') out.push({ at: p.at, icon: 'fa-gavel', text: t('act_bid')(maskPhone(u.phone), L(a.name)), amount: p.amount });
+            });
+            ADMIN_USERS.filter(u => PAGE_LOADED_AT - u.joined < 4 * DAY).forEach(u => out.push({ at: u.joined + 9 * 3600e3, icon: 'fa-user-plus', text: t('act_user')(u.name) }));
+            AUCTIONS.filter(a => a.status === 'ended').forEach(a => out.push({ at: a.endsAt, icon: 'fa-trophy', text: t('act_won')(a.winner.fullName, L(a.name)) }));
+            return out.filter(x => x.at <= Date.now()).sort((x, y) => y.at - x.at).slice(0, 9);
+        }
+
+        function render() {
+            const today = ADMIN_REVENUE[ADMIN_REVENUE.length - 1], yesterday = ADMIN_REVENUE[ADMIN_REVENUE.length - 2];
+            const change = (a, b) => { const p = Math.round((a - b) / b * 100); return `<b>${p >= 0 ? '+' : ''}${p}%</b> ${t('a_vs_yesterday')}`; };
+            const live = AUCTIONS.filter(a => a.status === 'live');
+            const newUsers = ADMIN_USERS.filter(u => PAGE_LOADED_AT - u.joined < 7 * DAY).length;
+            const toCall = winnersToCall();
+            const card = (icon, key, val, delta = '', cls = '', href = '') =>
+                `<${href ? `a href="${href}"` : 'div'} class="stat-card ${cls}"><div class="lbl"><i class="fa-solid ${icon}"></i>${t(key)}</div><div class="val">${val}</div><div class="delta">${delta}</div></${href ? 'a' : 'div'}>`;
+            const seg = (key, opts) => `<div class="segmented">${opts.map(([v, l]) => `<button type="button" class="${ui[key] === v ? 'active' : ''}" data-ui="${key}" data-v="${v}">${l}</button>`).join('')}</div>`;
+
+            // category totals, payment methods, busiest hour
+            const cats = CATEGORIES.filter(c => c.id !== 'all').map(c => ({ label: L(c), value: AUCTIONS.filter(a => a.cat === c.id && ['live', 'ended'].includes(a.status)).reduce((s, a) => s + a.bids, 0) })).sort((x, y) => y.value - x.value);
+            const done = ADMIN_PAYMENTS.filter(p => p.status !== 'pending');
+            const success = Math.round(done.filter(p => p.status === 'success').length / done.length * 100);
+            const ok = ADMIN_PAYMENTS.filter(p => p.status === 'success');
+            const methods = [['telebirr', 'Telebirr'], ['cbe', 'CBE Birr']].map(([m, label]) => { const n = ok.filter(p => p.method === m).length; return { label, value: n, sub: `${Math.round(n / ok.length * 100)}%` }; });
+            const peak = ADMIN_HOURS.reduce((a, b) => b.bids > a.bids ? b : a);
+            const ending = live.slice().sort((a, b) => a.endsAt - b.endsAt).slice(0, 4);
+
+            qs('#content').innerHTML = `
+            <div class="stat-cards">
+                ${owner ? card('fa-coins', 'a_revenue_today', `${num(today.revenue)} <small>${t('currency')}</small>`, change(today.revenue, yesterday.revenue)) : ''}
+                ${card('fa-gavel', 'a_bids_today', num(today.bids), change(today.bids, yesterday.bids))}
+                ${card('fa-bolt', 'a_live', live.length, '', '', 'auctions.html#live')}
+                ${card('fa-user-plus', 'a_new_users', newUsers, t('a_7d'), '', 'users.html')}
+                ${card('fa-phone', 'a_to_call', toCall.length, '', toCall.length ? 'alert' : '', 'winners.html#call')}
+                ${owner ? card('fa-hand-holding-heart', 'a_charity', `128,460 <small>${t('currency')}</small>`, '20%') : ''}
+            </div>
+
+            <section class="card" style="margin-bottom:16px">
+                <div class="card-head">
+                    <div class="adm-h">${t(ui.metric === 'revenue' ? 'a_revenue_chart' : 'a_bids_chart')}</div>
+                    <div class="chart-controls">
+                        ${owner ? seg('metric', [['revenue', t('a_revenue')], ['bids', t('acc_bids')]]) : ''}
+                        ${seg('type', [['bars', '<i class="fa-solid fa-chart-column"></i>'], ['line', '<i class="fa-solid fa-chart-line"></i>']])}
+                        ${seg('range', [[7, t('a_7d')], [30, t('a_30d')], [90, t('a_90d')]])}
+                    </div>
+                </div>
+                <div class="chart" id="mainChart"></div>
+            </section>
+
+            <div class="adm-grid three" style="margin-bottom:16px">
+                <section class="card"><div class="card-head"><div class="adm-h">${t('a_by_category')}</div></div>${hbarsHTML(cats)}</section>
+                ${owner ? `<section class="card"><div class="card-head"><div class="adm-h">${t('pay_method')}</div></div>
+                    <div class="hero-num">${success}%<small>${t('a_success_rate')}</small></div>${hbarsHTML(methods)}</section>` : ''}
+                <section class="card"><div class="card-head"><div class="adm-h">${t('a_busy_hours')}</div><span class="adm-sub">${t('a_peak')(hourLabel(peak.hour))}</span></div><div class="chart" id="hoursChart"></div></section>
+            </div>
+
+            <div class="adm-grid split">
+                <section class="card">
+                    <div class="card-head"><div class="adm-h">${t('a_activity')}</div></div>
+                    <ul class="activity">${activity().map(x => `
+                        <li><span class="act-icon ${x.bad ? 'bad' : ''}"><i class="fa-solid ${x.icon}"></i></span>
+                            <div class="grow">${x.text}<small>${timeAgo(x.at)}</small></div>
+                            ${owner && x.amount ? `<span class="amt">${fmtETB(x.amount)}</span>` : ''}</li>`).join('')}</ul>
+                </section>
+                <div style="display:grid;gap:16px;align-content:start">
+                    <section class="card">
+                        <div class="card-head"><div class="adm-h">${t('a_waiting_call')}</div><a href="winners.html#call" class="see-all">${t('view_all')} <i class="fa-solid fa-arrow-right"></i></a></div>
+                        ${toCall.length ? `<ul class="mini-list">${toCall.map(a => `
+                            <li><img src="${img(a.images[0])}" alt=""><div class="grow"><strong>${a.winner.fullName}</strong><small>${L(a.name)} · ${fmtETB(a.winner.bid)} ${t('currency')}</small></div>
+                            <a class="btn btn-gold btn-xs" href="tel:0${a.winner.phone}"><i class="fa-solid fa-phone"></i> ${t('a_call')}</a></li>`).join('')}</ul>`
+                            : `<p class="adm-sub">${t('a_nothing')}</p>`}
+                    </section>
+                    <section class="card">
+                        <div class="card-head"><div class="adm-h">${t('sort_ending')}</div><a href="auctions.html#live" class="see-all">${t('view_all')} <i class="fa-solid fa-arrow-right"></i></a></div>
+                        <ul class="mini-list">${ending.map(a => `
+                            <li><img src="${img(a.images[0])}" alt=""><div class="grow"><strong>${L(a.name)}</strong><small>${t('a_bids_n')(a.bids)}</small></div>
+                            <span class="timer-text" data-ends="${a.endsAt}" style="font-size:0.78rem"></span></li>`).join('')}</ul>
+                    </section>
+                </div>
+            </div>`;
+            drawCharts();
+            tickTimers();
+        }
+
+        function drawCharts() {
+            const data = ADMIN_REVENUE.slice(-ui.range);
+            const rev = ui.metric === 'revenue';
+            const opts = {
+                value: d => rev ? d.revenue : d.bids,
+                label: d => fmtDay(d.day),
+                tip: d => `${fmtDay(d.day)}: ${rev ? num(d.revenue) + ' ' + t('currency') : t('a_bids_n')(d.bids)}`
+            };
+            const el = qs('#mainChart');
+            el.dataset.label = t(rev ? 'a_revenue_chart' : 'a_bids_chart');
+            (ui.type === 'line' ? lineChart : barChart)(el, data, opts);
+            barChart(qs('#hoursChart'), ADMIN_HOURS, { value: d => d.bids, label: d => String(d.hour).padStart(2, '0'), tip: d => `${hourLabel(d.hour)}: ${t('a_bids_n')(d.bids)}` });
+        }
+
+        function initPage() {
+            qs('#content').addEventListener('click', e => {
+                const b = e.target.closest('[data-ui]');
+                if (!b) return;
+                ui[b.dataset.ui] = b.dataset.ui === 'range' ? +b.dataset.v : b.dataset.v;
+                render();
+            });
+            let w = innerWidth;
+            addEventListener('resize', () => { if (innerWidth !== w) { w = innerWidth; drawCharts(); } });
+            document.addEventListener('langchange', render);
+        }
+    </script>
+</body>
+</html>
