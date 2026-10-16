@@ -1,3 +1,7 @@
+// On Vercel (clean URLs) the overview lives at /admin with no trailing slash, so relative links like
+// "winners.html" would resolve to the site root. A <base> keeps them inside /admin/.
+if (/\/admin$/.test(location.pathname)) document.head.insertAdjacentHTML('afterbegin', '<base href="/admin/">');
+
 // =========================================================
 // Joobiraa admin — chrome (sidebar + top bar), roles, helpers.
 // Loaded after script.js; reuses t, L, fmtETB, store, toast, openModal...
