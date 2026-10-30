@@ -847,7 +847,7 @@ function winnerBox(a, cls = '') {
 }
 
 // Feature switches: set to true to show a feature again (code is kept)
-const FEATURES = { bidHistory: true, install: false };
+const FEATURES = { bidHistory: true, install: true };
 
 // ---------- Bid history (ended auctions, inside a closed-by-default box) ----------
 const HISTORY_PAGE = 15;
